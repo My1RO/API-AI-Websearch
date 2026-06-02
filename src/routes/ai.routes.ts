@@ -7,7 +7,6 @@ import {
   createProviderProfileJob,
   getProviderProfileJob
 } from "../services/provider-profile-job.service";
-import { assertNoForbiddenFields } from "../validators/forbidden-fields";
 import {
   createProviderProfilesSchema,
   feedbackSchema,
@@ -20,7 +19,6 @@ import { healthRouter } from "./health.route";
 export const aiRouter = Router();
 
 const parseBody = <T>(schema: z.ZodType<T>, body: unknown): T => {
-  assertNoForbiddenFields(body);
   return schema.parse(body);
 };
 

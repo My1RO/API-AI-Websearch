@@ -1,7 +1,6 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
 import { ZodError } from "zod";
 
-import { ForbiddenFieldError } from "../validators/forbidden-fields";
 import { AiProviderError, HttpError } from "../errors/http-error";
 
 export const notFoundHandler: RequestHandler = (_request, _response, next) => {
@@ -14,15 +13,6 @@ export const errorHandler: ErrorRequestHandler = (error, _request, response, _ne
       status: error.status,
       detail: error.message,
       code: error.code
-    });
-    return;
-  }
-
-  if (error instanceof ForbiddenFieldError) {
-    response.status(400).json({
-      status: 400,
-      detail: error.message,
-      code: "FORBIDDEN_FIELD"
     });
     return;
   }
