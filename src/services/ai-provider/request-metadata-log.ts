@@ -5,13 +5,31 @@ interface AiProviderRequestMetadata {
   model: string;
   input: CreateProviderProfilesInput;
   identityOnly: boolean;
+  toolType: string;
+  toolChoice: string;
+  externalWebAccess: boolean;
+  store: boolean;
+  maxToolCalls: number;
+  parallelToolCalls: boolean;
+  searchContextSize?: string;
+  reasoningEffort?: string;
+  includeSources?: boolean;
 }
 
 export const logAiProviderRequestMetadata = ({
   provider,
   model,
   input,
-  identityOnly
+  identityOnly,
+  toolType,
+  toolChoice,
+  externalWebAccess,
+  store,
+  maxToolCalls,
+  parallelToolCalls,
+  searchContextSize,
+  reasoningEffort,
+  includeSources
 }: AiProviderRequestMetadata): void => {
   console.log("AI provider request metadata", {
     provider,
@@ -24,10 +42,14 @@ export const logAiProviderRequestMetadata = ({
       Boolean(profileProvider.city) || Boolean(profileProvider.state) || Boolean(profileProvider.zip)
     )).length,
     identityOnly,
-    toolType: "web_search",
-    externalWebAccess: false,
-    store: false,
-    maxToolCalls: 1,
-    parallelToolCalls: false
+    toolType,
+    toolChoice,
+    externalWebAccess,
+    store,
+    maxToolCalls,
+    parallelToolCalls,
+    searchContextSize,
+    reasoningEffort,
+    includeSources
   });
 };

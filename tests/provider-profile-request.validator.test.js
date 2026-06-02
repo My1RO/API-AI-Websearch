@@ -35,33 +35,30 @@ describe("provider profile request allowlist", () => {
     });
   });
 
-  it("strips non-allowlisted request keys before downstream handling", () => {
-    const parsed = createProviderProfilesSchema.parse({
-      requestComment: "do not persist or forward free text",
-      providers: [
-        {
-          ...completeProvider,
-          rawSearchPrompt: "hidden prompt",
-          sourceUrl: "https://example.invalid/provider",
-          arbitraryMetadata: { value: "hidden metadata" }
-        }
-      ],
-      lineOfCoverage: "Medical"
-    });
+  it("rejects non-allowlisted root request keys instead of stripping them", () => {
+    expect(() =>
+      createProviderProfilesSchema.parse({
+        requestComment: "do not persist or forward free text",
+        providers: [completeProvider],
+        lineOfCoverage: "Medical"
+      })
+    ).toThrow(/Unrecognized key/);
+  });
 
-    expect(parsed).not.toHaveProperty("requestComment");
-    expect(parsed.providers[0]).not.toHaveProperty("rawSearchPrompt");
-    expect(parsed.providers[0]).not.toHaveProperty("sourceUrl");
-    expect(parsed.providers[0]).not.toHaveProperty("arbitraryMetadata");
-    expect(Object.keys(parsed.providers[0]).sort()).toEqual([
-      "city",
-      "name",
-      "npi",
-      "providerId",
-      "specialty",
-      "state",
-      "zip"
-    ]);
+  it("rejects non-allowlisted provider request keys instead of stripping them", () => {
+    expect(() =>
+      createProviderProfilesSchema.parse({
+        providers: [
+          {
+            ...completeProvider,
+            rawSearchPrompt: "hidden prompt",
+            sourceUrl: "https://example.invalid/provider",
+            arbitraryMetadata: { value: "hidden metadata" }
+          }
+        ],
+        lineOfCoverage: "Medical"
+      })
+    ).toThrow(/Unrecognized key/);
   });
 
   it.each(["Dental", "Vision", "Life", ""])("rejects non-Medical lineOfCoverage %s", (lineOfCoverage) => {

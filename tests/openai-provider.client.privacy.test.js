@@ -20,9 +20,17 @@ const loadClient = () => {
     AI_FEATURE_ENABLED: "true",
     AI_WEBSEARCH_COMPLIANCE_CONFIRMED: "true",
     OPENAI_API_KEY: "test-openai-key",
-    OPENAI_MODEL: "gpt-4.1",
+    OPENAI_MODEL: "gpt-5.5",
     OPENAI_WEB_SEARCH_EXTERNAL_ACCESS: "false",
-    OPENAI_STORE: "false"
+    OPENAI_STORE: "false",
+    OPENAI_WEB_SEARCH_CONTEXT_SIZE: "medium",
+    OPENAI_WEB_SEARCH_TOOL_CHOICE: "required",
+    OPENAI_WEB_SEARCH_MAX_TOOL_CALLS: "8",
+    OPENAI_WEB_SEARCH_PARALLEL_TOOL_CALLS: "true",
+    OPENAI_REASONING_EFFORT: "medium",
+    OPENAI_WEB_SEARCH_RETURN_TOKEN_BUDGET: "",
+    OPENAI_WEB_SEARCH_ALLOWED_DOMAINS: "",
+    OPENAI_WEB_SEARCH_BLOCKED_DOMAINS: ""
   };
 
   return require("../src/services/ai-provider/openai-provider.client");
@@ -71,21 +79,24 @@ describe("OpenAI provider client privacy contract", () => {
 
     expect(request).toEqual(
       expect.objectContaining({
-        model: "gpt-4.1",
+        model: "gpt-5.5",
         tool_choice: "required",
-        max_tool_calls: 1,
-        parallel_tool_calls: false,
-        store: false
+        max_tool_calls: 8,
+        parallel_tool_calls: true,
+        store: false,
+        reasoning: { effort: "medium" }
       })
     );
     expect(request).not.toHaveProperty("text");
+    expect(request).not.toHaveProperty("background");
     expect(request.tools).toEqual([
       expect.objectContaining({
         type: "web_search",
         external_web_access: false,
-        search_context_size: "low"
+        search_context_size: "medium"
       })
     ]);
+    expect(request.tools[0]).not.toHaveProperty("return_token_budget");
     expect(JSON.stringify({ tools: request.tools, background: request.background })).not.toMatch(/web_search_preview|background":true/i);
     expect(request.input).not.toMatch(/quote|member|client|patient|dob|diagnosis|medication/i);
     expect(request.input).not.toMatch(/example\.com|"string optional"|"string"/i);
@@ -94,17 +105,20 @@ describe("OpenAI provider client privacy contract", () => {
       "AI provider request metadata",
       expect.objectContaining({
         provider: "openai",
-        model: "gpt-4.1",
+        model: "gpt-5.5",
         lineOfCoverage: "Medical",
         providerCount: 1,
         providersWithProviderId: 1,
         providersWithLocationHints: 1,
         identityOnly: false,
         toolType: "web_search",
+        toolChoice: "required",
         externalWebAccess: false,
         store: false,
-        maxToolCalls: 1,
-        parallelToolCalls: false
+        maxToolCalls: 8,
+        parallelToolCalls: true,
+        searchContextSize: "medium",
+        reasoningEffort: "medium"
       })
     );
     expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/Public Provider|provider-123|prompt|raw|sourceUrl|citation|quote|member|client|patient/i);
@@ -172,16 +186,17 @@ describe("OpenAI provider client privacy contract", () => {
     expect(retryRequest).toEqual(
       expect.objectContaining({
         tool_choice: "required",
-        max_tool_calls: 1,
-        parallel_tool_calls: false,
-        store: false
+        max_tool_calls: 8,
+        parallel_tool_calls: true,
+        store: false,
+        reasoning: { effort: "medium" }
       })
     );
     expect(retryRequest.tools).toEqual([
       expect.objectContaining({
         type: "web_search",
         external_web_access: false,
-        search_context_size: "low"
+        search_context_size: "medium"
       })
     ]);
     expect(retryRequest.input).not.toMatch(/quote|member|client|patient|dob|diagnosis|medication/i);

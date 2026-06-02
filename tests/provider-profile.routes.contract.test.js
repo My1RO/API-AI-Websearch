@@ -113,6 +113,25 @@ describeWhenHookExists("provider profile public route privacy contract", () => {
     expect(JSON.stringify(response.body)).not.toContain("patient has a diagnosis");
   });
 
+  it("rejects non-allowlisted provider profile request keys", async () => {
+    const app = buildAppFromHook();
+    expect(app).toBeTruthy();
+
+    const response = await postFirstAvailable(app, {
+      requestComment: "do not strip and continue",
+      providers: [
+        {
+          name: "Dr. Ada Smith",
+          npi: "1234567890"
+        }
+      ],
+      lineOfCoverage: "Medical"
+    });
+
+    expect([400, 422]).toContain(response.status);
+    expect(JSON.stringify(response.body)).not.toContain("do not strip and continue");
+  });
+
   it("accepts the allowlisted Medical provider lookup payload", async () => {
     const app = buildAppFromHook();
     expect(app).toBeTruthy();

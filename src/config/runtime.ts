@@ -76,6 +76,24 @@ export const getAiRuntimeStatus = (): AiRuntimeStatus => {
       };
     }
 
+    if (!env.azureWebSearchEnabled) {
+      return {
+        provider,
+        enabled: true,
+        ready: false,
+        reason: "azure_web_search_disabled"
+      };
+    }
+
+    if (!env.azureWebSearchComplianceConfirmed) {
+      return {
+        provider,
+        enabled: true,
+        ready: false,
+        reason: "azure_web_search_compliance_gate_unconfirmed"
+      };
+    }
+
     if (!env.azureEndpoint || !env.azureApiKey || !env.azureDeployment) {
       return {
         provider,

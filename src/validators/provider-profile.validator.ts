@@ -17,12 +17,12 @@ export const providerRequestItemSchema = z.object({
   city: optionalTrimmedString,
   state: z.string().trim().regex(/^[A-Z]{2}$/).optional(),
   zip: z.string().trim().regex(/^\d{5}$/).optional()
-}).strip();
+}).strict();
 
 export const createProviderProfilesSchema = z.object({
   providers: z.array(providerRequestItemSchema).min(1).max(10),
   lineOfCoverage: z.literal("Medical")
-}).strip();
+}).strict();
 
 export const sourceSchema = z.object({
   id: z.string().trim().min(1).max(80),

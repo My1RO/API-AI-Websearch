@@ -14,6 +14,8 @@ const loadRuntimeWithEnv = (overrides) => {
     AZURE_OPENAI_API_KEY: "",
     AZURE_OPENAI_DEPLOYMENT: "",
     AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "false",
+    AZURE_OPENAI_WEB_SEARCH_ENABLED: "false",
+    AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "false",
     ...overrides
   };
 
@@ -93,7 +95,9 @@ describe("AI runtime fail-closed privacy configuration", () => {
       AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
       AZURE_OPENAI_API_KEY: "test-azure-key",
       AZURE_OPENAI_DEPLOYMENT: "provider-profiles",
-      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "false"
+      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "false",
+      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
+      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true"
     });
 
     expect(getAiRuntimeStatus()).toEqual(
@@ -105,10 +109,52 @@ describe("AI runtime fail-closed privacy configuration", () => {
     );
   });
 
+  it("keeps Azure fail-closed until web search is explicitly enabled", () => {
+    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
+      AI_PROVIDER: "azure",
+      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
+      AZURE_OPENAI_API_KEY: "test-azure-key",
+      AZURE_OPENAI_DEPLOYMENT: "provider-profiles",
+      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
+      AZURE_OPENAI_WEB_SEARCH_ENABLED: "false",
+      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true"
+    });
+
+    expect(getAiRuntimeStatus()).toEqual(
+      expect.objectContaining({
+        provider: "azure",
+        ready: false,
+        reason: "azure_web_search_disabled"
+      })
+    );
+  });
+
+  it("keeps Azure fail-closed until web search compliance is confirmed", () => {
+    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
+      AI_PROVIDER: "azure",
+      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
+      AZURE_OPENAI_API_KEY: "test-azure-key",
+      AZURE_OPENAI_DEPLOYMENT: "provider-profiles",
+      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
+      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
+      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "false"
+    });
+
+    expect(getAiRuntimeStatus()).toEqual(
+      expect.objectContaining({
+        provider: "azure",
+        ready: false,
+        reason: "azure_web_search_compliance_gate_unconfirmed"
+      })
+    );
+  });
+
   it("keeps Azure fail-closed when deployment configuration is incomplete", () => {
     const { getAiRuntimeStatus } = loadRuntimeWithEnv({
       AI_PROVIDER: "azure",
       AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
+      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
+      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true",
       AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
       AZURE_OPENAI_API_KEY: "test-azure-key",
       AZURE_OPENAI_DEPLOYMENT: ""
@@ -119,6 +165,26 @@ describe("AI runtime fail-closed privacy configuration", () => {
         provider: "azure",
         ready: false,
         reason: "provider_not_configured"
+      })
+    );
+  });
+
+  it("allows Azure only after web search enable and compliance flags are explicit", () => {
+    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
+      AI_PROVIDER: "azure",
+      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
+      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
+      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true",
+      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
+      AZURE_OPENAI_API_KEY: "test-azure-key",
+      AZURE_OPENAI_DEPLOYMENT: "provider-profiles"
+    });
+
+    expect(getAiRuntimeStatus()).toEqual(
+      expect.objectContaining({
+        provider: "azure",
+        enabled: true,
+        ready: true
       })
     );
   });

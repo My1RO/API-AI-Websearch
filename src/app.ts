@@ -12,7 +12,6 @@ export const createApp = () => {
   app.use(express.json({ limit: "64kb", type: ["application/json", "application/*+json"] }));
 
   app.use("/health", healthRouter);
-  app.use("/api/v1/ai", authContextMiddleware, aiRouter);
   app.use("/v1/ai", authContextMiddleware, aiRouter);
 
   app.use(notFoundHandler);
