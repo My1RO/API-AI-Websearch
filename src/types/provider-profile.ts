@@ -1,4 +1,5 @@
 export type ProviderProfileJobStatus = "queued" | "running" | "completed" | "failed" | "expired";
+export type ProviderProfileProviderJobStatus = "queued" | "searching" | "completed" | "no_results" | "failed" | "expired";
 
 export interface ProviderProfileRequestItem {
   providerId?: string;
@@ -53,10 +54,32 @@ export interface ProviderProfile {
   sources: ProviderSource[];
 }
 
+export interface ProviderProfileProviderJob {
+  requestProviderKey: string;
+  providerId?: string;
+  npi?: string;
+  providerName: string;
+  status: ProviderProfileProviderJobStatus;
+  loading: boolean;
+  startedAt?: string | null;
+  completedAt?: string | null;
+  error?: string | null;
+}
+
+export interface ProviderProfileJobSummary {
+  total: number;
+  completed: number;
+  noResults: number;
+  failed: number;
+  running: number;
+}
+
 export interface ProviderProfileJob {
   requestId: string;
   status: ProviderProfileJobStatus;
   expiresAt: string;
   profiles?: ProviderProfile[];
+  providerJobs?: ProviderProfileProviderJob[];
+  summary?: ProviderProfileJobSummary;
   error?: string;
 }

@@ -73,11 +73,33 @@ export const providerProfileSchema = z.object({
 
 export const providerProfilesSchema = z.array(providerProfileSchema);
 
+export const providerProfileProviderJobSchema = z.object({
+  requestProviderKey: z.string().trim().min(1).max(320),
+  providerId: z.string().trim().min(1).max(255).optional(),
+  npi: z.string().trim().regex(/^\d{10}$/).optional(),
+  providerName: z.string().trim().min(1).max(255),
+  status: z.enum(["queued", "searching", "completed", "no_results", "failed", "expired"]),
+  loading: z.boolean(),
+  startedAt: z.string().datetime().nullable().optional(),
+  completedAt: z.string().datetime().nullable().optional(),
+  error: z.string().trim().min(1).max(255).nullable().optional()
+}).strict();
+
+export const providerProfileJobSummarySchema = z.object({
+  total: z.number().int().nonnegative(),
+  completed: z.number().int().nonnegative(),
+  noResults: z.number().int().nonnegative(),
+  failed: z.number().int().nonnegative(),
+  running: z.number().int().nonnegative()
+}).strict();
+
 export const providerProfileJobSchema = z.object({
   requestId: z.string().uuid(),
   status: z.enum(["queued", "running", "completed", "failed", "expired"]),
   expiresAt: z.string().datetime(),
   profiles: providerProfilesSchema.optional(),
+  providerJobs: z.array(providerProfileProviderJobSchema).optional(),
+  summary: providerProfileJobSummarySchema.optional(),
   error: z.string().trim().min(1).max(255).optional()
 }).strict();
 

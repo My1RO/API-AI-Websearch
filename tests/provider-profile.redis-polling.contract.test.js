@@ -34,13 +34,23 @@ const jobStoreHook =
 
 const describeWhenHookExists = jobStoreHook.module ? describe : describe.skip;
 
-const createMockRedis = () => ({
-  get: jest.fn(),
-  set: jest.fn().mockResolvedValue("OK"),
-  setex: jest.fn().mockResolvedValue("OK"),
-  expire: jest.fn().mockResolvedValue(1),
-  del: jest.fn().mockResolvedValue(1)
-});
+const createMockRedis = () => {
+  const store = new Map();
+
+  return {
+    get: jest.fn(async (key) => (store.has(key) ? store.get(key) : null)),
+    set: jest.fn(async (key, value) => {
+      store.set(key, value);
+      return "OK";
+    }),
+    setex: jest.fn(async (key, _ttlSeconds, value) => {
+      store.set(key, value);
+      return "OK";
+    }),
+    expire: jest.fn().mockResolvedValue(1),
+    del: jest.fn().mockResolvedValue(1)
+  };
+};
 
 describeWhenHookExists("provider profile Redis polling contract", () => {
   const makeStore =
@@ -131,6 +141,112 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
     await expect(api.getJob("request-1")).resolves.toEqual(
       expect.objectContaining({ status: "expired" })
     );
+  });
+
+  it("returns partial provider snapshots before every provider reaches a terminal state", async () => {
+    const redis = createMockRedis();
+    const api = resolveApi(redis);
+
+    expect(api.createJob).toEqual(expect.any(Function));
+    expect(api.markProviderSearching).toEqual(expect.any(Function));
+    expect(api.markProviderCompleted).toEqual(expect.any(Function));
+    expect(api.markProviderNoResults).toEqual(expect.any(Function));
+
+    const created = await api.createJob("request-1", {
+      providers: [
+        {
+          providerId: "1679525919",
+          npi: "1679525919",
+          name: "THE CLEVELAND CLINIC FOUNDATION",
+          city: "Cleveland",
+          state: "OH",
+          zip: "44195"
+        },
+        {
+          providerId: "second-provider",
+          name: "Second Provider",
+          city: "Cleveland",
+          state: "OH",
+          zip: "44113"
+        }
+      ],
+      lineOfCoverage: "Medical"
+    });
+    const firstProviderKey = created.providerJobs[0].requestProviderKey;
+    const secondProviderKey = created.providerJobs[1].requestProviderKey;
+
+    expect(created).toEqual(expect.objectContaining({
+      status: "queued",
+      profiles: [],
+      summary: {
+        total: 2,
+        completed: 0,
+        noResults: 0,
+        failed: 0,
+        running: 2
+      }
+    }));
+    expect(created.providerJobs.map((job) => job.status)).toEqual(["queued", "queued"]);
+
+    const searching = await api.markProviderSearching("request-1", firstProviderKey);
+    expect(searching.status).toBe("running");
+    expect(searching.providerJobs[0]).toEqual(expect.objectContaining({
+      status: "searching",
+      loading: true
+    }));
+
+    const partial = await api.markProviderCompleted("request-1", firstProviderKey, [
+      {
+        providerId: "1679525919",
+        npi: "1679525919",
+        providerName: "THE CLEVELAND CLINIC FOUNDATION",
+        phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
+        locations: [{
+          addressLine1: "9500 Euclid Ave",
+          city: "Cleveland",
+          state: "OH",
+          zip: "44195",
+          sourceId: "directory"
+        }],
+        sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+      }
+    ]);
+
+    expect(partial.status).toBe("running");
+    expect(partial.summary).toEqual({
+      total: 2,
+      completed: 1,
+      noResults: 0,
+      failed: 0,
+      running: 1
+    });
+    expect(partial.profiles).toHaveLength(1);
+    expect(partial.providerJobs[0]).toEqual(expect.objectContaining({
+      status: "completed",
+      loading: false
+    }));
+    expect(partial.providerJobs[1]).toEqual(expect.objectContaining({
+      status: "queued",
+      loading: true
+    }));
+    expect(JSON.stringify(partial)).not.toContain("https://");
+
+    const completed = await api.markProviderNoResults("request-1", secondProviderKey);
+
+    expect(completed.status).toBe("completed");
+    expect(completed.summary).toEqual({
+      total: 2,
+      completed: 1,
+      noResults: 1,
+      failed: 0,
+      running: 0
+    });
+    expect(completed.profiles).toHaveLength(1);
+    expect(completed.providerJobs[1]).toEqual(expect.objectContaining({
+      status: "no_results",
+      loading: false
+    }));
+    expect([...redis.set.mock.calls, ...redis.setex.mock.calls].some((call) => call.includes(1800))).toBe(true);
   });
 });
 
