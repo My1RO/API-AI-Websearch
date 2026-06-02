@@ -1,4 +1,4 @@
-import { pool } from "../db/mysql";
+import { getDataSource } from "../db/data-source";
 import { FeedbackInput, PhoneCallInput } from "../validators/provider-profile.validator";
 import { sanitizePhoneNumberOrThrow, sanitizeStoredFactOrThrow } from "./sanitizer.service";
 
@@ -25,8 +25,9 @@ export const saveFeedback = async (input: FeedbackInput): Promise<void> => {
   const providerId = input.providerId?.slice(0, 191) || null;
   const consensusProviderNpi = input.providerNpi || "";
   const consensusProviderId = providerId || "";
+  const dataSource = await getDataSource();
 
-  await pool.execute(
+  await dataSource.query(
     `INSERT INTO ai_provider_fact_feedback
       (broker_org_id, provider_npi, provider_id, fact_type, normalized_fact_value, validation_status, reason_code)
      VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -42,7 +43,7 @@ export const saveFeedback = async (input: FeedbackInput): Promise<void> => {
   );
 
   const isPositive = ["useful", "correct"].includes(input.validationStatus);
-  await pool.execute(
+  await dataSource.query(
     `INSERT INTO ai_provider_fact_consensus
       (broker_org_id, provider_npi, provider_id, fact_type, normalized_fact_value, positive_count, negative_count, last_validated_at, updated_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
@@ -66,8 +67,9 @@ export const saveFeedback = async (input: FeedbackInput): Promise<void> => {
 export const savePhoneCall = async (input: PhoneCallInput): Promise<void> => {
   const normalizedPhone = sanitizePhoneNumberOrThrow(input.normalizedPhone);
   const providerId = input.providerId?.slice(0, 191) || null;
+  const dataSource = await getDataSource();
 
-  await pool.execute(
+  await dataSource.query(
     `INSERT INTO ai_provider_phone_call_events
       (broker_org_id, provider_npi, provider_id, normalized_phone)
      VALUES (?, ?, ?, ?)`,

@@ -1,9 +1,9 @@
 const mockExecute = jest.fn();
 
-jest.mock("../src/db/mysql", () => ({
-  pool: {
-    execute: mockExecute
-  }
+jest.mock("../src/db/data-source", () => ({
+  getDataSource: jest.fn().mockResolvedValue({
+    query: mockExecute
+  })
 }));
 
 const {

@@ -1,6 +1,6 @@
 import { env } from "./config/env";
 import { createApp } from "./app";
-import { pool } from "./db/mysql";
+import { closeDataSource } from "./db/data-source";
 import { redis } from "./db/redis";
 
 const app = createApp();
@@ -16,7 +16,7 @@ const server = app.listen(env.port, () => {
 const shutdown = async (): Promise<void> => {
   server.close(async () => {
     redis.disconnect();
-    await pool.end();
+    await closeDataSource();
     process.exit(0);
   });
 };

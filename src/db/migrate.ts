@@ -1,58 +1,48 @@
-import fs from "node:fs/promises";
-import path from "node:path";
+import { AppDataSource } from "./data-source";
 
-import { pool } from "./mysql";
+type MigrationCommand = "up" | "down";
+
+const parseCommand = (): MigrationCommand => {
+  const command = (process.argv[2] || "up").toLowerCase();
+
+  if (command === "up" || command === "run") {
+    return "up";
+  }
+
+  if (command === "down" || command === "revert") {
+    return "down";
+  }
+
+  throw new Error(`Unsupported migration command "${command}". Use "up" or "down".`);
+};
 
 const run = async (): Promise<void> => {
-  const migrationsDirectory = path.join(__dirname, "../migrations");
-  const files = (await fs.readdir(migrationsDirectory)).filter((file) => file.endsWith(".sql")).sort();
+  const command = parseCommand();
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS ai_websearch_migrations (
-      id INT AUTO_INCREMENT NOT NULL,
-      filename VARCHAR(255) NOT NULL,
-      executed_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-      UNIQUE INDEX UNIQ_AI_WEBSEARCH_MIGRATION_FILENAME (filename),
-      PRIMARY KEY (id)
-    ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB
-  `);
+  await AppDataSource.initialize();
 
-  for (const file of files) {
-    const [rows] = await pool.query("SELECT id FROM ai_websearch_migrations WHERE filename = ?", [file]);
-    if (Array.isArray(rows) && rows.length > 0) {
-      continue;
+  if (command === "up") {
+    const migrations = await AppDataSource.runMigrations({ transaction: "none" });
+    if (migrations.length === 0) {
+      console.log("No pending TypeORM migrations.");
+      return;
     }
 
-    const sql = await fs.readFile(path.join(migrationsDirectory, file), "utf8");
-    const statements = sql
-      .split(/;\s*$/m)
-      .map((statement) => statement.trim())
-      .filter(Boolean);
-
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
-      for (const statement of statements) {
-        await connection.query(statement);
-      }
-      await connection.query("INSERT INTO ai_websearch_migrations (filename) VALUES (?)", [file]);
-      await connection.commit();
-      console.log(`Executed migration ${file}`);
-    } catch (error) {
-      await connection.rollback();
-      throw error;
-    } finally {
-      connection.release();
-    }
+    migrations.forEach((migration) => console.log(`Executed TypeORM migration ${migration.name}`));
+    return;
   }
+
+  await AppDataSource.undoLastMigration({ transaction: "none" });
+  console.log("Reverted last TypeORM migration.");
 };
 
 run()
-  .then(async () => {
-    await pool.end();
-  })
-  .catch(async (error: unknown) => {
+  .catch((error: unknown) => {
     console.error(error);
-    await pool.end();
-    process.exit(1);
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    if (AppDataSource.isInitialized) {
+      await AppDataSource.destroy();
+    }
   });
