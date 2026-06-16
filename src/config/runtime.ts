@@ -8,12 +8,43 @@ export interface AiRuntimeStatus {
   enabled: boolean;
   ready: boolean;
   reason?: string;
+  baseUrl?: string;
 }
 
 const providerNames: AiProviderName[] = ["openai", "azure"];
 
 export const getConfiguredProvider = (): AiProviderName | null => {
-  return providerNames.includes(env.aiProvider as AiProviderName) ? (env.aiProvider as AiProviderName) : null;
+  if (env.aiProviderOverride) {
+    return providerNames.includes(env.aiProviderOverride as AiProviderName) ? env.aiProviderOverride as AiProviderName : null;
+  }
+
+  return providerFromBaseUrl(env.aiBaseUrl);
+};
+
+export const providerFromBaseUrl = (baseUrl: string): AiProviderName | null => {
+  if (!baseUrl) {
+    return "openai";
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(baseUrl);
+  } catch {
+    return null;
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+  const pathname = parsed.pathname.toLowerCase();
+
+  if (hostname === "api.openai.com") {
+    return "openai";
+  }
+
+  if (hostname.endsWith(".openai.azure.com") || pathname.includes("/openai/v1")) {
+    return "azure";
+  }
+
+  return null;
 };
 
 export const getAiRuntimeStatus = (): AiRuntimeStatus => {
@@ -21,10 +52,11 @@ export const getAiRuntimeStatus = (): AiRuntimeStatus => {
 
   if (!provider) {
     return {
-      provider: env.aiProvider,
+      provider: env.aiProviderOverride || "unknown",
       enabled: false,
       ready: false,
-      reason: "unsupported_provider"
+      reason: "unsupported_provider",
+      baseUrl: env.aiBaseUrl
     };
   }
 
@@ -33,7 +65,8 @@ export const getAiRuntimeStatus = (): AiRuntimeStatus => {
       provider,
       enabled: false,
       ready: false,
-      reason: "feature_disabled"
+      reason: "feature_disabled",
+      baseUrl: env.aiBaseUrl
     };
   }
 
@@ -42,72 +75,26 @@ export const getAiRuntimeStatus = (): AiRuntimeStatus => {
       provider,
       enabled: true,
       ready: false,
-      reason: "compliance_gate_unconfirmed"
+      reason: "compliance_gate_unconfirmed",
+      baseUrl: env.aiBaseUrl
     };
   }
 
-  if (provider === "openai") {
-    if (!env.openaiApiKey) {
-      return {
-        provider,
-        enabled: true,
-        ready: false,
-        reason: "provider_not_configured"
-      };
-    }
-
-    if (env.openaiExternalWebAccess || env.openaiStore) {
-      return {
-        provider,
-        enabled: true,
-        ready: false,
-        reason: "unsafe_provider_config"
-      };
-    }
-  }
-
-  if (provider === "azure") {
-    if (!env.azureContentLoggingConfirmed) {
-      return {
-        provider,
-        enabled: true,
-        ready: false,
-        reason: "azure_compliance_gate_unconfirmed"
-      };
-    }
-
-    if (!env.azureWebSearchEnabled) {
-      return {
-        provider,
-        enabled: true,
-        ready: false,
-        reason: "azure_web_search_disabled"
-      };
-    }
-
-    if (!env.azureWebSearchComplianceConfirmed) {
-      return {
-        provider,
-        enabled: true,
-        ready: false,
-        reason: "azure_web_search_compliance_gate_unconfirmed"
-      };
-    }
-
-    if (!env.azureEndpoint || !env.azureApiKey || !env.azureDeployment) {
-      return {
-        provider,
-        enabled: true,
-        ready: false,
-        reason: "provider_not_configured"
-      };
-    }
+  if (!env.aiApiKey || !env.aiModel) {
+    return {
+      provider,
+      enabled: true,
+      ready: false,
+      reason: "provider_not_configured",
+      baseUrl: env.aiBaseUrl
+    };
   }
 
   return {
     provider,
     enabled: true,
-    ready: true
+    ready: true,
+    baseUrl: env.aiBaseUrl
   };
 };
 

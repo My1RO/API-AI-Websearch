@@ -40,48 +40,27 @@ const csvValues = (value: string | undefined, maxValues: number): string[] => {
 const searchContextSizes = ["low", "medium", "high"] as const;
 const searchToolChoices = ["auto", "required"] as const;
 const reasoningEfforts = ["low", "medium", "high", "xhigh"] as const;
-const searchReturnTokenBudgets = ["default", "unlimited"] as const;
 
 export type SearchContextSize = (typeof searchContextSizes)[number];
 export type SearchToolChoice = (typeof searchToolChoices)[number];
 export type ReasoningEffort = (typeof reasoningEfforts)[number];
-export type SearchReturnTokenBudget = (typeof searchReturnTokenBudgets)[number];
 
 export const env = {
   port: numberValue(process.env.PORT, 3065),
   nodeEnv: process.env.NODE_ENV || "development",
   aiFeatureEnabled: booleanValue(process.env.AI_FEATURE_ENABLED),
-  aiProvider: (process.env.AI_PROVIDER || "openai").toLowerCase(),
+  aiProviderOverride: envProviderOverride(process.env.AI_PROVIDER, process.env.NODE_ENV || "development"),
   aiComplianceConfirmed: booleanValue(process.env.AI_WEBSEARCH_COMPLIANCE_CONFIRMED),
-  openaiApiKey: process.env.OPENAI_API_KEY || "",
-  openaiModel: process.env.OPENAI_MODEL || "gpt-5.5",
-  openaiExternalWebAccess: booleanValue(process.env.OPENAI_WEB_SEARCH_EXTERNAL_ACCESS, false),
-  openaiStore: booleanValue(process.env.OPENAI_STORE, false),
-  openaiWebSearchContextSize: enumValue(process.env.OPENAI_WEB_SEARCH_CONTEXT_SIZE, searchContextSizes, "medium"),
-  openaiWebSearchToolChoice: enumValue(process.env.OPENAI_WEB_SEARCH_TOOL_CHOICE, searchToolChoices, "required"),
-  openaiWebSearchMaxToolCalls: boundedNumberValue(process.env.OPENAI_WEB_SEARCH_MAX_TOOL_CALLS, 8, 20),
-  openaiWebSearchParallelToolCalls: booleanValue(process.env.OPENAI_WEB_SEARCH_PARALLEL_TOOL_CALLS, true),
-  openaiReasoningEffort: optionalEnumValue(process.env.OPENAI_REASONING_EFFORT || "medium", reasoningEfforts),
-  openaiWebSearchReturnTokenBudget: optionalEnumValue(
-    process.env.OPENAI_WEB_SEARCH_RETURN_TOKEN_BUDGET,
-    searchReturnTokenBudgets
-  ),
-  openaiWebSearchAllowedDomains: csvValues(process.env.OPENAI_WEB_SEARCH_ALLOWED_DOMAINS, 100),
-  openaiWebSearchBlockedDomains: csvValues(process.env.OPENAI_WEB_SEARCH_BLOCKED_DOMAINS, 100),
-  azureEndpoint: process.env.AZURE_OPENAI_ENDPOINT || "",
-  azureApiKey: process.env.AZURE_OPENAI_API_KEY || "",
-  azureDeployment: process.env.AZURE_OPENAI_DEPLOYMENT || "",
-  azureApiVersion: process.env.AZURE_OPENAI_API_VERSION || "",
-  azureContentLoggingConfirmed: booleanValue(process.env.AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED),
-  azureWebSearchEnabled: booleanValue(process.env.AZURE_OPENAI_WEB_SEARCH_ENABLED),
-  azureWebSearchComplianceConfirmed: booleanValue(process.env.AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED),
-  azureWebSearchToolChoice: enumValue(process.env.AZURE_OPENAI_WEB_SEARCH_TOOL_CHOICE, searchToolChoices, "required"),
-  azureWebSearchMaxToolCalls: boundedNumberValue(process.env.AZURE_OPENAI_WEB_SEARCH_MAX_TOOL_CALLS, 8, 20),
-  azureWebSearchParallelToolCalls: booleanValue(process.env.AZURE_OPENAI_WEB_SEARCH_PARALLEL_TOOL_CALLS, true),
-  azureReasoningEffort: optionalEnumValue(process.env.AZURE_OPENAI_REASONING_EFFORT, reasoningEfforts),
-  azureWebSearchIncludeSources: booleanValue(process.env.AZURE_OPENAI_WEB_SEARCH_INCLUDE_SOURCES),
-  azureWebSearchAllowedDomains: csvValues(process.env.AZURE_OPENAI_WEB_SEARCH_ALLOWED_DOMAINS, 100),
-  azureWebSearchBlockedDomains: csvValues(process.env.AZURE_OPENAI_WEB_SEARCH_BLOCKED_DOMAINS, 100),
+  aiBaseUrl: process.env.AI_BASE_URL || process.env.OPENAI_BASE_URL || process.env.AZURE_OPENAI_ENDPOINT || "",
+  aiApiKey: process.env.AI_API_KEY || process.env.OPENAI_API_KEY || process.env.AZURE_OPENAI_API_KEY || "",
+  aiModel: process.env.AI_MODEL || process.env.OPENAI_MODEL || process.env.AZURE_OPENAI_DEPLOYMENT || "gpt-5.5",
+  aiWebSearchToolChoice: enumValue(process.env.AI_WEBSEARCH_TOOL_CHOICE, searchToolChoices, "required"),
+  aiWebSearchMaxToolCalls: boundedNumberValue(process.env.AI_WEBSEARCH_MAX_TOOL_CALLS, 8, 20),
+  aiWebSearchParallelToolCalls: booleanValue(process.env.AI_WEBSEARCH_PARALLEL_TOOL_CALLS, true),
+  aiReasoningEffort: optionalEnumValue(process.env.AI_REASONING_EFFORT || "medium", reasoningEfforts),
+  aiOpenAiSearchContextSize: enumValue(process.env.AI_OPENAI_WEBSEARCH_CONTEXT_SIZE, searchContextSizes, "medium"),
+  aiWebSearchAllowedDomains: csvValues(process.env.AI_WEBSEARCH_ALLOWED_DOMAINS, 100),
+  aiWebSearchBlockedDomains: csvValues(process.env.AI_WEBSEARCH_BLOCKED_DOMAINS, 100),
   redisUrl: process.env.REDIS_URL || "redis://redis:6379",
   mysql: {
     host: process.env.MYSQL_HOST || "db",
@@ -94,3 +73,11 @@ export const env = {
   profileResultTtlSeconds: boundedNumberValue(process.env.PROFILE_RESULT_TTL_SECONDS, 1800, 1800),
   feedbackNoteMaxLength: numberValue(process.env.FEEDBACK_NOTE_MAX_LENGTH, 240)
 };
+
+function envProviderOverride(provider: string | undefined, nodeEnv: string): string {
+  if (nodeEnv !== "test") {
+    return "";
+  }
+
+  return (provider || "").toLowerCase();
+}

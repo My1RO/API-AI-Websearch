@@ -9,6 +9,7 @@
     "migrate": "ts-node src/db/migrate.ts up",
     "migrate:revert": "ts-node src/db/migrate.ts down",
     "start": "node build/index.js",
+    "smoke:live-provider": "node -r ./node_modules/ts-node/register scripts/provider-profile-live-smoke.ts",
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:db": "cross-env NODE_ENV=test AI_WEBSEARCH_DB_INTEGRATION_TEST=true jest --runInBand tests/typeorm-migrations.integration.test.js"
   },

@@ -19,7 +19,7 @@ export const buildWebSearchFilters = (allowedDomains: string[], blockedDomains: 
   return filters.allowed_domains || filters.blocked_domains ? filters : undefined;
 };
 
-export const supportsOpenAiReasoning = (model: string): boolean => {
+export const supportsReasoningModel = (model: string): boolean => {
   const normalizedModel = model.toLowerCase();
   return normalizedModel.startsWith("gpt-5") || /^o\d/.test(normalizedModel);
 };

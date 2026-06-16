@@ -7,15 +7,9 @@ const loadRuntimeWithEnv = (overrides) => {
     NODE_ENV: "test",
     AI_FEATURE_ENABLED: "true",
     AI_WEBSEARCH_COMPLIANCE_CONFIRMED: "true",
-    OPENAI_API_KEY: "test-openai-key",
-    OPENAI_WEB_SEARCH_EXTERNAL_ACCESS: "false",
-    OPENAI_STORE: "false",
-    AZURE_OPENAI_ENDPOINT: "",
-    AZURE_OPENAI_API_KEY: "",
-    AZURE_OPENAI_DEPLOYMENT: "",
-    AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "false",
-    AZURE_OPENAI_WEB_SEARCH_ENABLED: "false",
-    AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "false",
+    AI_API_KEY: "test-ai-key",
+    AI_MODEL: "gpt-5.5",
+    AI_BASE_URL: "",
     ...overrides
   };
 
@@ -28,55 +22,38 @@ describe("AI runtime fail-closed privacy configuration", () => {
     jest.resetModules();
   });
 
-  it("marks OpenAI runtime unsafe when external web access is enabled", () => {
-    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "openai",
-      OPENAI_WEB_SEARCH_EXTERNAL_ACCESS: "true"
-    });
+  it("routes empty or OpenAI base URLs to OpenAI", () => {
+    const { providerFromBaseUrl } = loadRuntimeWithEnv();
 
-    expect(getAiRuntimeStatus()).toEqual(
-      expect.objectContaining({
-        provider: "openai",
-        ready: false,
-        reason: "unsafe_provider_config"
-      })
-    );
+    expect(providerFromBaseUrl("")).toBe("openai");
+    expect(providerFromBaseUrl("https://api.openai.com/v1")).toBe("openai");
   });
 
-  it("marks OpenAI runtime unsafe when provider-side storage is enabled", () => {
-    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "openai",
-      OPENAI_STORE: "true"
-    });
+  it("routes Azure OpenAI URLs to the Azure dialect", () => {
+    const { providerFromBaseUrl } = loadRuntimeWithEnv();
 
-    expect(getAiRuntimeStatus()).toEqual(
-      expect.objectContaining({
-        provider: "openai",
-        ready: false,
-        reason: "unsafe_provider_config"
-      })
-    );
+    expect(providerFromBaseUrl("https://foundry-lucie-ai.openai.azure.com/")).toBe("azure");
+    expect(providerFromBaseUrl("https://foundry-lucie-ai.openai.azure.com/openai/v1")).toBe("azure");
   });
 
-  it("allows OpenAI only when the privacy switches are explicitly closed", () => {
+  it("fails closed for unknown provider hosts", () => {
     const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "openai",
-      OPENAI_WEB_SEARCH_EXTERNAL_ACCESS: "false",
-      OPENAI_STORE: "false"
+      AI_BASE_URL: "https://llm.example.invalid/v1"
     });
 
     expect(getAiRuntimeStatus()).toEqual(
       expect.objectContaining({
-        provider: "openai",
-        enabled: true,
-        ready: true
+        provider: "unknown",
+        ready: false,
+        reason: "unsupported_provider",
+        baseUrl: "https://llm.example.invalid/v1"
       })
     );
   });
 
   it("does not allow mock profiles as a runtime provider", () => {
     const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      NODE_ENV: "development",
+      NODE_ENV: "test",
       AI_PROVIDER: "mock"
     });
 
@@ -89,75 +66,25 @@ describe("AI runtime fail-closed privacy configuration", () => {
     );
   });
 
-  it("keeps Azure fail-closed until content logging compliance is confirmed", () => {
+  it("keeps runtime fail-closed until the shared compliance gate is confirmed", () => {
     const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "azure",
-      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
-      AZURE_OPENAI_API_KEY: "test-azure-key",
-      AZURE_OPENAI_DEPLOYMENT: "provider-profiles",
-      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "false",
-      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
-      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true"
+      AI_WEBSEARCH_COMPLIANCE_CONFIRMED: "false"
     });
 
     expect(getAiRuntimeStatus()).toEqual(
       expect.objectContaining({
-        provider: "azure",
+        provider: "openai",
         ready: false,
-        reason: "azure_compliance_gate_unconfirmed"
+        reason: "compliance_gate_unconfirmed"
       })
     );
   });
 
-  it("keeps Azure fail-closed until web search is explicitly enabled", () => {
+  it("keeps runtime fail-closed when provider credentials are incomplete", () => {
     const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "azure",
-      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
-      AZURE_OPENAI_API_KEY: "test-azure-key",
-      AZURE_OPENAI_DEPLOYMENT: "provider-profiles",
-      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
-      AZURE_OPENAI_WEB_SEARCH_ENABLED: "false",
-      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true"
-    });
-
-    expect(getAiRuntimeStatus()).toEqual(
-      expect.objectContaining({
-        provider: "azure",
-        ready: false,
-        reason: "azure_web_search_disabled"
-      })
-    );
-  });
-
-  it("keeps Azure fail-closed until web search compliance is confirmed", () => {
-    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "azure",
-      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
-      AZURE_OPENAI_API_KEY: "test-azure-key",
-      AZURE_OPENAI_DEPLOYMENT: "provider-profiles",
-      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
-      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
-      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "false"
-    });
-
-    expect(getAiRuntimeStatus()).toEqual(
-      expect.objectContaining({
-        provider: "azure",
-        ready: false,
-        reason: "azure_web_search_compliance_gate_unconfirmed"
-      })
-    );
-  });
-
-  it("keeps Azure fail-closed when deployment configuration is incomplete", () => {
-    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "azure",
-      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
-      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
-      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true",
-      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
-      AZURE_OPENAI_API_KEY: "test-azure-key",
-      AZURE_OPENAI_DEPLOYMENT: ""
+      AI_BASE_URL: "https://foundry-lucie-ai.openai.azure.com/openai/v1",
+      AI_API_KEY: "",
+      AI_MODEL: "gpt-5.4"
     });
 
     expect(getAiRuntimeStatus()).toEqual(
@@ -169,15 +96,27 @@ describe("AI runtime fail-closed privacy configuration", () => {
     );
   });
 
-  it("allows Azure only after web search enable and compliance flags are explicit", () => {
+  it("allows OpenAI with the shared config surface", () => {
     const { getAiRuntimeStatus } = loadRuntimeWithEnv({
-      AI_PROVIDER: "azure",
-      AZURE_OPENAI_CONTENT_LOGGING_CONFIRMED: "true",
-      AZURE_OPENAI_WEB_SEARCH_ENABLED: "true",
-      AZURE_OPENAI_WEB_SEARCH_COMPLIANCE_CONFIRMED: "true",
-      AZURE_OPENAI_ENDPOINT: "https://azure.example.invalid",
-      AZURE_OPENAI_API_KEY: "test-azure-key",
-      AZURE_OPENAI_DEPLOYMENT: "provider-profiles"
+      AI_BASE_URL: "",
+      AI_API_KEY: "test-ai-key",
+      AI_MODEL: "gpt-5.5"
+    });
+
+    expect(getAiRuntimeStatus()).toEqual(
+      expect.objectContaining({
+        provider: "openai",
+        enabled: true,
+        ready: true
+      })
+    );
+  });
+
+  it("allows Azure with the same shared config surface", () => {
+    const { getAiRuntimeStatus } = loadRuntimeWithEnv({
+      AI_BASE_URL: "https://foundry-lucie-ai.openai.azure.com/openai/v1",
+      AI_API_KEY: "test-ai-key",
+      AI_MODEL: "gpt-5.4"
     });
 
     expect(getAiRuntimeStatus()).toEqual(
@@ -188,4 +127,5 @@ describe("AI runtime fail-closed privacy configuration", () => {
       })
     );
   });
+
 });
