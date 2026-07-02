@@ -79,7 +79,8 @@ describe("unified Responses provider client privacy contract", () => {
 
     expect(mockOpenAIConstructor).toHaveBeenCalledWith({
       apiKey: "test-ai-key",
-      baseURL: undefined
+      baseURL: undefined,
+      maxRetries: 2
     });
     expect(mockCreateResponse).toHaveBeenCalledTimes(1);
 
@@ -139,7 +140,8 @@ describe("unified Responses provider client privacy contract", () => {
 
     expect(mockOpenAIConstructor).toHaveBeenCalledWith({
       apiKey: "test-ai-key",
-      baseURL: "https://azure.example.openai.azure.com/openai/v1"
+      baseURL: "https://azure.example.openai.azure.com/openai/v1",
+      maxRetries: 2
     });
     expect(mockCreateResponse).toHaveBeenCalledTimes(1);
 

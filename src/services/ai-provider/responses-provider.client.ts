@@ -41,6 +41,8 @@ interface ResponseStatusShape {
   status?: unknown;
 }
 
+const SDK_MAX_RETRIES = 2;
+
 export const normalizedResponsesBaseUrl = (provider: AiProviderName): string | undefined => {
   if (provider === "openai") {
     return env.aiBaseUrl ? env.aiBaseUrl.replace(/\/+$/, "") : undefined;
@@ -57,7 +59,8 @@ export const normalizedResponsesBaseUrl = (provider: AiProviderName): string | u
 export const createResponsesClient = (provider: AiProviderName): OpenAI => {
   return new OpenAI({
     apiKey: env.aiApiKey,
-    baseURL: normalizedResponsesBaseUrl(provider)
+    baseURL: normalizedResponsesBaseUrl(provider),
+    maxRetries: SDK_MAX_RETRIES
   });
 };
 

@@ -22,7 +22,6 @@ import {
 } from "./provider-profile-sanitizer.service";
 
 const jobKey = (requestId: string): string => `ai:websearch:provider-profile:job:${requestId}`;
-const providerSearchConcurrency = 3;
 
 const expiresAt = (ttlSeconds: number): string => new Date(Date.now() + ttlSeconds * 1000).toISOString();
 
@@ -416,7 +415,7 @@ const runProviderProfileJob = async (
 
   try {
     let nextProviderIndex = 0;
-    const workerCount = Math.min(providerSearchConcurrency, input.providers.length);
+    const workerCount = Math.min(env.providerSearchConcurrency, input.providers.length);
     const workers = Array.from({ length: workerCount }, async () => {
       while (nextProviderIndex < input.providers.length) {
         const providerIndex = nextProviderIndex;

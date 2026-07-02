@@ -71,6 +71,7 @@ export const env = {
   },
   profileJobTtlSeconds: boundedNumberValue(process.env.PROFILE_JOB_TTL_SECONDS, 3600, 3600),
   profileResultTtlSeconds: boundedNumberValue(process.env.PROFILE_RESULT_TTL_SECONDS, 1800, 1800),
+  providerSearchConcurrency: boundedNumberValue(process.env.PROVIDER_PROFILE_SEARCH_CONCURRENCY, 2, 5),
   feedbackNoteMaxLength: numberValue(process.env.FEEDBACK_NOTE_MAX_LENGTH, 240)
 };
 
