@@ -22,6 +22,8 @@ const placeholderTextPatterns = [
   /public address unavailable/i
 ];
 const placeholderDomainPattern = /^(?:example\.(?:com|org|net)|mock\.local|localhost|local|public-source|(?:.+\.)?test)$/i;
+const reservedHostPattern = /(?:^|\.)(?:invalid|example|localhost|local|test)$/i;
+const publicHostPattern = /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
 const unsafeContentPatterns = [
   /\bquote\b/i,
   /\bmember\b/i,
@@ -111,10 +113,55 @@ export const safeDomain = (domain: string | undefined, url: string | undefined, 
     }
   })();
 
-  const cleaned = cleanPublicText(fromUrl || domain, 255)?.toLowerCase();
-  if (!cleaned || containsUnsafeStoredContent(cleaned) || isPlaceholderDomain(cleaned)) {
+  const cleaned = cleanPublicText(fromUrl || domain, 255)?.toLowerCase().replace(/^www\./, "");
+  if (
+    !cleaned
+    || containsUnsafeStoredContent(cleaned)
+    || isPlaceholderDomain(cleaned)
+    || reservedHostPattern.test(cleaned)
+    || !publicHostPattern.test(cleaned)
+  ) {
     return fallback;
   }
 
   return cleaned.replace(/[^a-z0-9.-]/g, "").replace(/^\.+|\.+$/g, "") || fallback;
+};
+
+export const safePublicUrl = (value: string | undefined, expectedDomain?: string): string | undefined => {
+  const cleaned = cleanPublicText(value, 2048);
+  if (!cleaned) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(cleaned);
+    if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) {
+      return undefined;
+    }
+
+    const hostname = safeDomain(url.hostname, undefined);
+    if (hostname === "public-source") {
+      return undefined;
+    }
+
+    if (
+      expectedDomain
+      && hostname !== expectedDomain
+      && !hostname.endsWith(`.${expectedDomain}`)
+      && !expectedDomain.endsWith(`.${hostname}`)
+    ) {
+      return undefined;
+    }
+
+    [...url.searchParams.keys()].forEach((key) => {
+      if (/^(?:utm_.+|fbclid|gclid|dclid|msclkid|mc_cid|mc_eid|ref|referrer|source|tracking)$/i.test(key)) {
+        url.searchParams.delete(key);
+      }
+    });
+    url.searchParams.sort();
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return undefined;
+  }
 };

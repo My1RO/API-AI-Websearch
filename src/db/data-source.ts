@@ -3,11 +3,9 @@ import { DataSource } from "typeorm";
 
 import { env } from "../config/env";
 import { SafeFeedbackTables2026060200010 } from "../migrations/2026060200010-SafeFeedbackTables";
-import { DropFeedbackOptionalNote2026060200020 } from "../migrations/2026060200020-DropFeedbackOptionalNote";
 
 export const aiWebsearchMigrations = [
-  SafeFeedbackTables2026060200010,
-  DropFeedbackOptionalNote2026060200020
+  SafeFeedbackTables2026060200010
 ];
 
 export const createAiWebsearchDataSource = (): DataSource =>

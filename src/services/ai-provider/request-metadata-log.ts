@@ -1,19 +1,16 @@
 import { CreateProviderProfilesInput } from "../../validators/provider-profile.validator";
 
 interface AiProviderRequestMetadata {
-  provider: "openai" | "azure";
+  provider: "azure";
   model: string;
   input: CreateProviderProfilesInput;
   identityOnly: boolean;
   toolType: string;
   toolChoice: string;
-  externalWebAccess: boolean;
   store: boolean;
   maxToolCalls: number;
   parallelToolCalls: boolean;
-  searchContextSize?: string;
   reasoningEffort?: string;
-  includeSources?: boolean;
 }
 
 export const logAiProviderRequestMetadata = ({
@@ -23,13 +20,10 @@ export const logAiProviderRequestMetadata = ({
   identityOnly,
   toolType,
   toolChoice,
-  externalWebAccess,
   store,
   maxToolCalls,
   parallelToolCalls,
-  searchContextSize,
-  reasoningEffort,
-  includeSources
+  reasoningEffort
 }: AiProviderRequestMetadata): void => {
   console.log("AI provider request metadata", {
     provider,
@@ -44,12 +38,9 @@ export const logAiProviderRequestMetadata = ({
     identityOnly,
     toolType,
     toolChoice,
-    externalWebAccess,
     store,
     maxToolCalls,
     parallelToolCalls,
-    searchContextSize,
-    reasoningEffort,
-    includeSources
+    reasoningEffort
   });
 };

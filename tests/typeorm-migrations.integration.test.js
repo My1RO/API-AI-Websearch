@@ -87,37 +87,45 @@ describeDb("TypeORM migrations against MySQL", () => {
   it("runs up migrations, supports safe writes, and reverts back down", async () => {
     const migrations = await dataSource.runMigrations({ transaction: "none" });
     expect(migrations.map((migration) => migration.name)).toEqual([
-      "SafeFeedbackTables2026060200010",
-      "DropFeedbackOptionalNote2026060200020"
+      "SafeFeedbackTables2026060200010"
     ]);
 
     expect(await providerTables()).toEqual([
       "ai_provider_fact_consensus",
-      "ai_provider_fact_feedback",
-      "ai_provider_phone_call_events"
+      "ai_provider_fact_feedback_counts",
+      "ai_provider_phone_call_counts"
     ]);
-    expect(await hasColumn("ai_provider_fact_feedback", "optional_note")).toBe(false);
+    expect(await hasColumn("ai_provider_fact_feedback_counts", "optional_note")).toBe(false);
+    expect(await hasColumn("ai_provider_fact_feedback_counts", "submitter_class")).toBe(true);
+    expect(await hasColumn("ai_provider_fact_feedback_counts", "created_at")).toBe(false);
+    expect(await hasColumn("ai_provider_fact_feedback_counts", "feedback_day")).toBe(true);
 
     await dataSource.query(
-      `INSERT INTO ai_provider_fact_feedback
-        (broker_org_id, provider_npi, provider_id, fact_type, normalized_fact_value, validation_status, reason_code)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      ["broker-1", "1234567890", "provider-123", "phone", "+12164442200", "correct", "accurate"]
+      `INSERT INTO ai_provider_fact_feedback_counts
+        (aggregation_key, broker_org_id, submitter_class, provider_npi, provider_id, fact_type, normalized_fact_value, validation_status, reason_code, feedback_day, feedback_count)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+       ON DUPLICATE KEY UPDATE feedback_count = feedback_count + 1`,
+      ["a".repeat(64), "broker-1", "producer", "1234567890", "provider-123", "phone", "+12164442200", "correct", "accurate", "2026-07-28"]
     );
     await dataSource.query(
-      `INSERT INTO ai_provider_phone_call_events
-        (broker_org_id, provider_npi, provider_id, normalized_phone)
-       VALUES (?, ?, ?, ?)`,
-      ["broker-1", "1234567890", "provider-123", "+12164442200"]
+      `INSERT INTO ai_provider_fact_feedback_counts
+        (aggregation_key, broker_org_id, submitter_class, provider_npi, provider_id, fact_type, normalized_fact_value, validation_status, reason_code, feedback_day, feedback_count)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+       ON DUPLICATE KEY UPDATE feedback_count = feedback_count + 1`,
+      ["a".repeat(64), "broker-1", "producer", "1234567890", "provider-123", "phone", "+12164442200", "correct", "accurate", "2026-07-28"]
+    );
+    await dataSource.query(
+      `INSERT INTO ai_provider_phone_call_counts
+        (aggregation_key, broker_org_id, provider_npi, provider_id, normalized_phone, click_day, click_count)
+       VALUES (?, ?, ?, ?, ?, ?, 1)
+       ON DUPLICATE KEY UPDATE click_count = click_count + 1`,
+      ["b".repeat(64), "broker-1", "1234567890", "provider-123", "+12164442200", "2026-07-28"]
     );
 
-    const feedbackRows = await dataSource.query("SELECT broker_org_id, normalized_fact_value FROM ai_provider_fact_feedback");
-    const phoneRows = await dataSource.query("SELECT broker_org_id, normalized_phone FROM ai_provider_phone_call_events");
-    expect(feedbackRows).toEqual([{ broker_org_id: "broker-1", normalized_fact_value: "+12164442200" }]);
-    expect(phoneRows).toEqual([{ broker_org_id: "broker-1", normalized_phone: "+12164442200" }]);
-
-    await dataSource.undoLastMigration({ transaction: "none" });
-    expect(await hasColumn("ai_provider_fact_feedback", "optional_note")).toBe(true);
+    const feedbackRows = await dataSource.query("SELECT broker_org_id, submitter_class, normalized_fact_value, DATE_FORMAT(feedback_day, '%Y-%m-%d') AS feedback_day, feedback_count FROM ai_provider_fact_feedback_counts");
+    const phoneRows = await dataSource.query("SELECT broker_org_id, normalized_phone, DATE_FORMAT(click_day, '%Y-%m-%d') AS click_day, click_count FROM ai_provider_phone_call_counts");
+    expect(feedbackRows).toEqual([{ broker_org_id: "broker-1", submitter_class: "producer", normalized_fact_value: "+12164442200", feedback_day: "2026-07-28", feedback_count: 2 }]);
+    expect(phoneRows).toEqual([{ broker_org_id: "broker-1", normalized_phone: "+12164442200", click_day: "2026-07-28", click_count: 1 }]);
 
     await dataSource.undoLastMigration({ transaction: "none" });
     expect(await providerTables()).toEqual([]);

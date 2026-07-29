@@ -49,6 +49,7 @@ export interface ProviderProfile {
   locations: ProviderLocation[];
   phoneNumbers: SourcedValue[];
   ratings: ProviderRating[];
+  websites: SourcedValue[];
   publicInsuranceMentions: SourcedValue[];
   confidenceNotes?: string[];
   sources: ProviderSource[];

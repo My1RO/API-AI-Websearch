@@ -336,4 +336,96 @@ describe("provider profile sanitizer", () => {
 
     expect(profiles).toEqual([]);
   });
+
+  it("rejects personal-directory contacts, non-public domains, and malformed phone numbers", () => {
+    const profiles = sanitizeProviderProfiles([
+      {
+        ...baseProfile,
+        phoneNumbers: [
+          { value: "12345", sourceId: "official" },
+          { value: "(216) 444-2200", sourceId: "people-finder" }
+        ],
+        locations: [{ addressLine1: "100 Residential Way", sourceId: "people-finder" }],
+        sources: [
+          { id: "official", title: "Official provider", domain: "official-provider" },
+          { id: "people-finder", title: "Whitepages personal record", domain: "whitepages.com" }
+        ]
+      }
+    ]);
+
+    expect(profiles).toEqual([]);
+  });
+
+  it("retains a canonical official website and exact supporting page URL", () => {
+    const [profile] = sanitizeProviderProfiles([
+      {
+        ...baseProfile,
+        websites: [{ value: "https://clevelandclinic.org/locations/main-campus?tracking=1", sourceId: "official" }],
+        sources: [{
+          id: "official",
+          title: "The Cleveland Clinic Foundation official site",
+          domain: "clevelandclinic.org",
+          url: "https://clevelandclinic.org/locations/main-campus?tracking=1#contact"
+        }]
+      }
+    ]);
+
+    expect(profile.websites).toEqual([{
+      value: "https://clevelandclinic.org/locations/main-campus",
+      sourceId: "official",
+      sourceName: "The Cleveland Clinic Foundation official site"
+    }]);
+    expect(profile.sources).toEqual([{
+      id: "official",
+      title: "The Cleveland Clinic Foundation official site",
+      domain: "clevelandclinic.org",
+      url: "https://clevelandclinic.org/locations/main-campus"
+    }]);
+  });
+
+  it("deduplicates and deterministically prioritizes requested-location and official-source facts", () => {
+    const [profile] = sanitizeProviderProfilesForRequest(
+      [{
+        ...baseProfile,
+        phoneNumbers: [
+          { value: "(216) 444-2200", sourceId: "directory" },
+          { value: "216-444-2200", sourceId: "official" },
+          { value: "(440) 777-2201", sourceId: "directory" }
+        ],
+        locations: [
+          { addressLine1: "200 Other Ave", city: "Akron", state: "OH", zip: "44308", sourceId: "directory" },
+          { addressLine1: "9500 Euclid Ave", city: "Cleveland", state: "OH", zip: "44195", sourceId: "official" }
+        ],
+        ratings: [
+          { value: "4.7", scale: "5", sourceId: "healthgrades" },
+          { value: "4.8", scale: "5", sourceId: "zocdoc" }
+        ],
+        sources: [
+          { id: "directory", title: "NPI Profile", domain: "npiprofile.com" },
+          {
+            id: "official",
+            title: "The Cleveland Clinic Foundation official site",
+            domain: "clevelandclinic.org",
+            url: "https://clevelandclinic.org/locations/main-campus"
+          },
+          { id: "healthgrades", title: "Healthgrades rating", domain: "healthgrades.com" },
+          { id: "zocdoc", title: "Zocdoc rating", domain: "zocdoc.com" }
+        ]
+      }],
+      [{
+        providerId: "provider-123",
+        npi: "1234567890",
+        name: "The Cleveland Clinic Foundation",
+        city: "Cleveland",
+        state: "OH",
+        zip: "44195"
+      }]
+    );
+
+    expect(profile.phoneNumbers).toHaveLength(2);
+    expect(profile.phoneNumbers[0].sourceId).toBe("official");
+    expect(profile.locations[0].zip).toBe("44195");
+    expect(profile.ratings.map((rating) => rating.sourceId)).toEqual(["healthgrades", "zocdoc"]);
+    expect(profile.sources[0].id).toBe("official");
+  });
 });

@@ -7,10 +7,8 @@ import { HttpError } from "../errors/http-error";
 
 export interface AuthContext {
   requestId: string;
-  userId?: string;
   subdomain?: string;
-  ipAddress?: string;
-  origin?: string;
+  userClass?: string;
 }
 
 declare global {
@@ -31,27 +29,21 @@ const safeHeader = (request: Request, name: string, maxLength = 255): string | u
   return trimmed ? trimmed.slice(0, maxLength) : undefined;
 };
 
-const firstForwardedIp = (value?: string): string | undefined => {
-  return value?.split(",")[0]?.trim().slice(0, 64) || undefined;
-};
-
 const requiresPublicApiContext = (): boolean => {
   return env.nodeEnv === "production";
 };
 
 export const authContextMiddleware = (request: Request, _response: Response, next: NextFunction): void => {
-  const userId = safeHeader(request, "Lifecycle-User-Id") || safeHeader(request, "User-Id");
   const subdomain = safeHeader(request, "Lifecycle-Subdomain", 120);
+  const userClass = safeHeader(request, "Lifecycle-User-Class", 32);
 
   request.authContext = {
     requestId: safeHeader(request, "X-Request-Id", 120) || randomUUID(),
-    userId,
     subdomain,
-    ipAddress: firstForwardedIp(safeHeader(request, "X-Forwarded-For")) || safeHeader(request, "Ip-Address", 64),
-    origin: safeHeader(request, "Origin", 255)
+    userClass
   };
 
-  if (requiresPublicApiContext() && (!userId || !subdomain)) {
+  if (requiresPublicApiContext() && !subdomain) {
     throw new HttpError(401, "Missing Public-API request context.", "MISSING_PUBLIC_API_CONTEXT");
   }
 

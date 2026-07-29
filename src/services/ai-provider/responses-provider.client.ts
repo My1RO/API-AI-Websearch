@@ -1,35 +1,31 @@
 import OpenAI from "openai";
 
-import { env, ReasoningEffort, SearchContextSize, SearchToolChoice } from "../../config/env";
+import { env, ReasoningEffort, SearchToolChoice } from "../../config/env";
 import { AiProviderError } from "../../errors/http-error";
-import { assertAiRuntimeReady } from "../../config/runtime";
-import type { AiProviderName } from "../../config/runtime";
+import { assertAiRuntimeReady, azureOpenAiResponsesBaseUrl } from "../../config/runtime";
 import { CreateProviderProfilesInput } from "../../validators/provider-profile.validator";
 import { buildProviderProfilePrompt, providerProfileSystemInstructions } from "../prompt-builder.service";
-import { extractResponseText, parseProviderProfilesFromText } from "./response-parser";
+import { parseProviderProfilesFromResponse } from "./response-parser";
 import { ProviderProfileAiClient } from "./provider-client";
 import { logAiProviderRequestMetadata } from "./request-metadata-log";
 import { buildReasoningOptions, buildWebSearchFilters, supportsReasoningModel, WebSearchFilters } from "./search-request-config";
-
-interface OpenAiWebSearchTool {
-  type: "web_search";
-  external_web_access: false;
-  search_context_size: SearchContextSize;
-  filters?: WebSearchFilters;
-}
+import {
+  AiProviderAttempt,
+  AiProviderUsageRecord,
+  logAiProviderSearchSummary,
+  recordAiProviderUsage
+} from "./usage-telemetry";
 
 interface AzureWebSearchTool {
   type: "web_search";
   filters?: WebSearchFilters;
 }
 
-type ProviderProfileWebSearchTool = OpenAiWebSearchTool | AzureWebSearchTool;
-
 export interface ProviderProfileResponseRequest {
   model: string;
   instructions: string;
   input: string;
-  tools: ProviderProfileWebSearchTool[];
+  tools: AzureWebSearchTool[];
   tool_choice: SearchToolChoice;
   max_tool_calls: number;
   parallel_tool_calls: boolean;
@@ -43,38 +39,37 @@ interface ResponseStatusShape {
 
 const SDK_MAX_RETRIES = 2;
 
-export const normalizedResponsesBaseUrl = (provider: AiProviderName): string | undefined => {
-  if (provider === "openai") {
-    return env.aiBaseUrl ? env.aiBaseUrl.replace(/\/+$/, "") : undefined;
-  }
-
-  const baseUrl = env.aiBaseUrl.replace(/\/+$/, "");
+export const normalizedResponsesBaseUrl = (): string => {
+  const baseUrl = azureOpenAiResponsesBaseUrl(env.azureOpenAiEndpoint);
   if (!baseUrl) {
-    return undefined;
+    assertAiRuntimeReady();
+    throw new Error("Azure OpenAI endpoint validation did not produce a base URL.");
   }
 
-  return baseUrl.toLowerCase().endsWith("/openai/v1") ? baseUrl : `${baseUrl}/openai/v1`;
+  return baseUrl;
 };
 
-export const createResponsesClient = (provider: AiProviderName): OpenAI => {
+export const createResponsesClient = (): OpenAI => {
+  assertAiRuntimeReady();
   return new OpenAI({
-    apiKey: env.aiApiKey,
-    baseURL: normalizedResponsesBaseUrl(provider),
+    apiKey: env.azureOpenAiApiKey,
+    baseURL: normalizedResponsesBaseUrl(),
     maxRetries: SDK_MAX_RETRIES
   });
 };
 
 export const providerProfileResponseRequest = (
-  provider: AiProviderName,
   input: CreateProviderProfilesInput,
   identityOnly: boolean
 ): ProviderProfileResponseRequest => {
-  const reasoning = supportsReasoningModel(env.aiModel) ? buildReasoningOptions(env.aiReasoningEffort) : undefined;
+  const reasoning = supportsReasoningModel(env.azureOpenAiDeployment)
+    ? buildReasoningOptions(env.aiReasoningEffort)
+    : undefined;
   const request: ProviderProfileResponseRequest = {
-    model: env.aiModel,
+    model: env.azureOpenAiDeployment,
     instructions: providerProfileSystemInstructions,
     input: buildProviderProfilePrompt(input, { identityOnly }),
-    tools: [webSearchTool(provider)],
+    tools: [webSearchTool()],
     tool_choice: env.aiWebSearchToolChoice,
     max_tool_calls: env.aiWebSearchMaxToolCalls,
     parallel_tool_calls: env.aiWebSearchParallelToolCalls,
@@ -100,18 +95,26 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
   private client?: OpenAI;
 
   async searchProviderProfiles(input: CreateProviderProfilesInput) {
+    const usageRecords: AiProviderUsageRecord[] = [];
+    const searchStartedAt = Date.now();
+    let searchOutcome: "completed" | "failed" = "failed";
+
     try {
-      const response = await this.createResponse(input);
+      const response = await this.createResponse(input, false, usageRecords);
 
       try {
-        return parseProviderProfilesFromText(extractResponseText(response));
+        const profiles = parseProviderProfilesFromResponse(response);
+        searchOutcome = "completed";
+        return profiles;
       } catch (parseError) {
         if (!(parseError instanceof AiProviderError)) {
           throw parseError;
         }
 
-        const retryResponse = await this.createResponse(input, true);
-        return parseProviderProfilesFromText(extractResponseText(retryResponse));
+        const retryResponse = await this.createResponse(input, true, usageRecords);
+        const profiles = parseProviderProfilesFromResponse(retryResponse);
+        searchOutcome = "completed";
+        return profiles;
       }
     } catch (error) {
       if (error instanceof AiProviderError) {
@@ -119,53 +122,72 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
       }
 
       throw new AiProviderError();
+    } finally {
+      logAiProviderSearchSummary(usageRecords, searchOutcome, Date.now() - searchStartedAt);
     }
   }
 
-  private async createResponse(input: CreateProviderProfilesInput, identityOnly = false): Promise<unknown> {
-    const provider = assertAiRuntimeReady();
-    const request = providerProfileResponseRequest(provider, input, identityOnly);
+  private async createResponse(
+    input: CreateProviderProfilesInput,
+    identityOnly: boolean,
+    usageRecords: AiProviderUsageRecord[]
+  ): Promise<unknown> {
+    assertAiRuntimeReady();
+    const request = providerProfileResponseRequest(input, identityOnly);
+    const attempt: AiProviderAttempt = identityOnly ? "identity_retry" : "initial";
+    const startedAt = Date.now();
+    let usageRecorded = false;
 
     logAiProviderRequestMetadata({
-      provider,
-      model: env.aiModel,
+      provider: "azure",
+      model: env.azureOpenAiDeployment,
       input,
       identityOnly,
       toolType: request.tools[0].type,
       toolChoice: request.tool_choice,
-      externalWebAccess: false,
       store: request.store,
       maxToolCalls: request.max_tool_calls,
       parallelToolCalls: request.parallel_tool_calls,
-      searchContextSize: "search_context_size" in request.tools[0] ? request.tools[0].search_context_size : undefined,
       reasoningEffort: request.reasoning?.effort
     });
 
-    const response = await this.responsesClient(provider).responses.create(request as never);
-    assertCompletedResponse(response);
-    return response;
+    try {
+      const response = await this.responsesClient().responses.create(request as never);
+      const status = (response as ResponseStatusShape).status;
+      usageRecords.push(recordAiProviderUsage({
+        model: env.azureOpenAiDeployment,
+        attempt,
+        outcome: typeof status === "string" && status !== "completed" ? "incomplete" : "completed",
+        durationMs: Date.now() - startedAt,
+        response
+      }));
+      usageRecorded = true;
+      assertCompletedResponse(response);
+      return response;
+    } catch (error) {
+      if (!usageRecorded) {
+        usageRecords.push(recordAiProviderUsage({
+          model: env.azureOpenAiDeployment,
+          attempt,
+          outcome: "request_error",
+          durationMs: Date.now() - startedAt
+        }));
+      }
+
+      throw error;
+    }
   }
 
-  private responsesClient(provider: AiProviderName): OpenAI {
+  private responsesClient(): OpenAI {
     if (!this.client) {
-      this.client = createResponsesClient(provider);
+      this.client = createResponsesClient();
     }
 
     return this.client;
   }
 }
 
-const webSearchTool = (provider: AiProviderName): ProviderProfileWebSearchTool => {
+const webSearchTool = (): AzureWebSearchTool => {
   const filters = buildWebSearchFilters(env.aiWebSearchAllowedDomains, env.aiWebSearchBlockedDomains);
-
-  if (provider === "azure") {
-    return filters ? { type: "web_search", filters } : { type: "web_search" };
-  }
-
-  return {
-    type: "web_search",
-    external_web_access: false,
-    search_context_size: env.aiOpenAiSearchContextSize,
-    ...(filters ? { filters } : {})
-  };
+  return filters ? { type: "web_search", filters } : { type: "web_search" };
 };

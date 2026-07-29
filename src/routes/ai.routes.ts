@@ -24,15 +24,28 @@ const parseBody = <T>(schema: z.ZodType<T>, body: unknown): T => {
 
 aiRouter.use("/health", healthRouter);
 
-const brokerOrgIdFromRequest = (request: Express.Request): string => {
-  return request.authContext.subdomain || request.authContext.userId || "local";
+export const brokerOrgIdFromRequest = (request: Express.Request): string => {
+  return request.authContext.subdomain || "local";
+};
+
+const feedbackSubmitterClasses = new Set([
+  "consumer",
+  "producer",
+  "broker_admin",
+  "general_agent",
+  "internal_administrator"
+]);
+
+const submitterClassFromRequest = (request: Express.Request): string => {
+  const userClass = request.authContext.userClass || "";
+  return feedbackSubmitterClasses.has(userClass) ? userClass : "unknown";
 };
 
 aiRouter.post(
   "/provider-profiles",
   asyncHandler(async (request, response) => {
     const input = parseBody(createProviderProfilesSchema, request.body);
-    const job = await createProviderProfileJob(input);
+    const job = await createProviderProfileJob(input, brokerOrgIdFromRequest(request));
 
     response.status(202).json(job);
   })
@@ -43,7 +56,7 @@ aiRouter.get(
   asyncHandler(async (request, response) => {
     assertAiRuntimeReady();
     const requestId = requestIdParamSchema.parse(request.params.requestId);
-    const job = await getProviderProfileJob(requestId);
+    const job = await getProviderProfileJob(requestId, brokerOrgIdFromRequest(request));
 
     response.status(200).json(job);
   })
@@ -55,7 +68,8 @@ aiRouter.post(
     assertAiRuntimeReady();
     const input = parseBody(feedbackSchema, {
       ...request.body,
-      brokerOrgId: brokerOrgIdFromRequest(request)
+      brokerOrgId: brokerOrgIdFromRequest(request),
+      submitterClass: submitterClassFromRequest(request)
     });
     await saveFeedback(input);
 

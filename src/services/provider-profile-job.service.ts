@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import { env } from "../config/env";
 import { HttpError } from "../errors/http-error";
@@ -21,12 +21,23 @@ import {
   sanitizeProviderProfilesForRequest
 } from "./provider-profile-sanitizer.service";
 
-const jobKey = (requestId: string): string => `ai:websearch:provider-profile:job:${requestId}`;
+const jobOwnerScope = (ownerContext: string): string => {
+  const normalized = ownerContext.trim().toLowerCase();
+  if (!normalized) {
+    throw new Error("Provider profile job owner context is required.");
+  }
+
+  return createHash("sha256").update(normalized).digest("hex");
+};
+
+const jobKey = (requestId: string, ownerContext: string): string => (
+  `ai:websearch:provider-profile:job:${jobOwnerScope(ownerContext)}:${requestId}`
+);
 
 const expiresAt = (ttlSeconds: number): string => new Date(Date.now() + ttlSeconds * 1000).toISOString();
 
-const setJob = async (job: ProviderProfileJob, ttlSeconds: number): Promise<void> => {
-  await redis.set(jobKey(job.requestId), JSON.stringify(job), "EX", ttlSeconds);
+const setJob = async (job: ProviderProfileJob, ttlSeconds: number, ownerContext: string): Promise<void> => {
+  await redis.set(jobKey(job.requestId, ownerContext), JSON.stringify(job), "EX", ttlSeconds);
 };
 
 interface RedisJobStoreClient {
@@ -37,6 +48,7 @@ interface RedisJobStoreClient {
 
 interface ProviderProfileJobStoreOptions {
   redis: RedisJobStoreClient;
+  ownerContext: string;
   jobTtlSeconds?: number;
   resultTtlSeconds?: number;
   now?: () => Date;
@@ -219,17 +231,17 @@ export const createProviderProfileJobStore = (options: ProviderProfileJobStoreOp
   const writeJob = async (job: ProviderProfileJob, ttlSeconds: number): Promise<void> => {
     const payload = JSON.stringify(job);
     if (options.redis.set) {
-      await options.redis.set(jobKey(job.requestId), payload, "EX", ttlSeconds);
+      await options.redis.set(jobKey(job.requestId, options.ownerContext), payload, "EX", ttlSeconds);
       return;
     }
 
     if (options.redis.setex) {
-      await options.redis.setex(jobKey(job.requestId), ttlSeconds, payload);
+      await options.redis.setex(jobKey(job.requestId, options.ownerContext), ttlSeconds, payload);
     }
   };
 
   const readJob = async (requestId: string): Promise<ProviderProfileJob> => {
-    const rawJob = await options.redis.get(jobKey(requestId));
+    const rawJob = await options.redis.get(jobKey(requestId, options.ownerContext));
     if (!rawJob) {
       return {
         requestId,
@@ -353,7 +365,8 @@ const sanitizeCompletedProfiles = (
 
 const runProviderProfileJob = async (
   requestId: string,
-  input: CreateProviderProfilesInput
+  input: CreateProviderProfilesInput,
+  ownerContext: string
 ): Promise<void> => {
   const client = getProviderProfileAiClient();
   let currentJob = buildInitialProviderProfileJob(requestId, input, env.profileJobTtlSeconds);
@@ -368,7 +381,7 @@ const runProviderProfileJob = async (
         expiresAt: expiresAt(ttlSeconds)
       };
 
-      await setJob(currentJob, ttlSeconds);
+      await setJob(currentJob, ttlSeconds, ownerContext);
     });
 
     return writeQueue;
@@ -434,13 +447,15 @@ const runProviderProfileJob = async (
         expiresAt: expiresAt(env.profileResultTtlSeconds),
         error: safeJobError(error)
       },
-      env.profileResultTtlSeconds
+      env.profileResultTtlSeconds,
+      ownerContext
     );
   }
 };
 
 export const createProviderProfileJob = async (
-  input: CreateProviderProfilesInput
+  input: CreateProviderProfilesInput,
+  ownerContext: string
 ): Promise<ProviderProfileJob> => {
   getProviderProfileAiClient();
 
@@ -453,20 +468,23 @@ export const createProviderProfileJob = async (
   const requestId = randomUUID();
   const job = buildInitialProviderProfileJob(requestId, input, env.profileJobTtlSeconds);
 
-  await setJob(job, env.profileJobTtlSeconds);
-  void runProviderProfileJob(requestId, input);
+  await setJob(job, env.profileJobTtlSeconds, ownerContext);
+  void runProviderProfileJob(requestId, input, ownerContext);
 
   return job;
 };
 
-export const getProviderProfileJob = async (requestId: string): Promise<ProviderProfileJob> => {
+export const getProviderProfileJob = async (
+  requestId: string,
+  ownerContext: string
+): Promise<ProviderProfileJob> => {
   try {
     await ensureRedis();
   } catch {
     throw new HttpError(503, "Provider profile job store is unavailable.", "JOB_STORE_UNAVAILABLE");
   }
 
-  const rawJob = await redis.get(jobKey(requestId));
+  const rawJob = await redis.get(jobKey(requestId, ownerContext));
   if (!rawJob) {
     return {
       requestId,

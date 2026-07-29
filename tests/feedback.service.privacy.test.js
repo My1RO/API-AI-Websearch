@@ -7,10 +7,11 @@ jest.mock("../src/db/data-source", () => ({
 }));
 
 const {
-  assertFeedbackNoteIsSafe,
+  sanitizeFeedbackFactValueOrThrow,
   saveFeedback,
   savePhoneCall
 } = require("../src/services/feedback.service");
+const { feedbackSchema } = require("../src/validators/provider-profile.validator");
 
 const flattenExecuteParameters = () =>
   mockExecute.mock.calls.flatMap(([, params]) => (Array.isArray(params) ? params : []));
@@ -22,41 +23,74 @@ describe("feedback persistence privacy guardrails", () => {
   });
 
   it.each([
-    "member M-123 said this is wrong",
-    "client Jane Doe reported it",
-    "patient John Doe",
-    "DOB 01/02/1970",
-    "diagnosis hypertension",
-    "diagnosed with asthma",
-    "medication metformin",
-    "prescription refill",
-    "123-45-6789",
-    "jane@example.invalid"
-  ])("rejects optional feedback notes that look like PHI or client identifiers: %s", (note) => {
-    expect(() => assertFeedbackNoteIsSafe(note)).toThrow(/client or PHI data/i);
+    "optionalNote",
+    "memberId",
+    "userId",
+    "sessionId",
+    "queryId",
+    "jobId",
+    "requestId",
+    "quoteId",
+    "prompt",
+    "rawResponse",
+    "sourceUrl"
+  ])("strictly rejects the unsupported %s field", (field) => {
+    expect(() => feedbackSchema.parse({
+      brokerOrgId: "broker-1",
+      submitterClass: "consumer",
+      providerNpi: "1234567890",
+      factType: "phone",
+      normalizedFactValue: "+12164442200",
+      validationStatus: "correct",
+      [field]: "forbidden"
+    })).toThrow();
   });
 
-  it("allows absent or operational feedback notes", () => {
-    expect(() => assertFeedbackNoteIsSafe()).not.toThrow();
-    expect(() => assertFeedbackNoteIsSafe("Phone number is disconnected")).not.toThrow();
+  it.each([
+    ["profile", "Public Clinic", "wrong_provider"],
+    ["phone", "+1 (216) 444-2200", "wrong_phone"],
+    ["address", "100 Public Street, Cleveland OH 44113", "wrong_location"],
+    ["website", "https://www.publicclinic.org/contact?utm_source=test#top", "wrong_website"],
+    ["rating", "4.8 out of 5", "wrong_rating"]
+  ])("accepts structured %s feedback and normalizes its fact value", (factType, normalizedFactValue, reasonCode) => {
+    const parsed = feedbackSchema.parse({
+      brokerOrgId: "broker-1",
+      submitterClass: "consumer",
+      providerNpi: "1234567890",
+      factType,
+      normalizedFactValue,
+      validationStatus: "incorrect",
+      reasonCode
+    });
+
+    expect(sanitizeFeedbackFactValueOrThrow(parsed.factType, parsed.normalizedFactValue)).toEqual(
+      factType === "website"
+        ? "https://www.publicclinic.org/contact"
+        : expect.any(String)
+    );
   });
 
-  it("does not write rejected feedback notes to MySQL", async () => {
-    await expect(
-      saveFeedback({
-        brokerOrgId: "broker-1",
-        providerNpi: "1234567890",
-        factType: "phone",
-        normalizedFactValue: "+12164442200",
-        validationStatus: "incorrect",
-        optionalNote: "client Jane Doe reported this"
-      })
-    ).rejects.toThrow(/client or PHI data/i);
+  it("requires a type-compatible structured reason for incorrect feedback", () => {
+    const base = {
+      brokerOrgId: "broker-1",
+      submitterClass: "producer",
+      providerId: "provider-123",
+      factType: "website",
+      normalizedFactValue: "https://publicclinic.org",
+      validationStatus: "incorrect"
+    };
 
-    expect(mockExecute).not.toHaveBeenCalled();
+    expect(() => feedbackSchema.parse(base)).toThrow(/structured reason/i);
+    expect(() => feedbackSchema.parse({ ...base, reasonCode: "wrong_phone" })).toThrow(/not valid for website/i);
+    expect(feedbackSchema.parse({ ...base, reasonCode: "wrong_website" }).reasonCode).toBe("wrong_website");
+    expect(() => feedbackSchema.parse({
+      ...base,
+      validationStatus: "correct",
+      reasonCode: "outdated"
+    })).toThrow(/accurate reason/i);
   });
 
-  it("persists only normalized fact feedback fields and ignores notes/raw AI/source/prompt extras", async () => {
+  it("persists only aggregated normalized structured feedback counts", async () => {
     const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => undefined);
     const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined);
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => undefined);
@@ -64,25 +98,19 @@ describe("feedback persistence privacy guardrails", () => {
     try {
       await saveFeedback({
         brokerOrgId: "broker-1",
+        submitterClass: "producer",
         providerNpi: "1234567890",
         providerId: "provider-123",
         factType: "phone",
         normalizedFactValue: "+12164442200",
-        validationStatus: "correct",
-        reasonCode: "accurate",
-        optionalNote: "Phone number answered",
-        prompt: "FORBIDDEN_PROMPT",
-        rawResponse: "FORBIDDEN_RAW_RESPONSE",
-        sourceUrl: "https://example.invalid/provider",
-        citationPayload: { url: "https://example.invalid/citation" },
-        quoteId: "QUOTE-123",
-        memberId: "MEMBER-123"
+        validationStatus: "correct"
       });
 
       expect(mockExecute).toHaveBeenCalledTimes(2);
       expect(flattenExecuteParameters()).toEqual(
         expect.arrayContaining([
           "broker-1",
+          "producer",
           "1234567890",
           "provider-123",
           "phone",
@@ -93,20 +121,10 @@ describe("feedback persistence privacy guardrails", () => {
           0
         ])
       );
-      expect(flattenExecuteParameters()).not.toEqual(
-        expect.arrayContaining([
-          "Phone number answered",
-          "FORBIDDEN_PROMPT",
-          "FORBIDDEN_RAW_RESPONSE",
-          "https://example.invalid/provider",
-          "QUOTE-123",
-          "MEMBER-123"
-        ])
-      );
       expect(flattenExecuteParameters().some((value) => value && typeof value === "object")).toBe(false);
-      expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/FORBIDDEN_|example\.invalid|QUOTE-123|MEMBER-123/);
-      expect(JSON.stringify(consoleWarnSpy.mock.calls)).not.toMatch(/FORBIDDEN_|example\.invalid|QUOTE-123|MEMBER-123/);
-      expect(JSON.stringify(consoleErrorSpy.mock.calls)).not.toMatch(/FORBIDDEN_|example\.invalid|QUOTE-123|MEMBER-123/);
+      expect(JSON.stringify(consoleLogSpy.mock.calls)).toBe("[]");
+      expect(JSON.stringify(consoleWarnSpy.mock.calls)).toBe("[]");
+      expect(JSON.stringify(consoleErrorSpy.mock.calls)).toBe("[]");
     } finally {
       consoleLogSpy.mockRestore();
       consoleWarnSpy.mockRestore();
@@ -117,6 +135,7 @@ describe("feedback persistence privacy guardrails", () => {
   it("uses non-null consensus identifiers so NPI-only feedback can upsert", async () => {
     await saveFeedback({
       brokerOrgId: "broker-1",
+      submitterClass: "broker_admin",
       providerNpi: "1234567890",
       factType: "phone",
       normalizedFactValue: "+12164442200",
@@ -126,26 +145,45 @@ describe("feedback persistence privacy guardrails", () => {
 
     expect(mockExecute).toHaveBeenCalledTimes(2);
     expect(mockExecute.mock.calls[0][1]).toEqual([
+      expect.stringMatching(/^[a-f0-9]{64}$/),
       "broker-1",
+      "broker_admin",
       "1234567890",
-      null,
+      "",
       "phone",
       "+12164442200",
       "correct",
-      "accurate"
+      "accurate",
+      expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/)
     ]);
     expect(mockExecute.mock.calls[1][1]).toEqual([
+      expect.stringMatching(/^[a-f0-9]{64}$/),
       "broker-1",
       "1234567890",
       "",
       "phone",
       "+12164442200",
+      expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
       1,
       0
     ]);
   });
 
-  it("stores phone click events with the normalized phone value only, not raw display/source fields", async () => {
+  it("treats only correctness feedback as positive consensus", async () => {
+    await saveFeedback({
+      brokerOrgId: "broker-1",
+      submitterClass: "consumer",
+      providerNpi: "1234567890",
+      factType: "profile",
+      normalizedFactValue: "The Cleveland Clinic Foundation",
+      validationStatus: "incorrect",
+      reasonCode: "outdated"
+    });
+
+    expect(mockExecute.mock.calls[1][1].slice(-2)).toEqual([0, 1]);
+  });
+
+  it("stores only an aggregated normalized phone-click count, not raw display/source fields", async () => {
     const consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => undefined);
     const consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => undefined);
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => undefined);
@@ -165,18 +203,38 @@ describe("feedback persistence privacy guardrails", () => {
 
       expect(mockExecute).toHaveBeenCalledTimes(1);
       expect(mockExecute.mock.calls[0][1]).toEqual([
+        expect.stringMatching(/^[a-f0-9]{64}$/),
         "broker-1",
         "1234567890",
         "provider-123",
-        "+12164442200"
+        "+12164442200",
+        expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/)
       ]);
       expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/FORBIDDEN_|example\.invalid|CLIENT-123/);
       expect(JSON.stringify(consoleWarnSpy.mock.calls)).not.toMatch(/FORBIDDEN_|example\.invalid|CLIENT-123/);
       expect(JSON.stringify(consoleErrorSpy.mock.calls)).not.toMatch(/FORBIDDEN_|example\.invalid|CLIENT-123/);
+      expect(mockExecute.mock.calls[0][0]).toMatch(/ON DUPLICATE KEY UPDATE click_count = click_count \+ 1/);
     } finally {
       consoleLogSpy.mockRestore();
       consoleWarnSpy.mockRestore();
       consoleErrorSpy.mockRestore();
     }
+  });
+
+  it("persists only a UTC day bucket, never a per-click timestamp or raw event row", async () => {
+    await saveFeedback({
+      brokerOrgId: "broker-1",
+      submitterClass: "consumer",
+      providerNpi: "1234567890",
+      factType: "address",
+      normalizedFactValue: "100 Public Street, Cleveland OH 44113",
+      validationStatus: "incorrect",
+      reasonCode: "wrong_location"
+    });
+
+    const persistenceSql = mockExecute.mock.calls.map(([sql]) => sql).join("\n");
+    expect(persistenceSql).toMatch(/feedback_count = feedback_count \+ 1/);
+    expect(persistenceSql).toMatch(/feedback_day/);
+    expect(persistenceSql).not.toMatch(/created_at|updated_at|last_validated_at|NOW\(\)|event/i);
   });
 });

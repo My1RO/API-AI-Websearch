@@ -1,110 +1,91 @@
 import { env } from "./env";
 import { HttpError } from "../errors/http-error";
 
-export type AiProviderName = "openai" | "azure";
-
 export interface AiRuntimeStatus {
-  provider: string;
+  provider: "azure";
   enabled: boolean;
   ready: boolean;
   reason?: string;
   baseUrl?: string;
 }
 
-const providerNames: AiProviderName[] = ["openai", "azure"];
-
-export const getConfiguredProvider = (): AiProviderName | null => {
-  if (env.aiProviderOverride) {
-    return providerNames.includes(env.aiProviderOverride as AiProviderName) ? env.aiProviderOverride as AiProviderName : null;
-  }
-
-  return providerFromBaseUrl(env.aiBaseUrl);
-};
-
-export const providerFromBaseUrl = (baseUrl: string): AiProviderName | null => {
-  if (!baseUrl) {
-    return "openai";
-  }
-
+export const azureOpenAiResponsesBaseUrl = (endpoint: string): string | null => {
   let parsed: URL;
   try {
-    parsed = new URL(baseUrl);
+    parsed = new URL(endpoint);
   } catch {
     return null;
   }
 
   const hostname = parsed.hostname.toLowerCase();
-  const pathname = parsed.pathname.toLowerCase();
+  const pathname = parsed.pathname.replace(/\/+$/, "").toLowerCase();
+  const isAzureHost = hostname.endsWith(".openai.azure.com");
+  const isSupportedPath = pathname === "" || pathname === "/openai/v1";
+  const hasOnlyEndpointParts = !parsed.username && !parsed.password && !parsed.port
+    && !parsed.search && !parsed.hash;
 
-  if (hostname === "api.openai.com") {
-    return "openai";
+  if (parsed.protocol !== "https:" || !isAzureHost || !isSupportedPath || !hasOnlyEndpointParts) {
+    return null;
   }
 
-  if (hostname.endsWith(".openai.azure.com") || pathname.includes("/openai/v1")) {
-    return "azure";
-  }
-
-  return null;
+  return `${parsed.origin}/openai/v1`;
 };
 
 export const getAiRuntimeStatus = (): AiRuntimeStatus => {
-  const provider = getConfiguredProvider();
+  const baseUrl = azureOpenAiResponsesBaseUrl(env.azureOpenAiEndpoint);
 
-  if (!provider) {
+  if (!baseUrl) {
     return {
-      provider: env.aiProviderOverride || "unknown",
+      provider: "azure",
       enabled: false,
       ready: false,
-      reason: "unsupported_provider",
-      baseUrl: env.aiBaseUrl
+      reason: env.azureOpenAiEndpoint ? "invalid_azure_endpoint" : "azure_endpoint_not_configured",
+      baseUrl: env.azureOpenAiEndpoint
     };
   }
 
   if (!env.aiFeatureEnabled) {
     return {
-      provider,
+      provider: "azure",
       enabled: false,
       ready: false,
       reason: "feature_disabled",
-      baseUrl: env.aiBaseUrl
+      baseUrl
     };
   }
 
   if (!env.aiComplianceConfirmed) {
     return {
-      provider,
+      provider: "azure",
       enabled: true,
       ready: false,
       reason: "compliance_gate_unconfirmed",
-      baseUrl: env.aiBaseUrl
+      baseUrl
     };
   }
 
-  if (!env.aiApiKey || !env.aiModel) {
+  if (!env.azureOpenAiApiKey || !env.azureOpenAiDeployment) {
     return {
-      provider,
+      provider: "azure",
       enabled: true,
       ready: false,
       reason: "provider_not_configured",
-      baseUrl: env.aiBaseUrl
+      baseUrl
     };
   }
 
   return {
-    provider,
+    provider: "azure",
     enabled: true,
     ready: true,
-    baseUrl: env.aiBaseUrl
+    baseUrl
   };
 };
 
-export const assertAiRuntimeReady = (): AiProviderName => {
+export const assertAiRuntimeReady = (): void => {
   const status = getAiRuntimeStatus();
-  const provider = getConfiguredProvider();
 
-  if (!status.ready || !provider) {
+  if (!status.ready) {
     throw new HttpError(503, "AI provider profile runtime is not available.", "AI_RUNTIME_UNAVAILABLE");
   }
-
-  return provider;
 };

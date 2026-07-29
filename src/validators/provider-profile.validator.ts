@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-import { env } from "../config/env";
-
 const optionalTrimmedString = z
   .string()
   .trim()
@@ -28,7 +26,7 @@ export const sourceSchema = z.object({
   id: z.string().trim().min(1).max(80),
   title: z.string().trim().min(1).max(255),
   domain: z.string().trim().min(1).max(255),
-  url: z.string().trim().url().optional()
+  url: z.string().trim().max(2048).optional()
 }).strip();
 
 export const sourcedValueSchema = z.object({
@@ -66,6 +64,7 @@ export const providerProfileSchema = z.object({
       }).strip()
     )
     .default([]),
+  websites: z.array(sourcedValueSchema).default([]),
   publicInsuranceMentions: z.array(sourcedValueSchema).default([]),
   confidenceNotes: z.array(z.string().trim().min(1).max(500)).default([]),
   sources: z.array(sourceSchema).default([])
@@ -105,20 +104,68 @@ export const providerProfileJobSchema = z.object({
 
 export const requestIdParamSchema = z.string().uuid();
 
+export const feedbackFactTypes = ["profile", "phone", "address", "website", "rating"] as const;
+export const feedbackReasonCodes = [
+  "accurate",
+  "outdated",
+  "wrong_provider",
+  "wrong_location",
+  "wrong_phone",
+  "wrong_website",
+  "wrong_rating",
+  "missing_info",
+  "other"
+] as const;
+
+const typeSpecificFeedbackReasons = {
+  profile: new Set(["outdated", "wrong_provider", "missing_info", "other"]),
+  phone: new Set(["outdated", "wrong_provider", "wrong_phone", "missing_info", "other"]),
+  address: new Set(["outdated", "wrong_provider", "wrong_location", "missing_info", "other"]),
+  website: new Set(["outdated", "wrong_provider", "wrong_website", "missing_info", "other"]),
+  rating: new Set(["outdated", "wrong_provider", "wrong_rating", "missing_info", "other"])
+} satisfies Record<(typeof feedbackFactTypes)[number], Set<string>>;
+
 export const feedbackSchema = z.object({
   brokerOrgId: z.string().trim().min(1).max(120),
+  submitterClass: z.enum(["consumer", "producer", "broker_admin", "general_agent", "internal_administrator", "unknown"]),
   providerId: z.string().trim().min(1).max(255).optional(),
   providerNpi: z.string().trim().regex(/^\d{10}$/).optional(),
-  factType: z.enum(["profile", "phone", "address", "rating", "specialty", "public_insurance_mention"]),
-  normalizedFactValue: z.string().trim().min(1).max(500),
-  validationStatus: z.enum(["useful", "not_useful", "correct", "incorrect"]),
-  reasonCode: z
-    .enum(["accurate", "outdated", "wrong_provider", "wrong_location", "wrong_phone", "missing_info", "other"])
-    .optional(),
-  optionalNote: z.string().trim().max(env.feedbackNoteMaxLength).optional()
-}).strict().refine((value) => value.providerId || value.providerNpi, {
-  message: "providerId or providerNpi is required",
-  path: ["providerId"]
+  factType: z.enum(feedbackFactTypes),
+  normalizedFactValue: z.string().trim().min(1).max(255),
+  validationStatus: z.enum(["correct", "incorrect"]),
+  reasonCode: z.enum(feedbackReasonCodes).optional()
+}).strict().superRefine((value, context) => {
+  if (!value.providerId && !value.providerNpi) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "providerId or providerNpi is required",
+      path: ["providerId"]
+    });
+  }
+
+  if (value.validationStatus === "correct" && value.reasonCode && value.reasonCode !== "accurate") {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Correct feedback may only use the accurate reason",
+      path: ["reasonCode"]
+    });
+  }
+
+  if (value.validationStatus === "incorrect") {
+    if (!value.reasonCode) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Incorrect feedback requires a structured reason",
+        path: ["reasonCode"]
+      });
+    } else if (!typeSpecificFeedbackReasons[value.factType].has(value.reasonCode)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Reason ${value.reasonCode} is not valid for ${value.factType} feedback`,
+        path: ["reasonCode"]
+      });
+    }
+  }
 });
 
 export const phoneCallSchema = z.object({

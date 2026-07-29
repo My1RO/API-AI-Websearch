@@ -4,6 +4,7 @@ import { sanitizeProviderProfiles } from "../provider-profile-sanitizer.service"
 interface ResponseContentPart {
   type?: string;
   text?: unknown;
+  annotations?: unknown;
 }
 
 interface ResponseOutputItem {
@@ -81,4 +82,55 @@ export const parseProviderProfilesFromText = (value: string) => {
   }
 
   return sanitizeProviderProfiles(profiles);
+};
+
+const citationUrlFromAnnotation = (annotation: unknown): string | undefined => {
+  if (!annotation || typeof annotation !== "object" || Array.isArray(annotation)) {
+    return undefined;
+  }
+
+  const record = annotation as Record<string, unknown>;
+  if (record.type !== "url_citation") {
+    return undefined;
+  }
+  const nested = record.url_citation;
+  if (typeof record.url === "string") {
+    return record.url;
+  }
+  if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+    const nestedUrl = (nested as Record<string, unknown>).url;
+    return typeof nestedUrl === "string" ? nestedUrl : undefined;
+  }
+
+  return undefined;
+};
+
+export const extractResponseCitationUrls = (response: unknown): string[] => {
+  const shaped = response as ResponseShape;
+  return [...new Set(
+    (shaped.output || [])
+      .flatMap((item) => item.content || [])
+      .flatMap((part) => Array.isArray(part.annotations) ? part.annotations : [])
+      .map(citationUrlFromAnnotation)
+      .filter((url): url is string => Boolean(url))
+  )];
+};
+
+export const parseProviderProfilesFromResponse = (response: unknown) => {
+  let parsed: unknown;
+
+  try {
+    parsed = JSON.parse(extractJsonText(extractResponseText(response)));
+  } catch {
+    throw new AiProviderError("AI provider returned an invalid profile payload.");
+  }
+
+  const profiles = Array.isArray(parsed) ? parsed : (parsed as { profiles?: unknown }).profiles;
+  if (!profiles) {
+    throw new AiProviderError("AI provider returned an invalid profile payload.");
+  }
+
+  return sanitizeProviderProfiles(profiles, {
+    allowedSourceUrls: extractResponseCitationUrls(response)
+  });
 };

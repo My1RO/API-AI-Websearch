@@ -1,9 +1,6 @@
 const {
   SafeFeedbackTables2026060200010
 } = require("../src/migrations/2026060200010-SafeFeedbackTables");
-const {
-  DropFeedbackOptionalNote2026060200020
-} = require("../src/migrations/2026060200020-DropFeedbackOptionalNote");
 
 const buildQueryRunner = () => ({
   query: jest.fn().mockResolvedValue(undefined),
@@ -20,35 +17,29 @@ describe("TypeORM explicit migrations", () => {
     expect(queryRunner.query).toHaveBeenCalledTimes(3);
     expect(queryRunner.query.mock.calls.map(([sql]) => sql)).toEqual(
       expect.arrayContaining([
-        expect.stringContaining("CREATE TABLE IF NOT EXISTS ai_provider_fact_feedback"),
-        expect.stringContaining("CREATE TABLE IF NOT EXISTS ai_provider_phone_call_events"),
+        expect.stringContaining("CREATE TABLE IF NOT EXISTS ai_provider_fact_feedback_counts"),
+        expect.stringContaining("CREATE TABLE IF NOT EXISTS ai_provider_phone_call_counts"),
         expect.stringContaining("CREATE TABLE IF NOT EXISTS ai_provider_fact_consensus")
       ])
     );
-    expect(JSON.stringify(queryRunner.query.mock.calls)).not.toMatch(/optional_note|source_url|prompt|raw_response|quote_id|member_id|client_id/i);
+    const migrationSql = JSON.stringify(queryRunner.query.mock.calls);
+    expect(migrationSql).toMatch(/submitter_class/);
+    expect(migrationSql).toMatch(/broker_org_id, submitter_class/);
+    expect(migrationSql).toMatch(/reason_code VARCHAR\(80\) NOT NULL/);
+    expect(migrationSql).toMatch(/feedback_count INT UNSIGNED/);
+    expect(migrationSql).toMatch(/click_count INT UNSIGNED/);
+    expect(migrationSql).toMatch(/feedback_day DATE NOT NULL/);
+    expect(migrationSql).toMatch(/click_day DATE NOT NULL/);
+    expect(migrationSql).not.toMatch(/created_at|updated_at|last_validated_at/);
+    expect(migrationSql).not.toMatch(/optional_note|source_url|prompt|raw_response|quote_id|member_id|client_id|user_id|session_id|query_id|job_id|request_id/i);
 
     queryRunner.query.mockClear();
     await migration.down(queryRunner);
     expect(queryRunner.query.mock.calls.map(([sql]) => sql)).toEqual([
       "DROP TABLE IF EXISTS ai_provider_fact_consensus",
-      "DROP TABLE IF EXISTS ai_provider_phone_call_events",
-      "DROP TABLE IF EXISTS ai_provider_fact_feedback"
+      "DROP TABLE IF EXISTS ai_provider_phone_call_counts",
+      "DROP TABLE IF EXISTS ai_provider_fact_feedback_counts"
     ]);
   });
 
-  it("drops optional_note only when present and can add it back on explicit revert", async () => {
-    const queryRunner = buildQueryRunner();
-    const migration = new DropFeedbackOptionalNote2026060200020();
-
-    queryRunner.hasColumn.mockResolvedValueOnce(true);
-    await migration.up(queryRunner);
-    expect(queryRunner.query).toHaveBeenCalledWith("ALTER TABLE ai_provider_fact_feedback DROP COLUMN optional_note");
-
-    queryRunner.query.mockClear();
-    queryRunner.hasColumn.mockResolvedValueOnce(false);
-    await migration.down(queryRunner);
-    expect(queryRunner.query).toHaveBeenCalledWith(
-      "ALTER TABLE ai_provider_fact_feedback ADD COLUMN optional_note VARCHAR(240) DEFAULT NULL"
-    );
-  });
 });

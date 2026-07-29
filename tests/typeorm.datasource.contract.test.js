@@ -18,8 +18,7 @@ describe("TypeORM datasource contract", () => {
     );
     expect(dataSource.options.entities).toEqual([]);
     expect(aiWebsearchMigrations.map((migration) => migration.name)).toEqual([
-      "SafeFeedbackTables2026060200010",
-      "DropFeedbackOptionalNote2026060200020"
+      "SafeFeedbackTables2026060200010"
     ]);
   });
 });

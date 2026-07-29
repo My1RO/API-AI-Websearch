@@ -66,6 +66,7 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
     if (makeStore) {
       return makeStore({
         redis,
+        ownerContext: "test-tenant",
         jobTtlSeconds: 3600,
         resultTtlSeconds: 1800,
         now: () => new Date("2026-06-01T12:00:00.000Z")
@@ -141,6 +142,38 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
     await expect(api.getJob("request-1")).resolves.toEqual(
       expect.objectContaining({ status: "expired" })
     );
+  });
+
+  it("keeps UUID jobs isolated by a hashed tenant scope without provider data in Redis keys", async () => {
+    const redis = createMockRedis();
+    const commonOptions = {
+      redis,
+      jobTtlSeconds: 3600,
+      resultTtlSeconds: 1800,
+      now: () => new Date("2026-06-01T12:00:00.000Z")
+    };
+    const tenantA = makeStore({ ...commonOptions, ownerContext: "Broker-A" });
+    const tenantB = makeStore({ ...commonOptions, ownerContext: "broker-b" });
+    const requestId = "00000000-0000-4000-8000-000000000001";
+
+    await tenantA.createJob(requestId, {
+      providers: [{ npi: "1679525919", name: "THE CLEVELAND CLINIC FOUNDATION" }],
+      lineOfCoverage: "Medical"
+    });
+
+    await expect(tenantA.getJob(requestId)).resolves.toEqual(expect.objectContaining({
+      requestId,
+      status: "queued"
+    }));
+    await expect(tenantB.getJob(requestId)).resolves.toEqual(expect.objectContaining({
+      requestId,
+      status: "expired"
+    }));
+
+    const redisKeys = redis.set.mock.calls.map(([key]) => key);
+    expect(redisKeys).toHaveLength(1);
+    expect(redisKeys[0]).toContain(requestId);
+    expect(redisKeys[0]).not.toMatch(/broker-a|1679525919|cleveland/i);
   });
 
   it("returns partial provider snapshots before every provider reaches a terminal state", async () => {
