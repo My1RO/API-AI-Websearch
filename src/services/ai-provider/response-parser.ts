@@ -1,4 +1,5 @@
 import { AiProviderError } from "../../errors/http-error";
+import { providerProfileStructuredOutputSchema } from "../../validators/provider-profile.validator";
 import { sanitizeProviderProfiles } from "../provider-profile-sanitizer.service";
 
 interface ResponseContentPart {
@@ -173,16 +174,13 @@ export const parseProviderProfilesFromResponse = (response: unknown) => {
 
   if (!parsed) {
     try {
-      parsed = JSON.parse(extractJsonText(extractResponseText(response)));
+      parsed = JSON.parse(extractResponseText(response));
     } catch {
       throw new AiProviderError("AI provider returned an invalid profile payload.");
     }
   }
 
-  const profiles = Array.isArray(parsed) ? parsed : (parsed as { profiles?: unknown }).profiles;
-  if (!profiles) {
-    throw new AiProviderError("AI provider returned an invalid profile payload.");
-  }
+  const profiles = providerProfileStructuredOutputSchema.parse(parsed).profiles;
 
   return sanitizeProviderProfiles(profiles, {
     allowedSourceUrls: extractResponseProvenanceUrls(response)

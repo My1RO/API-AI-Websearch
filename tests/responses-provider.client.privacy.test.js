@@ -1,11 +1,43 @@
-const mockParseResponse = jest.fn();
+const mockCreateResponse = jest.fn();
 const mockOpenAIConstructor = jest.fn().mockImplementation(() => ({
   responses: {
-    parse: mockParseResponse
+    create: mockCreateResponse
   }
 }));
 const ORIGINAL_ENV = process.env;
 let consoleLogSpy;
+const auditedCompletionFilterFixtures = [
+  {
+    name: "confirmatory-v2 V0/P049",
+    response: require("./fixtures/azure-content-filter/v0-p049.json"),
+    expectedOutputTypes: ["web_search_call", "reasoning", "web_search_call", "message"],
+    expectedUsage: {
+      inputTokens: 10353,
+      cachedInputTokens: 6144,
+      uncachedInputTokens: 4209,
+      outputTokens: 142,
+      reasoningOutputTokens: 142,
+      totalTokens: 10495,
+      webSearchCalls: 2,
+      totalUsd: 0.0341885
+    }
+  },
+  {
+    name: "confirmatory-v2 V1/P056",
+    response: require("./fixtures/azure-content-filter/v1-p056.json"),
+    expectedOutputTypes: ["web_search_call", "message"],
+    expectedUsage: {
+      inputTokens: 6763,
+      cachedInputTokens: 5120,
+      uncachedInputTokens: 1643,
+      outputTokens: 43,
+      reasoningOutputTokens: 43,
+      totalTokens: 6806,
+      webSearchCalls: 1,
+      totalUsd: 0.0160325
+    }
+  }
+];
 
 jest.mock("openai", () => ({
   __esModule: true,
@@ -41,7 +73,27 @@ const loadClient = (overrides = {}) => {
 };
 
 const citedProfileResponse = profiles => {
-  const outputText = JSON.stringify({ profiles });
+  const strictProfiles = profiles.map(profile => ({
+    providerId: profile.providerId ?? null,
+    npi: profile.npi ?? null,
+    providerName: profile.providerName,
+    specialties: (profile.specialties || []).map(value => ({ sourceName: null, ...value })),
+    locations: (profile.locations || []).map(location => ({
+      addressLine2: null,
+      city: null,
+      state: null,
+      zip: null,
+      sourceName: null,
+      ...location
+    })),
+    phoneNumbers: (profile.phoneNumbers || []).map(value => ({ sourceName: null, ...value })),
+    ratings: (profile.ratings || []).map(rating => ({ scale: null, sourceName: null, ...rating })),
+    websites: (profile.websites || []).map(value => ({ sourceName: null, ...value })),
+    publicInsuranceMentions: (profile.publicInsuranceMentions || []).map(value => ({ sourceName: null, ...value })),
+    confidenceNotes: profile.confidenceNotes || [],
+    sources: profile.sources || []
+  }));
+  const outputText = JSON.stringify({ profiles: strictProfiles });
   return {
     status: "completed",
     usage: {
@@ -51,7 +103,7 @@ const citedProfileResponse = profiles => {
       output_tokens_details: { reasoning_tokens: 4 },
       total_tokens: 110
     },
-    output_parsed: { profiles },
+    output_parsed: { profiles: strictProfiles },
     output_text: outputText,
     output: [{
       type: "message",
@@ -86,12 +138,25 @@ const successfulProfileResponse = () => citedProfileResponse([
   }
 ]);
 
+const completionContentFilter = (usage = undefined) => ({
+  status: "incomplete",
+  incomplete_details: { reason: "content_filter" },
+  content_filters: [{
+    blocked: true,
+    source_type: "completion",
+    content_filter_results: {
+      protected_material_text: { detected: true, filtered: true }
+    }
+  }],
+  ...(usage ? { usage } : {})
+});
+
 describe("Azure OpenAI Responses client privacy contract", () => {
   beforeEach(() => {
     consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-    mockParseResponse.mockReset();
+    mockCreateResponse.mockReset();
     mockOpenAIConstructor.mockClear();
-    mockParseResponse.mockResolvedValue(successfulProfileResponse());
+    mockCreateResponse.mockResolvedValue(successfulProfileResponse());
   });
 
   afterEach(() => {
@@ -99,6 +164,58 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     process.env = ORIGINAL_ENV;
     jest.resetModules();
   });
+
+  it.each(auditedCompletionFilterFixtures)(
+    "retains the audited Azure completion-filter shape for $name",
+    ({ response, expectedOutputTypes, expectedUsage }) => {
+      expect(response).toEqual(expect.objectContaining({
+        object: "response",
+        status: "incomplete",
+        incomplete_details: { reason: "content_filter" },
+        output_text: "I'm sorry, but I cannot assist with that request.",
+        usage: {
+          input_tokens: expectedUsage.inputTokens,
+          input_tokens_details: { cached_tokens: expectedUsage.cachedInputTokens },
+          output_tokens: expectedUsage.outputTokens,
+          output_tokens_details: { reasoning_tokens: expectedUsage.reasoningOutputTokens },
+          total_tokens: expectedUsage.totalTokens
+        }
+      }));
+      expect(response.content_filters.map(filter => [filter.source_type, filter.blocked])).toEqual([
+        ["prompt", false],
+        ["completion", true]
+      ]);
+      expect(response.content_filters[1]).toEqual(expect.objectContaining({
+        content_filter_results: expect.objectContaining({
+          protected_material_text: { detected: true, filtered: true }
+        }),
+        content_filter_offsets: expect.objectContaining({
+          start_offset: expect.any(Number),
+          end_offset: expect.any(Number),
+          check_offset: expect.any(Number)
+        })
+      }));
+      expect(response.output.map(item => item.type)).toEqual(expectedOutputTypes);
+      const webSearchCalls = response.output.filter(item => item.type === "web_search_call");
+      expect(webSearchCalls.map(item => item.status)).toEqual(webSearchCalls.map(() => "completed"));
+      for (const reasoning of response.output.filter(item => item.type === "reasoning")) {
+        expect(reasoning).not.toHaveProperty("status");
+      }
+      const message = response.output.find(item => item.type === "message");
+      expect(message).toEqual(expect.objectContaining({
+        status: "incomplete",
+        content: [{
+          type: "output_text",
+          annotations: [],
+          logprobs: [],
+          text: "I'm sorry, but I cannot assist with that request."
+        }]
+      }));
+      expect(message.content).not.toEqual(expect.arrayContaining([
+        expect.objectContaining({ type: "refusal" })
+      ]));
+    }
+  );
 
   it("uses only the normalized Azure OpenAI Responses endpoint", async () => {
     const { ProviderProfileResponsesClient } = loadClient();
@@ -112,11 +229,12 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(mockOpenAIConstructor).toHaveBeenCalledWith({
       apiKey: "test-azure-key",
       baseURL: "https://azure.example.openai.azure.com/openai/v1",
-      maxRetries: 2
+      maxRetries: 1
     });
-    expect(mockParseResponse).toHaveBeenCalledTimes(1);
+    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
 
-    const request = mockParseResponse.mock.calls[0][0];
+    const request = mockCreateResponse.mock.calls[0][0];
+    expect(mockCreateResponse.mock.calls[0][1]).toEqual({ maxRetries: 1 });
     expect(request).toEqual(
       expect.objectContaining({
         model: "gpt-5.4",
@@ -176,7 +294,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       })).rejects.toThrow("AI provider profile search failed.");
 
       expect(mockOpenAIConstructor).not.toHaveBeenCalled();
-      expect(mockParseResponse).not.toHaveBeenCalled();
+      expect(mockCreateResponse).not.toHaveBeenCalled();
     }
   );
 
@@ -196,11 +314,11 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(mockOpenAIConstructor).toHaveBeenCalledWith({
       apiKey: "test-azure-key",
       baseURL: "https://azure.example.openai.azure.com/openai/v1",
-      maxRetries: 2
+      maxRetries: 1
     });
-    expect(mockParseResponse).toHaveBeenCalledTimes(1);
+    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
 
-    const request = mockParseResponse.mock.calls[0][0];
+    const request = mockCreateResponse.mock.calls[0][0];
     expect(request).toEqual(
       expect.objectContaining({
         model: "gpt-5.4",
@@ -242,7 +360,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
   });
 
   it("retries once with provider identity only when the first profile payload is not parseable", async () => {
-    mockParseResponse
+    mockCreateResponse
       .mockResolvedValueOnce({ status: "completed", output_text: "No JSON profile was returned." })
       .mockResolvedValueOnce(citedProfileResponse([
             {
@@ -290,10 +408,14 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     });
 
     expect(profiles).toHaveLength(1);
-    expect(mockParseResponse).toHaveBeenCalledTimes(2);
+    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
 
-    const firstRequest = mockParseResponse.mock.calls[0][0];
-    const retryRequest = mockParseResponse.mock.calls[1][0];
+    const firstRequest = mockCreateResponse.mock.calls[0][0];
+    const retryRequest = mockCreateResponse.mock.calls[1][0];
+    expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+      { maxRetries: 1 },
+      { maxRetries: 0 }
+    ]);
 
     expect(firstRequest.input).not.toMatch(/General Acute Care Hospital/);
     expect(firstRequest.input).toMatch(/Cleveland/);
@@ -301,25 +423,129 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(retryRequest.input).toMatch(/THE CLEVELAND CLINIC FOUNDATION/);
     expect(retryRequest.input).not.toMatch(/General Acute Care Hospital|Cleveland|44195/);
     expect(retryRequest.input).not.toMatch(/quote|member|client|patient|dob|diagnosis|medication/i);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "initial",
+        outcome: "malformed",
+        retryReason: "malformed_identity_retry"
+      })
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "identity_retry",
+        outcome: "completed",
+        retryReason: "malformed_identity_retry"
+      })
+    );
     expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/THE CLEVELAND CLINIC FOUNDATION|1679525919|General Acute Care Hospital|prompt|raw|sourceUrl|citation|quote|member|client|patient/i);
   });
 
-  it("fails closed on non-completed provider responses without logging raw response content", async () => {
-    mockParseResponse.mockResolvedValueOnce({
-      status: "incomplete",
-      usage: {
-        input_tokens: 80,
-        input_tokens_details: { cached_tokens: 20 },
-        output_tokens: 5,
-        output_tokens_details: { reasoning_tokens: 2 },
-        total_tokens: 85
-      },
-      incomplete_details: { reason: "content_filter" },
-      output_text: JSON.stringify({ profiles: [] })
-    });
-    const { ProviderProfileResponsesClient } = loadClient({
-      AZURE_OPENAI_ENDPOINT: "https://azure.example.openai.azure.com/openai/v1"
-    });
+  it.each(auditedCompletionFilterFixtures)(
+    "classifies $name and retries the identical full request with raw usage and cost",
+    async ({ response, expectedUsage }) => {
+      mockCreateResponse.mockResolvedValueOnce(response);
+      const { ProviderProfileResponsesClient } = loadClient({
+        AZURE_OPENAI_ENDPOINT: "https://azure.example.openai.azure.com/openai/v1",
+        AI_COST_INPUT_USD_PER_MILLION: "2.5",
+        AI_COST_CACHED_INPUT_USD_PER_MILLION: "0.25",
+        AI_COST_OUTPUT_USD_PER_MILLION: "15",
+        AI_COST_WEB_SEARCH_USD_PER_THOUSAND: "10",
+        AI_COST_PRICING_VERSION: "azure-contract-2026-07"
+      });
+      const client = new ProviderProfileResponsesClient();
+
+      await expect(client.searchProviderProfiles({
+        lineOfCoverage: "Medical",
+        providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+      })).resolves.toHaveLength(1);
+
+      expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+      expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+        { maxRetries: 1 },
+        { maxRetries: 0 }
+      ]);
+      expect(mockCreateResponse.mock.calls[1][0]).toEqual(mockCreateResponse.mock.calls[0][0]);
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        "AI provider usage telemetry",
+        expect.objectContaining({
+          attempt: "initial",
+          outcome: "incomplete",
+          retryReason: "content_filter_full_retry",
+          ...expectedUsage,
+          estimated: true,
+          pricingVersion: "azure-contract-2026-07"
+        })
+      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        "AI provider usage telemetry",
+        expect.objectContaining({
+          attempt: "full_retry",
+          outcome: "completed",
+          retryReason: "content_filter_full_retry"
+        })
+      );
+      expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/incomplete_details|output_text|profiles|Public Provider|provider-123/i);
+    }
+  );
+
+  it.each(auditedCompletionFilterFixtures)(
+    "fails closed after one identical full retry when $name repeats",
+    async ({ response, expectedUsage }) => {
+      mockCreateResponse
+        .mockResolvedValueOnce(response)
+        .mockResolvedValueOnce(response);
+      const { ProviderProfileResponsesClient } = loadClient();
+      const client = new ProviderProfileResponsesClient();
+
+      await expect(client.searchProviderProfiles({
+        lineOfCoverage: "Medical",
+        providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+      })).rejects.toThrow("AI provider profile search failed.");
+
+      expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+      expect(mockCreateResponse.mock.calls[1][0]).toEqual(mockCreateResponse.mock.calls[0][0]);
+      expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+        { maxRetries: 1 },
+        { maxRetries: 0 }
+      ]);
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        "AI provider usage telemetry",
+        expect.objectContaining({
+          attempt: "full_retry",
+          outcome: "incomplete",
+          retryReason: "content_filter_full_retry",
+          inputTokens: expectedUsage.inputTokens,
+          cachedInputTokens: expectedUsage.cachedInputTokens,
+          uncachedInputTokens: expectedUsage.uncachedInputTokens,
+          outputTokens: expectedUsage.outputTokens,
+          reasoningOutputTokens: expectedUsage.reasoningOutputTokens,
+          totalTokens: expectedUsage.totalTokens,
+          webSearchCalls: expectedUsage.webSearchCalls
+        })
+      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        "AI provider search telemetry",
+        expect.objectContaining({
+          outcome: "failed",
+          attemptCount: 2,
+          fullRetryCount: 1,
+          identityRetryCount: 0,
+          retryReasons: ["content_filter_full_retry"],
+          initialSdkMaxRetries: 1,
+          semanticRetrySdkMaxRetries: 0,
+          maxHttpAttempts: 3
+        })
+      );
+    }
+  );
+
+  it("does not stack identity recovery after the full content-filter retry", async () => {
+    mockCreateResponse
+      .mockResolvedValueOnce(completionContentFilter())
+      .mockResolvedValueOnce({ status: "completed", output_text: "not structured output" });
+    const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 
     await expect(client.searchProviderProfiles({
@@ -327,20 +553,164 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     })).rejects.toThrow("AI provider profile search failed.");
 
-    expect(mockParseResponse).toHaveBeenCalledTimes(1);
+    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+    expect(mockCreateResponse.mock.calls[1][0]).toEqual(mockCreateResponse.mock.calls[0][0]);
+    expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+      { maxRetries: 1 },
+      { maxRetries: 0 }
+    ]);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider search telemetry",
+      expect.objectContaining({
+        attemptCount: 2,
+        fullRetryCount: 1,
+        identityRetryCount: 0,
+        retryReasons: ["content_filter_full_retry"],
+        maxHttpAttempts: 3
+      })
+    );
+  });
+
+  it("recovers once when JSON violates the strict output envelope", async () => {
+    mockCreateResponse.mockResolvedValueOnce({
+      status: "completed",
+      output_text: JSON.stringify({ profiles: null }),
+      usage: {
+        input_tokens: 20,
+        input_tokens_details: { cached_tokens: 0 },
+        output_tokens: 5,
+        total_tokens: 25
+      }
+    });
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    await expect(client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    })).resolves.toHaveLength(1);
+
+    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+    expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+      { maxRetries: 1 },
+      { maxRetries: 0 }
+    ]);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "initial",
+        outcome: "malformed",
+        retryReason: "malformed_identity_retry",
+        totalTokens: 25
+      })
+    );
+  });
+
+  it("never starts a second semantic retry when malformed recovery also fails", async () => {
+    mockCreateResponse
+      .mockResolvedValueOnce({ status: "completed", output_text: "not structured output" })
+      .mockResolvedValueOnce({ status: "completed", output_text: "still not structured output" });
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    await expect(client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    })).rejects.toThrow("AI provider profile search failed.");
+
+    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+    expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+      { maxRetries: 1 },
+      { maxRetries: 0 }
+    ]);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider search telemetry",
+      expect.objectContaining({
+        outcome: "failed",
+        attemptCount: 2,
+        identityRetryCount: 1,
+        retryReasons: ["malformed_identity_retry"],
+        initialSdkMaxRetries: 1,
+        semanticRetrySdkMaxRetries: 0,
+        maxHttpAttempts: 3
+      })
+    );
+  });
+
+  it("does not semantically retry a native refusal", async () => {
+    mockCreateResponse.mockResolvedValueOnce({
+      status: "completed",
+      output: [{
+        type: "message",
+        content: [{ type: "refusal", refusal: "Unable to comply." }]
+      }]
+    });
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    await expect(client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    })).rejects.toThrow("AI provider profile search failed.");
+
+    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
+    expect(mockCreateResponse.mock.calls[0][1]).toEqual({ maxRetries: 1 });
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "initial",
+        outcome: "refusal",
+        retryReason: null
+      })
+    );
+  });
+
+  it("fails closed without semantic retry for non-content-filter incomplete responses", async () => {
+    mockCreateResponse.mockResolvedValueOnce({
+      status: "incomplete",
+      incomplete_details: { reason: "max_output_tokens" }
+    });
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    await expect(client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    })).rejects.toThrow("AI provider profile search failed.");
+
+    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "AI provider usage telemetry",
       expect.objectContaining({
         outcome: "incomplete",
-        inputTokens: 80,
-        cachedInputTokens: 20,
-        uncachedInputTokens: 60,
-        outputTokens: 5,
-        reasoningOutputTokens: 2,
-        totalTokens: 85
+        retryReason: null
       })
     );
-    expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/content_filter|incomplete_details|output_text|profiles|Public Provider|provider-123/i);
+  });
+
+  it("does not retry a prompt-side content filter as completion recovery", async () => {
+    mockCreateResponse.mockResolvedValueOnce({
+      status: "incomplete",
+      incomplete_details: { reason: "content_filter" },
+      content_filters: [{ blocked: true, source_type: "prompt" }]
+    });
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    await expect(client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    })).rejects.toThrow("AI provider profile search failed.");
+
+    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "initial",
+        outcome: "incomplete",
+        retryReason: null
+      })
+    );
   });
 
   it("aggregates separately billed response usage across the identity-only retry", async () => {
@@ -358,7 +728,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     };
     const retryResponse = successfulProfileResponse();
     retryResponse.output.unshift({ type: "web_search_call" });
-    mockParseResponse
+    mockCreateResponse
       .mockResolvedValueOnce(firstResponse)
       .mockResolvedValueOnce(retryResponse);
 
@@ -392,6 +762,10 @@ describe("Azure OpenAI Responses client privacy contract", () => {
         webSearchCalls: 3,
         estimated: true,
         pricingVersion: "azure-contract-2026-07",
+        retryReasons: ["malformed_identity_retry"],
+        initialSdkMaxRetries: 1,
+        semanticRetrySdkMaxRetries: 0,
+        maxHttpAttempts: 3,
         transportRetryUsageObservable: false
       })
     );
@@ -407,7 +781,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       "https://npiprofile.com/provider/not-cited"
     );
     response.output_parsed.profiles[0].sources[0].url = "https://npiprofile.com/provider/not-cited";
-    mockParseResponse.mockResolvedValue(response);
+    mockCreateResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 
@@ -429,7 +803,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
         sources: [{ type: "url", url: "https://npiprofile.com/provider/123" }]
       }
     });
-    mockParseResponse.mockResolvedValue(response);
+    mockCreateResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 
@@ -455,7 +829,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
         url: "https://npiregistry.cms.hhs.gov/api/?number=123&version=2.1"
       }
     });
-    mockParseResponse.mockResolvedValue(response);
+    mockCreateResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 
@@ -485,7 +859,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
         sources: [{ type: "url", url: "https://npiregistry.cms.hhs.gov/provider-view/1234567890" }]
       }
     });
-    mockParseResponse.mockResolvedValue(response);
+    mockCreateResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 

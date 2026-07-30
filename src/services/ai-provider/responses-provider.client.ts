@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
+import { ZodError } from "zod";
 
 import { env, ReasoningEffort, SearchToolChoice } from "../../config/env";
 import { AiProviderError } from "../../errors/http-error";
@@ -15,6 +16,8 @@ import { logAiProviderRequestMetadata } from "./request-metadata-log";
 import { buildReasoningOptions, buildWebSearchFilters, supportsReasoningModel, WebSearchFilters } from "./search-request-config";
 import {
   AiProviderAttempt,
+  AiProviderAttemptOutcome,
+  AiProviderRetryReason,
   AiProviderUsageRecord,
   logAiProviderSearchSummary,
   recordAiProviderUsage
@@ -43,9 +46,31 @@ export interface ProviderProfileResponseRequest {
 
 interface ResponseStatusShape {
   status?: unknown;
+  incomplete_details?: unknown;
+  content_filters?: unknown;
+  output?: unknown;
 }
 
-const SDK_MAX_RETRIES = 2;
+interface ResponseOutputShape {
+  type?: unknown;
+  content?: unknown;
+}
+
+interface ResponseContentShape {
+  type?: unknown;
+}
+
+const INITIAL_SDK_MAX_RETRIES = 1;
+const SEMANTIC_RETRY_SDK_MAX_RETRIES = 0;
+
+class RetryableAiProviderResponseError extends AiProviderError {
+  readonly retryReason: AiProviderRetryReason;
+
+  constructor(retryReason: AiProviderRetryReason) {
+    super();
+    this.retryReason = retryReason;
+  }
+}
 
 export const normalizedResponsesBaseUrl = (): string => {
   const baseUrl = azureOpenAiResponsesBaseUrl(env.azureOpenAiEndpoint);
@@ -62,7 +87,7 @@ export const createResponsesClient = (): OpenAI => {
   return new OpenAI({
     apiKey: env.azureOpenAiApiKey,
     baseURL: normalizedResponsesBaseUrl(),
-    maxRetries: SDK_MAX_RETRIES
+    maxRetries: INITIAL_SDK_MAX_RETRIES
   });
 };
 
@@ -103,6 +128,49 @@ export const assertCompletedResponse = (response: unknown): void => {
   }
 };
 
+const incompleteReason = (response: unknown): string | undefined => {
+  const details = (response as ResponseStatusShape).incomplete_details;
+  if (!details || typeof details !== "object" || Array.isArray(details)) {
+    return undefined;
+  }
+
+  const reason = (details as { reason?: unknown }).reason;
+  return typeof reason === "string" ? reason : undefined;
+};
+
+const isCompletionContentFilter = (response: unknown): boolean => {
+  const shaped = response as ResponseStatusShape;
+  if (shaped.status !== "incomplete" || incompleteReason(response) !== "content_filter") {
+    return false;
+  }
+
+  return Array.isArray(shaped.content_filters) && shaped.content_filters.some((filter) => {
+    if (!filter || typeof filter !== "object" || Array.isArray(filter)) {
+      return false;
+    }
+
+    const record = filter as { source_type?: unknown; blocked?: unknown };
+    return record.source_type === "completion" && record.blocked === true;
+  });
+};
+
+const hasNativeRefusal = (response: unknown): boolean => {
+  const output = (response as ResponseStatusShape).output;
+  if (!Array.isArray(output)) {
+    return false;
+  }
+
+  return output.some((item: ResponseOutputShape) => (
+    item?.type === "message"
+    && Array.isArray(item.content)
+    && item.content.some((content: ResponseContentShape) => content?.type === "refusal")
+  ));
+};
+
+const isMalformedStrictOutputError = (error: unknown): boolean => (
+  error instanceof AiProviderError || error instanceof ZodError
+);
+
 export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
   private client?: OpenAI;
 
@@ -112,19 +180,19 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     let searchOutcome: "completed" | "failed" = "failed";
 
     try {
-      const response = await this.createResponse(input, false, usageRecords);
-
       try {
-        const profiles = parseProviderProfilesFromResponse(response);
+        const profiles = await this.executeAttempt(input, "initial", null, usageRecords);
         searchOutcome = "completed";
         return profiles;
-      } catch (parseError) {
-        if (!(parseError instanceof AiProviderError)) {
-          throw parseError;
+      } catch (error) {
+        if (!(error instanceof RetryableAiProviderResponseError)) {
+          throw error;
         }
 
-        const retryResponse = await this.createResponse(input, true, usageRecords);
-        const profiles = parseProviderProfilesFromResponse(retryResponse);
+        const retryAttempt: AiProviderAttempt = error.retryReason === "content_filter_full_retry"
+          ? "full_retry"
+          : "identity_retry";
+        const profiles = await this.executeAttempt(input, retryAttempt, error.retryReason, usageRecords);
         searchOutcome = "completed";
         return profiles;
       }
@@ -139,16 +207,20 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     }
   }
 
-  private async createResponse(
+  private async executeAttempt(
     input: CreateProviderProfilesInput,
-    identityOnly: boolean,
+    attempt: AiProviderAttempt,
+    attemptRetryReason: AiProviderRetryReason | null,
     usageRecords: AiProviderUsageRecord[]
-  ): Promise<unknown> {
+  ) {
     assertAiRuntimeReady();
+    const identityOnly = attempt === "identity_retry";
     const request = providerProfileResponseRequest(input, identityOnly);
-    const attempt: AiProviderAttempt = identityOnly ? "identity_retry" : "initial";
+    const maxRetries = attempt === "initial" ? INITIAL_SDK_MAX_RETRIES : SEMANTIC_RETRY_SDK_MAX_RETRIES;
     const startedAt = Date.now();
-    let usageRecorded = false;
+    let response: unknown;
+    let outcome: AiProviderAttemptOutcome = "request_error";
+    let retryReason = attemptRetryReason;
 
     logAiProviderRequestMetadata({
       provider: "azure",
@@ -164,29 +236,51 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     });
 
     try {
-      const response = await this.responsesClient().responses.parse(request as never);
+      response = await this.responsesClient().responses.create(request as never, { maxRetries });
       const status = (response as ResponseStatusShape).status;
+      if (typeof status === "string" && status !== "completed") {
+        outcome = "incomplete";
+        if (isCompletionContentFilter(response)) {
+          if (attempt === "initial") {
+            retryReason = "content_filter_full_retry";
+            throw new RetryableAiProviderResponseError(retryReason);
+          }
+        }
+
+        throw new AiProviderError();
+      }
+
+      if (hasNativeRefusal(response)) {
+        outcome = "refusal";
+        throw new AiProviderError();
+      }
+
+      try {
+        const profiles = parseProviderProfilesFromResponse(response);
+        outcome = "completed";
+        return profiles;
+      } catch (error) {
+        if (!isMalformedStrictOutputError(error)) {
+          throw error;
+        }
+
+        outcome = "malformed";
+        if (attempt === "initial") {
+          retryReason = "malformed_identity_retry";
+          throw new RetryableAiProviderResponseError(retryReason);
+        }
+
+        throw new AiProviderError();
+      }
+    } finally {
       usageRecords.push(recordAiProviderUsage({
         model: env.azureOpenAiDeployment,
         attempt,
-        outcome: typeof status === "string" && status !== "completed" ? "incomplete" : "completed",
+        retryReason,
+        outcome,
         durationMs: Date.now() - startedAt,
         response
       }));
-      usageRecorded = true;
-      assertCompletedResponse(response);
-      return response;
-    } catch (error) {
-      if (!usageRecorded) {
-        usageRecords.push(recordAiProviderUsage({
-          model: env.azureOpenAiDeployment,
-          attempt,
-          outcome: "request_error",
-          durationMs: Date.now() - startedAt
-        }));
-      }
-
-      throw error;
     }
   }
 

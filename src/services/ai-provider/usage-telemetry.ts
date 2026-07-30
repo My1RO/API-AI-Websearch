@@ -1,7 +1,8 @@
 import { env } from "../../config/env";
 
-export type AiProviderAttempt = "initial" | "identity_retry";
-export type AiProviderAttemptOutcome = "completed" | "incomplete" | "request_error";
+export type AiProviderAttempt = "initial" | "full_retry" | "identity_retry";
+export type AiProviderRetryReason = "content_filter_full_retry" | "malformed_identity_retry";
+export type AiProviderAttemptOutcome = "completed" | "incomplete" | "malformed" | "refusal" | "request_error";
 
 interface UnknownRecord {
   [key: string]: unknown;
@@ -44,6 +45,7 @@ export interface AiProviderUsageRecord extends AiResponseUsage, AiEstimatedCost 
   model: string;
   operation: "provider_profile_search";
   attempt: AiProviderAttempt;
+  retryReason: AiProviderRetryReason | null;
   outcome: AiProviderAttemptOutcome;
   durationMs: number;
 }
@@ -143,12 +145,14 @@ const optionalComponentCost = (
 export const recordAiProviderUsage = ({
   model,
   attempt,
+  retryReason = null,
   outcome,
   durationMs,
   response
 }: {
   model: string;
   attempt: AiProviderAttempt;
+  retryReason?: AiProviderRetryReason | null;
   outcome: AiProviderAttemptOutcome;
   durationMs: number;
   response?: unknown;
@@ -160,6 +164,7 @@ export const recordAiProviderUsage = ({
     model,
     operation: "provider_profile_search",
     attempt,
+    retryReason,
     outcome,
     durationMs: Math.max(0, Math.round(durationMs)),
     ...usage,
@@ -199,7 +204,13 @@ export const logAiProviderSearchSummary = (
     outcome,
     durationMs: Math.max(0, Math.round(durationMs)),
     attemptCount: records.length,
+    fullRetryCount: records.filter((record) => record.attempt === "full_retry").length,
     identityRetryCount: records.filter((record) => record.attempt === "identity_retry").length,
+    retryReasons: [...new Set(
+      records
+        .map((record) => record.retryReason)
+        .filter((reason): reason is AiProviderRetryReason => reason !== null)
+    )],
     usageMissingAttempts: records.filter((record) => !record.usagePresent).length,
     inputTokens: sumKnown(records, "inputTokens"),
     cachedInputTokens: sumKnown(records, "cachedInputTokens"),
@@ -214,7 +225,9 @@ export const logAiProviderSearchSummary = (
     totalUsd: estimated
       ? roundUsd((totalCosts as number[]).reduce((sum, cost) => sum + cost, 0))
       : null,
-    sdkMaxRetries: 2,
+    initialSdkMaxRetries: 1,
+    semanticRetrySdkMaxRetries: 0,
+    maxHttpAttempts: 3,
     transportRetryUsageObservable: false
   });
 };

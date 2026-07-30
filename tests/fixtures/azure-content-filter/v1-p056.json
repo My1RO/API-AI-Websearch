@@ -1,0 +1,75 @@
+{
+  "id": "resp_REDACTED_v1_p056",
+  "object": "response",
+  "status": "incomplete",
+  "content_filters": [
+    {
+      "blocked": false,
+      "source_type": "prompt",
+      "content_filter_raw": [],
+      "content_filter_results": {
+        "hate": { "filtered": false, "severity": "safe" },
+        "sexual": { "filtered": false, "severity": "safe" },
+        "violence": { "filtered": false, "severity": "safe" },
+        "self_harm": { "filtered": false, "severity": "safe" },
+        "jailbreak": { "detected": false, "filtered": false }
+      },
+      "content_filter_offsets": {
+        "start_offset": 0,
+        "end_offset": 30261,
+        "check_offset": 0
+      }
+    },
+    {
+      "blocked": true,
+      "source_type": "completion",
+      "content_filter_raw": [],
+      "content_filter_results": {
+        "protected_material_code": { "detected": false, "filtered": false },
+        "protected_material_text": { "detected": true, "filtered": true }
+      },
+      "content_filter_offsets": {
+        "start_offset": 0,
+        "end_offset": 7005,
+        "check_offset": 0
+      }
+    }
+  ],
+  "error": null,
+  "incomplete_details": { "reason": "content_filter" },
+  "output": [
+    {
+      "id": "ws_REDACTED_v1_p056_1",
+      "type": "web_search_call",
+      "status": "completed",
+      "action": {
+        "type": "search",
+        "query": "[REDACTED_PROVIDER_QUERY]",
+        "sources": [{ "type": "url", "url": "https://redacted.invalid/source" }]
+      }
+    },
+    {
+      "id": "msg_REDACTED_v1_p056_1",
+      "type": "message",
+      "status": "incomplete",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "I'm sorry, but I cannot assist with that request."
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "usage": {
+    "input_tokens": 6763,
+    "input_tokens_details": { "cached_tokens": 5120 },
+    "output_tokens": 43,
+    "output_tokens_details": { "reasoning_tokens": 43 },
+    "total_tokens": 6806
+  },
+  "output_text": "I'm sorry, but I cannot assist with that request."
+}
