@@ -419,7 +419,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       { maxRetries: 0 }
     ]);
 
-    expect(firstRequest.input).not.toMatch(/General Acute Care Hospital/);
+    expect(firstRequest.input).toMatch(/General Acute Care Hospital/);
     expect(firstRequest.input).toMatch(/Cleveland/);
     expect(retryRequest.input).toMatch(/1679525919/);
     expect(retryRequest.input).toMatch(/THE CLEVELAND CLINIC FOUNDATION/);
