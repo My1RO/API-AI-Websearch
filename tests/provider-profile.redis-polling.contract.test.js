@@ -241,7 +241,7 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
           zip: "44195",
           sourceId: "directory"
         }],
-        sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+        sources: [{ id: "directory", title: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919", domain: "npiprofile.com" }]
       }
     ]);
 

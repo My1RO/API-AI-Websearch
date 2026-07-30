@@ -198,13 +198,50 @@ const hasDisplayableSource = (source: ProviderSource | undefined): source is Pro
 
 const sanitizeSources = (
   sources: ProviderSource[],
-  options: ProviderProfileSanitizerOptions = {}
+  options: ProviderProfileSanitizerOptions = {},
+  providerNpi?: string
 ): { sources: ProviderSource[]; sourceIdMap: Map<string, string> } => {
   const sanitizedSources = new Map<string, ProviderSource>();
   const sourceIdMap = new Map<string, string>();
   const allowedSourceUrls = options.allowedSourceUrls === undefined
     ? undefined
-    : new Set([...options.allowedSourceUrls].map((url) => safePublicUrl(url)).filter(Boolean));
+    : new Set([...options.allowedSourceUrls]
+      .map((url) => safePublicUrl(url))
+      .filter((url): url is string => Boolean(url)));
+
+  const nppesNpiFromUrl = (value: string): string | undefined => {
+    try {
+      const url = new URL(value);
+      if (url.hostname !== "npiregistry.cms.hhs.gov") {
+        return undefined;
+      }
+      const providerView = url.pathname.match(/^\/provider-view\/(\d{10})\/?$/);
+      return providerView?.[1]
+        || (url.pathname === "/api/" && /^\d{10}$/.test(url.searchParams.get("number") || "")
+          ? url.searchParams.get("number") || undefined
+          : undefined);
+    } catch {
+      return undefined;
+    }
+  };
+
+  const hasAllowedProvenance = (url: string | undefined): boolean => {
+    if (allowedSourceUrls === undefined) {
+      return true;
+    }
+    if (!url) {
+      return false;
+    }
+    if (allowedSourceUrls.has(url)) {
+      return true;
+    }
+    const sourceNpi = nppesNpiFromUrl(url);
+    return Boolean(
+      providerNpi
+      && sourceNpi === providerNpi
+      && [...allowedSourceUrls].some((allowedUrl) => nppesNpiFromUrl(allowedUrl) === providerNpi)
+    );
+  };
 
   sources.forEach((source, index) => {
     const id = safeSourceId(source.id, `source-${index + 1}`);
@@ -215,7 +252,7 @@ const sanitizeSources = (
     if (
       !title
       || domain === fallbackSourceId
-      || (allowedSourceUrls !== undefined && (!url || !allowedSourceUrls.has(url)))
+      || !hasAllowedProvenance(url)
     ) {
       return;
     }
@@ -246,7 +283,13 @@ const sourceIndex = (sources: ProviderSource[]): Map<string, ProviderSource> => 
   return new Map(sources.map((source) => [source.id, source]));
 };
 
-const governmentContactDomains = ["healthcare.gov", "cms.gov", "medicare.gov", "nppes.cms.hhs.gov"];
+const governmentContactDomains = [
+  "healthcare.gov",
+  "cms.gov",
+  "medicare.gov",
+  "nppes.cms.hhs.gov",
+  "npiregistry.cms.hhs.gov"
+];
 const professionalDirectoryDomains = ["npiprofile.com", "zocdoc.com", "healthgrades.com", "webmd.com", "vitals.com", "doximity.com"];
 const ratingDomains = ["zocdoc.com", "healthgrades.com", "webmd.com", "vitals.com"];
 const blockedContactDomains = [
@@ -254,19 +297,43 @@ const blockedContactDomains = [
   "fastpeoplesearch.com", "facebook.com", "instagram.com", "linkedin.com", "twitter.com", "x.com"
 ];
 const personalContactSourcePattern = /\b(people\s*finder|personal|residential|home address|mobile number|cell phone|social media)\b/i;
-const professionalContactSourcePattern = /\b(provider directory|hospital|health system|medical center|clinic|practice|official)\b/i;
+const professionalContactSourcePattern = /\b(provider|physician|pediatrics|contact|hospital|health system|medical center|clinic|practice|official)\b/i;
+const faxPattern = /\b(fax|facsimile)\b/i;
+const residentialAddressPattern = /\b(apartment|apt\.?|residential|residence|home address)\b/i;
+const generationArtifactPattern = /\b(this schema|response format|does not permit null|use null|likely validation|let'?s produce)\b/i;
+const placeholderAddressPattern = /^(?:\/?null|none|n\/?a|city|state|zip|address(?:line)?\s*\d?)$/i;
+const concatenatedFieldLabelPattern = /(?:address\s*line|city.*city|state.*state|zip.*zip)/i;
 
 const domainMatches = (domain: string, approvedDomains: string[]): boolean => approvedDomains.some((approved) => (
   domain === approved || domain.endsWith(`.${approved}`)
 ));
 
 const providerNameTokens = (providerName: string): string[] => {
-  const ignored = new Set(["the", "and", "for", "doctor", "dr", "md", "do", "provider", "medical", "health"]);
+  const ignored = new Set([
+    "the", "and", "for", "doctor", "dr", "md", "do", "phd", "ms", "msw", "pa", "aprn", "fnp",
+    "provider", "medical", "health", "clinic", "center", "inc", "llc", "services", "care"
+  ]);
   return providerName
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .split(/\s+/)
     .filter((token) => token.length >= 3 && !ignored.has(token));
+};
+
+const sourceDirectlyAttributedToProvider = (
+  source: ProviderSource,
+  providerName: string,
+  providerNpi?: string | null
+): boolean => {
+  const sourceText = `${source.title} ${source.url || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  if (providerNpi && /^\d{10}$/.test(providerNpi) && sourceText.includes(providerNpi)) {
+    return true;
+  }
+
+  const tokens = providerNameTokens(providerName);
+  const requiredMatches = tokens.length === 1 ? 1 : 2;
+  return tokens.length > 0
+    && tokens.filter((token) => sourceText.includes(token)).length >= requiredMatches;
 };
 
 const sourceLooksOfficialForProvider = (source: ProviderSource, providerName: string): boolean => {
@@ -278,15 +345,7 @@ const sourceLooksOfficialForProvider = (source: ProviderSource, providerName: st
   ) {
     return false;
   }
-  const tokens = providerNameTokens(providerName);
-  if (tokens.length === 0) {
-    return false;
-  }
-
-  const sourceText = source.title.toLowerCase().replace(/[^a-z0-9]+/g, " ");
-  const requiredMatches = tokens.length === 1 ? 1 : 2;
-  return professionalContactSourcePattern.test(source.title)
-    && tokens.filter((token) => sourceText.includes(token)).length >= requiredMatches;
+  return sourceDirectlyAttributedToProvider(source, providerName);
 };
 
 const contactSourceRank = (source: ProviderSource | undefined, providerName: string): number => {
@@ -306,11 +365,15 @@ const contactSourceRank = (source: ProviderSource | undefined, providerName: str
     return 1;
   }
 
-  return domainMatches(source.domain, professionalDirectoryDomains) ? 2 : 99;
-};
+  if (domainMatches(source.domain, professionalDirectoryDomains)) {
+    return 2;
+  }
 
-const isProfessionalContactSource = (source: ProviderSource | undefined, providerName: string): boolean => {
-  return contactSourceRank(source, providerName) < 99;
+  // API provenance plus the prompt establishes that the page was consulted for
+  // public professional information. Keep deterministic rejection for known
+  // unsafe source classes, but do not treat a closed title vocabulary as the
+  // definition of an official provider or facility source.
+  return 3;
 };
 
 const resolveSourceId = (
@@ -356,7 +419,7 @@ const sanitizePhoneNumber = (
   sourceIdMap: Map<string, string>
 ): SourcedValue | undefined => {
   const sanitized = sanitizeSourcedValue(value, sources, sourceIdMap);
-  if (!sanitized) {
+  if (!sanitized || faxPattern.test(sanitized.value)) {
     return undefined;
   }
 
@@ -372,7 +435,14 @@ const sanitizeWebsite = (
 ): SourcedValue | undefined => {
   const sourceId = resolveSourceId(value.sourceId, value.sourceName, sources, sourceIdMap);
   const source = sources.get(sourceId);
-  if (!source || !hasDisplayableSource(source) || !source.url || !sourceLooksOfficialForProvider(source, providerName)) {
+  if (
+    !source
+    || !hasDisplayableSource(source)
+    || !source.url
+    || contactSourceRank(source, providerName) === 99
+    || domainMatches(source.domain, governmentContactDomains)
+    || domainMatches(source.domain, professionalDirectoryDomains)
+  ) {
     return undefined;
   }
 
@@ -394,7 +464,20 @@ const sanitizeLocation = (
   sourceIdMap: Map<string, string>
 ): ProviderLocation | undefined => {
   const addressLine1 = cleanSafeStoredFact(location.addressLine1, 255);
-  if (!addressLine1) {
+  const rawAddressText = [
+    location.addressLine1,
+    location.addressLine2,
+    location.city,
+    location.state,
+    location.zip
+  ].filter(Boolean).join(" ");
+  const requiredAddressText = [
+    location.addressLine1,
+    location.city,
+    location.state,
+    location.zip
+  ].filter(Boolean).join(" ");
+  if (!addressLine1 || generationArtifactPattern.test(requiredAddressText) || residentialAddressPattern.test(rawAddressText)) {
     return undefined;
   }
 
@@ -404,10 +487,20 @@ const sanitizeLocation = (
     return undefined;
   }
 
+  const optionalAddressPart = (value: string | null | undefined, maximum: number): string | null => {
+    const cleaned = cleanSafeStoredFact(value || "", maximum);
+    return !cleaned
+      || placeholderAddressPattern.test(cleaned)
+      || generationArtifactPattern.test(cleaned)
+      || concatenatedFieldLabelPattern.test(cleaned)
+      ? null
+      : cleaned;
+  };
+
   return {
     addressLine1,
-    addressLine2: cleanSafeStoredFact(location.addressLine2 || "", 255) || null,
-    city: cleanSafeStoredFact(location.city || "", 120) || null,
+    addressLine2: optionalAddressPart(location.addressLine2, 255),
+    city: optionalAddressPart(location.city, 120),
     state: cleanPublicText(location.state || "", 2) || null,
     zip: cleanPublicText(location.zip || "", 10) || null,
     sourceId,
@@ -431,7 +524,7 @@ const sanitizeRating = (
     return undefined;
   }
 
-  if (!domainMatches(source.domain, ratingDomains)) {
+  if (contactSourceRank(source, "") === 99 || !domainMatches(source.domain, ratingDomains)) {
     return undefined;
   }
 
@@ -444,6 +537,23 @@ const sanitizeRating = (
 };
 
 const normalizedFactKey = (value: string): string => value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+const sourceHasAddressAnchor = (
+  source: ProviderSource,
+  locations: ProviderLocation[]
+): boolean => {
+  const sourceText = `${source.title} ${source.url || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  return locations.some((location) => {
+    const tokens = location.addressLine1
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .split(/\s+/)
+      .filter((token) => token.length >= 2);
+    const requiredMatches = Math.min(4, tokens.length);
+    return tokens.length >= 3
+      && tokens.filter((token) => sourceText.includes(token)).length >= requiredMatches;
+  });
+};
 
 const dedupeAndSort = <T>(
   values: T[],
@@ -606,32 +716,80 @@ export const sanitizeProviderProfiles = (
   const profiles = providerProfilesSchema.parse(asArray(value).map(normalizeProfileInput));
 
   return profiles.map((profile) => {
-    const sanitized = sanitizeSources(profile.sources, options);
+    const profileNpi = cleanPublicText(profile.npi, 10);
+    const sanitized = sanitizeSources(profile.sources, options, profileNpi);
     const sources = sourceIndex(sanitized.sources);
 
     const providerName = cleanSafeStoredFact(profile.providerName, 255) || "Provider";
+    const providerNpi = profileNpi;
+
+    const sourceIsDirectlyAttributed = (source: ProviderSource | undefined): source is ProviderSource => Boolean(
+      source
+      && contactSourceRank(source, providerName) < 99
+      && sourceDirectlyAttributedToProvider(source, providerName, providerNpi)
+    );
+
+    const officialWebsiteDomains = new Set(profile.websites.flatMap((website) => {
+      const sourceId = sanitized.sourceIdMap.get(website.sourceId) || safeSourceId(website.sourceId, fallbackSourceId);
+      const source = sources.get(sourceId);
+      const websiteUrl = safePublicUrl(website.value, source?.domain);
+      return source
+        && sourceIsDirectlyAttributed(source)
+        && websiteUrl
+        && websiteUrl === source.url
+        && !domainMatches(source.domain, governmentContactDomains)
+        && !domainMatches(source.domain, professionalDirectoryDomains)
+        ? [source.domain]
+        : [];
+    }));
+
+    const sourceHasOfficialDomainAnchor = (source: ProviderSource | undefined): source is ProviderSource => Boolean(
+      source
+      && officialWebsiteDomains.has(source.domain)
+      && professionalContactSourcePattern.test(source.title)
+    );
+
+    const locations = profile.locations
+      .map((location) => sanitizeLocation(location, sources, sanitized.sourceIdMap))
+      .filter((location): location is ProviderLocation => Boolean(location))
+      .filter((location) => {
+        const source = sources.get(location.sourceId);
+        return sourceIsDirectlyAttributed(source) || sourceHasOfficialDomainAnchor(source);
+      });
+
+    const sourceHasAcceptedAddressAnchor = (source: ProviderSource | undefined): source is ProviderSource => Boolean(
+      source
+      && contactSourceRank(source, providerName) < 99
+      && sourceHasAddressAnchor(source, locations)
+    );
 
     const output: ProviderProfile = {
       providerId: cleanPublicText(profile.providerId, 255),
-      npi: cleanPublicText(profile.npi, 10),
+      npi: providerNpi,
       providerName,
       specialties: profile.specialties
         .map((specialty) => sanitizeSourcedValue(specialty, sources, sanitized.sourceIdMap))
         .filter((specialty): specialty is SourcedValue => Boolean(specialty)),
-      locations: profile.locations
-        .map((location) => sanitizeLocation(location, sources, sanitized.sourceIdMap))
-        .filter((location): location is ProviderLocation => Boolean(location))
-        .filter((location) => isProfessionalContactSource(sources.get(location.sourceId), providerName)),
+      locations,
       phoneNumbers: profile.phoneNumbers
         .map((phoneNumber) => sanitizePhoneNumber(phoneNumber, sources, sanitized.sourceIdMap))
         .filter((phoneNumber): phoneNumber is SourcedValue => Boolean(phoneNumber))
-        .filter((phoneNumber) => isProfessionalContactSource(sources.get(phoneNumber.sourceId), providerName)),
+        .filter((phoneNumber) => {
+          const source = sources.get(phoneNumber.sourceId);
+          return sourceIsDirectlyAttributed(source)
+            || sourceHasOfficialDomainAnchor(source)
+            || sourceHasAcceptedAddressAnchor(source);
+        }),
       ratings: profile.ratings
         .map((rating) => sanitizeRating(rating, sources, sanitized.sourceIdMap))
         .filter((rating): rating is ProviderRating => Boolean(rating)),
       websites: profile.websites
         .map((website) => sanitizeWebsite(website, sources, sanitized.sourceIdMap, providerName))
-        .filter((website): website is SourcedValue => Boolean(website)),
+        .filter((website): website is SourcedValue => Boolean(website))
+        .filter((website) => {
+          const source = sources.get(website.sourceId);
+          return sourceIsDirectlyAttributed(source) || sourceHasAcceptedAddressAnchor(source);
+        }),
       publicInsuranceMentions: profile.publicInsuranceMentions
         .map((mention) => sanitizeSourcedValue(mention, sources, sanitized.sourceIdMap))
         .filter((mention): mention is SourcedValue => Boolean(mention)),

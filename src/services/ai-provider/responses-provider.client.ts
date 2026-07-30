@@ -1,9 +1,13 @@
 import OpenAI from "openai";
+import { zodTextFormat } from "openai/helpers/zod";
 
 import { env, ReasoningEffort, SearchToolChoice } from "../../config/env";
 import { AiProviderError } from "../../errors/http-error";
 import { assertAiRuntimeReady, azureOpenAiResponsesBaseUrl } from "../../config/runtime";
-import { CreateProviderProfilesInput } from "../../validators/provider-profile.validator";
+import {
+  CreateProviderProfilesInput,
+  providerProfileStructuredOutputSchema
+} from "../../validators/provider-profile.validator";
 import { buildProviderProfilePrompt, providerProfileSystemInstructions } from "../prompt-builder.service";
 import { parseProviderProfilesFromResponse } from "./response-parser";
 import { ProviderProfileAiClient } from "./provider-client";
@@ -29,6 +33,10 @@ export interface ProviderProfileResponseRequest {
   tool_choice: SearchToolChoice;
   max_tool_calls: number;
   parallel_tool_calls: boolean;
+  include: ["web_search_call.action.sources"];
+  text: {
+    format: ReturnType<typeof zodTextFormat>;
+  };
   store: false;
   reasoning?: { effort: ReasoningEffort };
 }
@@ -73,6 +81,10 @@ export const providerProfileResponseRequest = (
     tool_choice: env.aiWebSearchToolChoice,
     max_tool_calls: env.aiWebSearchMaxToolCalls,
     parallel_tool_calls: env.aiWebSearchParallelToolCalls,
+    include: ["web_search_call.action.sources"],
+    text: {
+      format: zodTextFormat(providerProfileStructuredOutputSchema, "provider_profiles")
+    },
     store: false
   };
 
@@ -152,7 +164,7 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     });
 
     try {
-      const response = await this.responsesClient().responses.create(request as never);
+      const response = await this.responsesClient().responses.parse(request as never);
       const status = (response as ResponseStatusShape).status;
       usageRecords.push(recordAiProviderUsage({
         model: env.azureOpenAiDeployment,

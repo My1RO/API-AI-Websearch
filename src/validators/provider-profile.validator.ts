@@ -72,6 +72,54 @@ export const providerProfileSchema = z.object({
 
 export const providerProfilesSchema = z.array(providerProfileSchema);
 
+const structuredSourcedValueSchema = z.object({
+  value: z.string().describe("The public professional fact exactly as supported by the cited source."),
+  sourceId: z.string().describe("The id of the source object that supports this fact."),
+  sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
+}).strict();
+
+const structuredLocationSchema = z.object({
+  addressLine1: z.string(),
+  addressLine2: z.string().nullable(),
+  city: z.string().nullable(),
+  state: z.string().nullable(),
+  zip: z.string().nullable(),
+  sourceId: z.string(),
+  sourceName: z.string().nullable()
+}).strict();
+
+const structuredRatingSchema = z.object({
+  value: z.string(),
+  scale: z.string().nullable(),
+  sourceId: z.string(),
+  sourceName: z.string().nullable()
+}).strict();
+
+const structuredSourceSchema = z.object({
+  id: z.string().describe("A stable id referenced by facts in this profile."),
+  title: z.string().describe("The title of the public source page."),
+  domain: z.string().describe("The public hostname of the source page."),
+  url: z.string().describe("The exact public http or https page URL consulted by web search.")
+}).strict();
+
+const structuredProviderProfileSchema = z.object({
+  providerId: z.string().nullable(),
+  npi: z.string().nullable(),
+  providerName: z.string(),
+  specialties: z.array(structuredSourcedValueSchema),
+  locations: z.array(structuredLocationSchema),
+  phoneNumbers: z.array(structuredSourcedValueSchema),
+  ratings: z.array(structuredRatingSchema),
+  websites: z.array(structuredSourcedValueSchema),
+  publicInsuranceMentions: z.array(structuredSourcedValueSchema),
+  confidenceNotes: z.array(z.string()),
+  sources: z.array(structuredSourceSchema)
+}).strict();
+
+export const providerProfileStructuredOutputSchema = z.object({
+  profiles: z.array(structuredProviderProfileSchema)
+}).strict();
+
 export const providerProfileProviderJobSchema = z.object({
   requestProviderKey: z.string().trim().min(1).max(320),
   providerId: z.string().trim().min(1).max(255).optional(),

@@ -47,6 +47,155 @@ describe("provider profile sanitizer", () => {
     expect(profile.ratings).toEqual([]);
   });
 
+  it("accepts professional contact facts from the current CMS NPI Registry hostname", () => {
+    const [profile] = sanitizeProviderProfiles([
+      {
+        ...baseProfile,
+        phoneNumbers: [{ value: "(305) 585-1111", sourceId: "npi-registry" }],
+        sources: [{
+          id: "npi-registry",
+          title: "NPI Registry",
+          domain: "npiregistry.cms.hhs.gov",
+          url: "https://npiregistry.cms.hhs.gov/provider-view/1234567890"
+        }]
+      }
+    ], {
+      allowedSourceUrls: ["https://npiregistry.cms.hhs.gov/provider-view/1234567890"]
+    });
+
+    expect(profile.phoneNumbers).toEqual([
+      expect.objectContaining({ value: "(305) 585-1111", sourceId: "npi-registry" })
+    ]);
+  });
+
+  it("accepts provenance-backed professional sources without a closed official-title vocabulary", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      providerName: "Pahola Rodriguez, MD",
+      phoneNumbers: [
+        { value: "Office: 706-559-4188", sourceId: "piedmont" },
+        { value: "Fax: 706-559-4177", sourceId: "piedmont" }
+      ],
+      websites: [{ value: "https://care.piedmont.org/provider/pahola-rodriguez", sourceId: "piedmont" }],
+      sources: [{
+        id: "piedmont",
+        title: "Pahola Rodriguez, MD Pediatrics in Athens, GA",
+        domain: "care.piedmont.org",
+        url: "https://care.piedmont.org/provider/pahola-rodriguez"
+      }]
+    }], {
+      allowedSourceUrls: ["https://care.piedmont.org/provider/pahola-rodriguez"]
+    });
+
+    expect(profile.phoneNumbers.map(({ value }) => value)).toEqual(["Office: 706-559-4188"]);
+    expect(profile.websites).toEqual([
+      expect.objectContaining({ value: "https://care.piedmont.org/provider/pahola-rodriguez" })
+    ]);
+  });
+
+  it("strips optional generation artifacts and rejects residential-looking locations", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      locations: [{
+        addressLine1: "1418 W Main St",
+        addressLine2: "This schema does not permit null. Use null. Let's produce.",
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "source-1"
+      }, {
+        addressLine1: "100 Main St Apt 2",
+        addressLine2: null,
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "source-1"
+      }],
+      sources: [{
+        id: "source-1",
+        title: "The Cleveland Clinic Foundation — NPI 1234567890",
+        domain: "npiprofile.com",
+        url: "https://npiprofile.com/provider/123"
+      }]
+    }], { allowedSourceUrls: ["https://npiprofile.com/provider/123"] });
+
+    expect(profile.locations).toEqual([
+      expect.objectContaining({
+        addressLine1: "1418 W Main St",
+        addressLine2: null,
+        city: "Lebanon"
+      })
+    ]);
+  });
+
+  it("accepts a facility phone and website only through an exact accepted-address anchor", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      npi: "1174045959",
+      providerName: "Leticia Garcia Haff, PA-C",
+      locations: [{
+        addressLine1: "1418 W Main St",
+        addressLine2: "This schema does not permit null. Let's produce.",
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "provider-directory"
+      }],
+      phoneNumbers: [
+        { value: "(615) 425-4200", sourceId: "provider-directory" },
+        { value: "(615) 453-7720", sourceId: "facility" }
+      ],
+      websites: [{ value: "https://www.kroger.com/health-services/clinic/1418-w-main-st", sourceId: "facility" }],
+      sources: [{
+        id: "provider-directory",
+        title: "Leticia Garcia Haff - Physician Assistant, Lebanon TN",
+        domain: "healthcare4ppl.com",
+        url: "https://healthcare4ppl.com/1174045959"
+      }, {
+        id: "facility",
+        title: "The Little Clinic at 1418 W Main St in Lebanon, TN",
+        domain: "kroger.com",
+        url: "https://www.kroger.com/health-services/clinic/1418-w-main-st"
+      }]
+    }]);
+
+    expect(profile.locations[0].addressLine2).toBeNull();
+    expect(profile.phoneNumbers).toHaveLength(2);
+    expect(profile.websites).toHaveLength(1);
+  });
+
+  it("rejects a generic facility contact without provider, domain, or address attribution", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      npi: "1568203883",
+      providerName: "Brian Edward Garcia, MSN, APRN, FNP-C",
+      locations: [{
+        addressLine1: "5656 Kelley St",
+        city: "Houston",
+        state: "TX",
+        zip: "77026",
+        sourceId: "nppes"
+      }],
+      phoneNumbers: [
+        { value: "713-566-5098", sourceId: "nppes" },
+        { value: "713-566-5100", sourceId: "generic-facility" }
+      ],
+      sources: [{
+        id: "nppes",
+        title: "NPPES record for NPI 1568203883",
+        domain: "npiregistry.cms.hhs.gov",
+        url: "https://npiregistry.cms.hhs.gov/provider-view/1568203883"
+      }, {
+        id: "generic-facility",
+        title: "Emergency Care - Harris Health System",
+        domain: "harrishealth.org",
+        url: "https://harrishealth.org/locations/emergency-care"
+      }]
+    }]);
+
+    expect(profile.phoneNumbers.map(({ value }) => value)).toEqual(["713-566-5098"]);
+  });
+
   it("allows ratings from public review or rating sources", () => {
     const [profile] = sanitizeProviderProfiles([
       {
@@ -161,11 +310,11 @@ describe("provider profile sanitizer", () => {
             zip: { value: "44195" }
           }
         ],
-        phoneNumbers: [{ value: "(216) 444-2200", source: { id: "src-1", title: "NPI Profile" } }],
+        phoneNumbers: [{ value: "(216) 444-2200", source: { id: "src-1", title: "NPI 1234567890 Profile" } }],
         ratings: [],
         publicInsuranceMentions: [],
         confidenceNotes: "Public directory match",
-        sources: [{ id: "src-1", title: "NPI Profile", domain: "npiprofile.com" }]
+        sources: [{ id: "src-1", title: "NPI 1234567890 Profile", domain: "npiprofile.com" }]
       }
     ]);
 
@@ -178,14 +327,14 @@ describe("provider profile sanitizer", () => {
         state: "OH",
         zip: "44195",
         sourceId: "src-1",
-        sourceName: "NPI Profile"
+        sourceName: "NPI 1234567890 Profile"
       }
     ]);
     expect(profile.phoneNumbers).toEqual([
       {
         value: "(216) 444-2200",
         sourceId: "src-1",
-        sourceName: "NPI Profile"
+        sourceName: "NPI 1234567890 Profile"
       }
     ]);
     expect(profile.confidenceNotes).toEqual([]);
@@ -213,12 +362,12 @@ describe("provider profile sanitizer", () => {
             title: "Directory without a domain"
           },
           {
-            title: "NPI Profile",
+            title: "NPI 1234567890 Profile",
             domain: "npiprofile.com"
           },
           {
             id: "directory",
-            title: "NPI Profile",
+            title: "NPI 1234567890 Profile",
             domain: "npiprofile.com"
           }
         ]
@@ -239,7 +388,7 @@ describe("provider profile sanitizer", () => {
           providerId: "wrong-provider",
           providerName: "Cleveland Eye Clinic",
           phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
-          sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+          sources: [{ id: "directory", title: "Cleveland Eye Clinic NPI Profile", domain: "npiprofile.com" }]
         },
         {
           ...baseProfile,
@@ -247,7 +396,7 @@ describe("provider profile sanitizer", () => {
           npi: undefined,
           providerName: "The Cleveland Clinic Foundation",
           phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
-          sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+          sources: [{ id: "directory", title: "The Cleveland Clinic Foundation NPI Profile", domain: "npiprofile.com" }]
         }
       ],
       [
@@ -272,7 +421,7 @@ describe("provider profile sanitizer", () => {
           providerId: undefined,
           npi: "1679525919",
           phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
-          sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+          sources: [{ id: "directory", title: "NPI 1679525919 Profile", domain: "npiprofile.com" }]
         }
       ],
       [
@@ -401,7 +550,7 @@ describe("provider profile sanitizer", () => {
           { value: "4.8", scale: "5", sourceId: "zocdoc" }
         ],
         sources: [
-          { id: "directory", title: "NPI Profile", domain: "npiprofile.com" },
+          { id: "directory", title: "The Cleveland Clinic Foundation NPI 1234567890 Profile", domain: "npiprofile.com" },
           {
             id: "official",
             title: "The Cleveland Clinic Foundation official site",

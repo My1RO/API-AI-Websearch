@@ -10,10 +10,12 @@ interface ResponseContentPart {
 interface ResponseOutputItem {
   type?: string;
   content?: ResponseContentPart[];
+  action?: unknown;
 }
 
 interface ResponseShape {
   output_text?: unknown;
+  output_parsed?: unknown;
   output?: ResponseOutputItem[];
 }
 
@@ -116,13 +118,65 @@ export const extractResponseCitationUrls = (response: unknown): string[] => {
   )];
 };
 
-export const parseProviderProfilesFromResponse = (response: unknown) => {
-  let parsed: unknown;
+export const extractResponseWebSearchSourceUrls = (response: unknown): string[] => {
+  const shaped = response as ResponseShape;
+  return [...new Set(
+    (shaped.output || [])
+      .filter((item) => item.type === "web_search_call")
+      .flatMap((item) => {
+        if (!item.action || typeof item.action !== "object" || Array.isArray(item.action)) {
+          return [];
+        }
+        const sources = (item.action as Record<string, unknown>).sources;
+        return Array.isArray(sources) ? sources : [];
+      })
+      .map((source) => {
+        if (!source || typeof source !== "object" || Array.isArray(source)) {
+          return undefined;
+        }
+        const url = (source as Record<string, unknown>).url;
+        return typeof url === "string" ? url : undefined;
+      })
+      .filter((url): url is string => Boolean(url))
+  )];
+};
 
-  try {
-    parsed = JSON.parse(extractJsonText(extractResponseText(response)));
-  } catch {
-    throw new AiProviderError("AI provider returned an invalid profile payload.");
+export const extractResponseWebSearchOpenedUrls = (response: unknown): string[] => {
+  const shaped = response as ResponseShape;
+  return [...new Set(
+    (shaped.output || [])
+      .filter((item) => item.type === "web_search_call")
+      .map((item) => {
+        if (!item.action || typeof item.action !== "object" || Array.isArray(item.action)) {
+          return undefined;
+        }
+        const action = item.action as Record<string, unknown>;
+        return action.type === "open_page" && typeof action.url === "string"
+          ? action.url
+          : undefined;
+      })
+      .filter((url): url is string => Boolean(url))
+  )];
+};
+
+export const extractResponseProvenanceUrls = (response: unknown): string[] => [
+  ...new Set([
+    ...extractResponseCitationUrls(response),
+    ...extractResponseWebSearchSourceUrls(response),
+    ...extractResponseWebSearchOpenedUrls(response)
+  ])
+];
+
+export const parseProviderProfilesFromResponse = (response: unknown) => {
+  const shaped = response as ResponseShape;
+  let parsed: unknown = shaped.output_parsed;
+
+  if (!parsed) {
+    try {
+      parsed = JSON.parse(extractJsonText(extractResponseText(response)));
+    } catch {
+      throw new AiProviderError("AI provider returned an invalid profile payload.");
+    }
   }
 
   const profiles = Array.isArray(parsed) ? parsed : (parsed as { profiles?: unknown }).profiles;
@@ -131,6 +185,6 @@ export const parseProviderProfilesFromResponse = (response: unknown) => {
   }
 
   return sanitizeProviderProfiles(profiles, {
-    allowedSourceUrls: extractResponseCitationUrls(response)
+    allowedSourceUrls: extractResponseProvenanceUrls(response)
   });
 };

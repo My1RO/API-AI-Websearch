@@ -31,7 +31,7 @@ new ProviderProfileResponsesClient()
       ok: true,
       elapsedMs: Date.now() - started,
       runtime: getAiRuntimeStatus(),
-      model: env.aiModel,
+      model: env.azureOpenAiDeployment,
       profileCount: profiles.length,
       firstProfile: firstProfile ? {
         hasProviderName: Boolean(firstProfile.providerName),
@@ -48,7 +48,7 @@ new ProviderProfileResponsesClient()
       ok: false,
       elapsedMs: Date.now() - started,
       runtime: getAiRuntimeStatus(),
-      model: env.aiModel,
+      model: env.azureOpenAiDeployment,
       errorName: error instanceof Error ? error.name : "UnknownError",
       errorMessage: error instanceof Error ? error.message : "Provider profile smoke failed."
     }, null, 2)}\n`);

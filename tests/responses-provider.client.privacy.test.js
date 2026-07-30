@@ -1,7 +1,7 @@
-const mockCreateResponse = jest.fn();
+const mockParseResponse = jest.fn();
 const mockOpenAIConstructor = jest.fn().mockImplementation(() => ({
   responses: {
-    create: mockCreateResponse
+    parse: mockParseResponse
   }
 }));
 const ORIGINAL_ENV = process.env;
@@ -51,6 +51,7 @@ const citedProfileResponse = profiles => {
       output_tokens_details: { reasoning_tokens: 4 },
       total_tokens: 110
     },
+    output_parsed: { profiles },
     output_text: outputText,
     output: [{
       type: "message",
@@ -88,9 +89,9 @@ const successfulProfileResponse = () => citedProfileResponse([
 describe("Azure OpenAI Responses client privacy contract", () => {
   beforeEach(() => {
     consoleLogSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-    mockCreateResponse.mockReset();
+    mockParseResponse.mockReset();
     mockOpenAIConstructor.mockClear();
-    mockCreateResponse.mockResolvedValue(successfulProfileResponse());
+    mockParseResponse.mockResolvedValue(successfulProfileResponse());
   });
 
   afterEach(() => {
@@ -113,20 +114,28 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       baseURL: "https://azure.example.openai.azure.com/openai/v1",
       maxRetries: 2
     });
-    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
+    expect(mockParseResponse).toHaveBeenCalledTimes(1);
 
-    const request = mockCreateResponse.mock.calls[0][0];
+    const request = mockParseResponse.mock.calls[0][0];
     expect(request).toEqual(
       expect.objectContaining({
         model: "gpt-5.4",
         tool_choice: "required",
         max_tool_calls: 8,
         parallel_tool_calls: true,
+        include: ["web_search_call.action.sources"],
         store: false,
         reasoning: { effort: "medium" }
       })
     );
     expect(request.tools).toEqual([{ type: "web_search" }]);
+    expect(request.text.format).toEqual(expect.objectContaining({
+      type: "json_schema",
+      name: "provider_profiles",
+      strict: true
+    }));
+    expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
+    expect(request.input).not.toMatch(/return json/i);
     expect(JSON.stringify(request)).not.toMatch(/web_search_preview|background":true|store":true/i);
     expect(request.input).not.toMatch(/quote|member|client|patient|dob|diagnosis|medication/i);
 
@@ -162,7 +171,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       })).rejects.toThrow("AI provider profile search failed.");
 
       expect(mockOpenAIConstructor).not.toHaveBeenCalled();
-      expect(mockCreateResponse).not.toHaveBeenCalled();
+      expect(mockParseResponse).not.toHaveBeenCalled();
     }
   );
 
@@ -184,15 +193,16 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       baseURL: "https://azure.example.openai.azure.com/openai/v1",
       maxRetries: 2
     });
-    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
+    expect(mockParseResponse).toHaveBeenCalledTimes(1);
 
-    const request = mockCreateResponse.mock.calls[0][0];
+    const request = mockParseResponse.mock.calls[0][0];
     expect(request).toEqual(
       expect.objectContaining({
         model: "gpt-5.4",
         tool_choice: "required",
         max_tool_calls: 12,
         parallel_tool_calls: true,
+        include: ["web_search_call.action.sources"],
         store: false,
         reasoning: { effort: "medium" }
       })
@@ -227,7 +237,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
   });
 
   it("retries once with provider identity only when the first profile payload is not parseable", async () => {
-    mockCreateResponse
+    mockParseResponse
       .mockResolvedValueOnce({ status: "completed", output_text: "No JSON profile was returned." })
       .mockResolvedValueOnce(citedProfileResponse([
             {
@@ -250,7 +260,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
               confidenceNotes: [],
               sources: [{
                 id: "src-1",
-                title: "NPI Profile",
+                title: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919",
                 domain: "npiprofile.com",
                 url: "https://npiprofile.com/provider/123"
               }]
@@ -275,10 +285,10 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     });
 
     expect(profiles).toHaveLength(1);
-    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+    expect(mockParseResponse).toHaveBeenCalledTimes(2);
 
-    const firstRequest = mockCreateResponse.mock.calls[0][0];
-    const retryRequest = mockCreateResponse.mock.calls[1][0];
+    const firstRequest = mockParseResponse.mock.calls[0][0];
+    const retryRequest = mockParseResponse.mock.calls[1][0];
 
     expect(firstRequest.input).not.toMatch(/General Acute Care Hospital/);
     expect(firstRequest.input).toMatch(/Cleveland/);
@@ -290,7 +300,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
   });
 
   it("fails closed on non-completed provider responses without logging raw response content", async () => {
-    mockCreateResponse.mockResolvedValueOnce({
+    mockParseResponse.mockResolvedValueOnce({
       status: "incomplete",
       usage: {
         input_tokens: 80,
@@ -312,7 +322,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     })).rejects.toThrow("AI provider profile search failed.");
 
-    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
+    expect(mockParseResponse).toHaveBeenCalledTimes(1);
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "AI provider usage telemetry",
       expect.objectContaining({
@@ -343,7 +353,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     };
     const retryResponse = successfulProfileResponse();
     retryResponse.output.unshift({ type: "web_search_call" });
-    mockCreateResponse
+    mockParseResponse
       .mockResolvedValueOnce(firstResponse)
       .mockResolvedValueOnce(retryResponse);
 
@@ -391,7 +401,8 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       "https://npiprofile.com/provider/123",
       "https://npiprofile.com/provider/not-cited"
     );
-    mockCreateResponse.mockResolvedValue(response);
+    response.output_parsed.profiles[0].sources[0].url = "https://npiprofile.com/provider/not-cited";
+    mockParseResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 
@@ -401,5 +412,84 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     });
 
     expect(profiles).toEqual([]);
+  });
+
+  it("retains sources returned in Azure web-search action metadata", async () => {
+    const response = successfulProfileResponse();
+    response.output[0].content[0].annotations = [];
+    response.output.unshift({
+      type: "web_search_call",
+      action: {
+        type: "search",
+        sources: [{ type: "url", url: "https://npiprofile.com/provider/123" }]
+      }
+    });
+    mockParseResponse.mockResolvedValue(response);
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    const profiles = await client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    });
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toEqual([
+      expect.objectContaining({ value: "2164442200", sourceId: "src-1" })
+    ]);
+  });
+
+  it("retains exact pages opened by Azure web search as API provenance", async () => {
+    const response = successfulProfileResponse();
+    response.output[0].content[0].annotations = [];
+    response.output_parsed.profiles[0].sources[0].url = "https://npiregistry.cms.hhs.gov/api/?number=123&version=2.1";
+    response.output.unshift({
+      type: "web_search_call",
+      action: {
+        type: "open_page",
+        url: "https://npiregistry.cms.hhs.gov/api/?number=123&version=2.1"
+      }
+    });
+    mockParseResponse.mockResolvedValue(response);
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    const profiles = await client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    });
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toHaveLength(1);
+  });
+
+  it("allows only same-NPI NPPES API and provider-view provenance equivalence", async () => {
+    const response = successfulProfileResponse();
+    response.output[0].content[0].annotations = [];
+    response.output_parsed.profiles[0].npi = "1234567890";
+    response.output_parsed.profiles[0].sources[0] = {
+      id: "src-1",
+      title: "NPPES record for NPI 1234567890",
+      domain: "npiregistry.cms.hhs.gov",
+      url: "https://npiregistry.cms.hhs.gov/api/?number=1234567890&version=2.1"
+    };
+    response.output.unshift({
+      type: "web_search_call",
+      action: {
+        type: "search",
+        sources: [{ type: "url", url: "https://npiregistry.cms.hhs.gov/provider-view/1234567890" }]
+      }
+    });
+    mockParseResponse.mockResolvedValue(response);
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    const profiles = await client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    });
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toHaveLength(1);
   });
 });
