@@ -163,7 +163,7 @@ describe("provider profile sanitizer", () => {
     expect(profile.publicInsuranceMentions.map(({ value }) => value)).toEqual(["CareSource Medicaid"]);
   });
 
-  it("strips optional generation artifacts and rejects residential-looking locations", () => {
+  it("strips optional generation artifacts, retains apartment-style professional locations, and rejects explicit residential locations", () => {
     const [profile] = sanitizeProviderProfiles([{
       ...baseProfile,
       locations: [{
@@ -180,6 +180,13 @@ describe("provider profile sanitizer", () => {
         state: "TN",
         zip: "37087",
         sourceId: "source-1"
+      }, {
+        addressLine1: "100 Main St",
+        addressLine2: "Residential home address",
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "source-1"
       }],
       sources: [{
         id: "source-1",
@@ -189,13 +196,18 @@ describe("provider profile sanitizer", () => {
       }]
     }], { allowedSourceUrls: ["https://npiprofile.com/provider/123"] });
 
-    expect(profile.locations).toEqual([
+    expect(profile.locations).toEqual(expect.arrayContaining([
       expect.objectContaining({
         addressLine1: "1418 W Main St",
         addressLine2: null,
         city: "Lebanon"
+      }),
+      expect.objectContaining({
+        addressLine1: "100 Main St Apt 2",
+        city: "Lebanon"
       })
-    ]);
+    ]));
+    expect(profile.locations).toHaveLength(2);
   });
 
   it("accepts a facility phone and website only through an exact accepted-address anchor", () => {

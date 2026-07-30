@@ -78,14 +78,22 @@ const structuredSourcedValueSchema = z.object({
   sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
 }).strict();
 
+const structuredPhoneSchema = z.object({
+  value: z.string().describe(
+    "A professional voice phone number for the exact provider. Never a fax, mobile, cell, personal, home, or uncertain-purpose number."
+  ),
+  sourceId: z.string().describe("The id of the exact public source page that establishes this professional phone."),
+  sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
+}).strict();
+
 const structuredLocationSchema = z.object({
-  addressLine1: z.string(),
-  addressLine2: z.string().nullable(),
-  city: z.string().nullable(),
-  state: z.string().nullable(),
-  zip: z.string().nullable(),
-  sourceId: z.string(),
-  sourceName: z.string().nullable()
+  addressLine1: z.string().describe("Street line for a verified professional practice, clinic, facility, hospital, or office location for the exact provider."),
+  addressLine2: z.string().nullable().describe("Professional suite or secondary address line, or null."),
+  city: z.string().nullable().describe("City for the verified professional location, or null."),
+  state: z.string().nullable().describe("State for the verified professional location, or null."),
+  zip: z.string().nullable().describe("ZIP code for the verified professional location, or null."),
+  sourceId: z.string().describe("The id of the exact public source page that establishes this professional location."),
+  sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
 }).strict();
 
 const structuredRatingSchema = z.object({
@@ -107,8 +115,12 @@ const structuredProviderProfileSchema = z.object({
   npi: z.string().nullable(),
   providerName: z.string(),
   specialties: z.array(structuredSourcedValueSchema),
-  locations: z.array(structuredLocationSchema),
-  phoneNumbers: z.array(structuredSourcedValueSchema),
+  locations: z.array(structuredLocationSchema).describe(
+    "Verified professional practice, office, clinic, facility, or hospital locations for the exact provider only. Never residential, people-search, or uncertain-purpose addresses."
+  ),
+  phoneNumbers: z.array(structuredPhoneSchema).describe(
+    "Verified professional voice contacts for the exact provider only. Never fax, mobile, cell, personal, home, or uncertain-purpose numbers."
+  ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(structuredSourcedValueSchema),
   publicInsuranceMentions: z.array(structuredSourcedValueSchema),

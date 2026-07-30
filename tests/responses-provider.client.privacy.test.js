@@ -134,7 +134,12 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       name: "provider_profiles",
       strict: true
     }));
+    expect(JSON.stringify(request.text.format)).toMatch(/Verified professional practice, office, clinic, facility, or hospital locations/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/Verified professional voice contacts/i);
     expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
+    expect(request.instructions).toMatch(/professional voice number/i);
+    expect(request.instructions).toMatch(/uncertain-purpose/i);
+    expect(request.instructions).toMatch(/professional practice, clinic, facility, hospital, or office location/i);
     expect(request.input).not.toMatch(/return json/i);
     expect(JSON.stringify(request)).not.toMatch(/web_search_preview|background":true|store":true/i);
     expect(request.input).not.toMatch(/quote|member|client|patient|dob|diagnosis|medication/i);
