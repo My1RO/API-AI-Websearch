@@ -294,11 +294,14 @@ const professionalDirectoryDomains = ["npiprofile.com", "zocdoc.com", "healthgra
 const ratingDomains = ["zocdoc.com", "healthgrades.com", "webmd.com", "vitals.com"];
 const blockedContactDomains = [
   "whitepages.com", "spokeo.com", "beenverified.com", "truthfinder.com", "radaris.com",
-  "fastpeoplesearch.com", "facebook.com", "instagram.com", "linkedin.com", "twitter.com", "x.com"
+  "fastpeoplesearch.com", "truepeoplesearch.com", "numlookup.com", "411.com",
+  "findwhocallsyou.com", "robokiller.com",
+  "facebook.com", "instagram.com", "linkedin.com", "twitter.com", "x.com"
 ];
 const personalContactSourcePattern = /\b(people\s*finder|personal|residential|home address|mobile number|cell phone|social media)\b/i;
 const professionalContactSourcePattern = /\b(provider|physician|pediatrics|contact|hospital|health system|medical center|clinic|practice|official)\b/i;
 const faxPattern = /\b(fax|facsimile)\b/i;
+const personalPhoneLabelPattern = /\b(mobile|cell(?:ular| phone)?|personal|home)\b/i;
 const residentialAddressPattern = /\b(apartment|apt\.?|residential|residence|home address)\b/i;
 const generationArtifactPattern = /\b(this schema|response format|does not permit null|use null|likely validation|let'?s produce)\b/i;
 const placeholderAddressPattern = /^(?:\/?null|none|n\/?a|city|state|zip|address(?:line)?\s*\d?)$/i;
@@ -419,7 +422,7 @@ const sanitizePhoneNumber = (
   sourceIdMap: Map<string, string>
 ): SourcedValue | undefined => {
   const sanitized = sanitizeSourcedValue(value, sources, sourceIdMap);
-  if (!sanitized || faxPattern.test(sanitized.value)) {
+  if (!sanitized || faxPattern.test(sanitized.value) || personalPhoneLabelPattern.test(sanitized.value)) {
     return undefined;
   }
 

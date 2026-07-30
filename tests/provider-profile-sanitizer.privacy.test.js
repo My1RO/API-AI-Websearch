@@ -93,6 +93,76 @@ describe("provider profile sanitizer", () => {
     ]);
   });
 
+  it("rejects personal phone labels and expanded people-finder domains", () => {
+    const profiles = sanitizeProviderProfiles([{
+      ...baseProfile,
+      phoneNumbers: [
+        { value: "Office: (305) 444-1213", sourceId: "official" },
+        { value: "Mobile: (305) 777-1212", sourceId: "official" },
+        { value: "Cell: (305) 777-1214", sourceId: "official" },
+        { value: "Personal: (305) 777-1215", sourceId: "official" },
+        { value: "Home: (305) 777-1216", sourceId: "official" },
+        { value: "(305) 777-1217", sourceId: "people-finder" }
+      ],
+      sources: [{
+        id: "official",
+        title: "The Cleveland Clinic Foundation NPI 1234567890",
+        domain: "clevelandclinic.org",
+        url: "https://clevelandclinic.org/provider/1234567890"
+      }, {
+        id: "people-finder",
+        title: "The Cleveland Clinic Foundation NPI 1234567890",
+        domain: "numlookup.com",
+        url: "https://numlookup.com/provider/1234567890"
+      }]
+    }], {
+      allowedSourceUrls: [
+        "https://clevelandclinic.org/provider/1234567890",
+        "https://numlookup.com/provider/1234567890"
+      ]
+    });
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers.map(({ value }) => value)).toEqual(["Office: (305) 444-1213"]);
+  });
+
+  it.each(["truepeoplesearch.com", "411.com", "findwhocallsyou.com", "lookup.robokiller.com"])(
+    "blocks provider-attributed contact facts from %s",
+    (domain) => {
+      const url = `https://${domain}/provider/1234567890`;
+      const profiles = sanitizeProviderProfiles([{
+        ...baseProfile,
+        phoneNumbers: [{ value: "(305) 777-1217", sourceId: "people-finder" }],
+        sources: [{
+          id: "people-finder",
+          title: "The Cleveland Clinic Foundation NPI 1234567890",
+          domain,
+          url
+        }]
+      }], { allowedSourceUrls: [url] });
+
+      expect(profiles).toEqual([]);
+    }
+  );
+
+  it("retains CareSource while continuing to reject source placeholders", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
+      publicInsuranceMentions: [
+        { value: "CareSource Medicaid", sourceId: "directory" },
+        { value: "Source Name", sourceId: "directory" }
+      ],
+      sources: [{
+        id: "directory",
+        title: "The Cleveland Clinic Foundation NPI 1234567890",
+        domain: "npiprofile.com"
+      }]
+    }]);
+
+    expect(profile.publicInsuranceMentions.map(({ value }) => value)).toEqual(["CareSource Medicaid"]);
+  });
+
   it("strips optional generation artifacts and rejects residential-looking locations", () => {
     const [profile] = sanitizeProviderProfiles([{
       ...baseProfile,
