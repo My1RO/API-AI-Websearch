@@ -48,6 +48,9 @@ export interface AiProviderUsageRecord extends AiResponseUsage, AiEstimatedCost 
   retryReason: AiProviderRetryReason | null;
   outcome: AiProviderAttemptOutcome;
   durationMs: number;
+  semanticAttemptId: string | null;
+  transportHttpAttemptCount: number;
+  transportRetryCount: number;
 }
 
 const asRecord = (value: unknown): UnknownRecord | undefined => (
@@ -148,7 +151,10 @@ export const recordAiProviderUsage = ({
   retryReason = null,
   outcome,
   durationMs,
-  response
+  response,
+  semanticAttemptId = null,
+  transportHttpAttemptCount = 0,
+  transportRetryCount = 0
 }: {
   model: string;
   attempt: AiProviderAttempt;
@@ -156,6 +162,9 @@ export const recordAiProviderUsage = ({
   outcome: AiProviderAttemptOutcome;
   durationMs: number;
   response?: unknown;
+  semanticAttemptId?: string | null;
+  transportHttpAttemptCount?: number;
+  transportRetryCount?: number;
 }): AiProviderUsageRecord => {
   const usage = extractAiResponseUsage(response);
   const cost = estimateAiResponseCost(usage, env.aiCostRates);
@@ -167,6 +176,9 @@ export const recordAiProviderUsage = ({
     retryReason,
     outcome,
     durationMs: Math.max(0, Math.round(durationMs)),
+    semanticAttemptId,
+    transportHttpAttemptCount: Math.max(0, Math.round(transportHttpAttemptCount)),
+    transportRetryCount: Math.max(0, Math.round(transportRetryCount)),
     ...usage,
     ...cost
   };
@@ -196,6 +208,11 @@ export const logAiProviderSearchSummary = (
 
   const totalCosts = records.map((record) => record.totalUsd);
   const estimated = totalCosts.every((cost) => cost !== null);
+  const transportHttpAttemptCount = records.reduce(
+    (sum, record) => sum + record.transportHttpAttemptCount,
+    0
+  );
+  const transportRetryCount = records.reduce((sum, record) => sum + record.transportRetryCount, 0);
 
   console.log("AI provider search telemetry", {
     provider: records[0].provider,
@@ -228,6 +245,8 @@ export const logAiProviderSearchSummary = (
     initialSdkMaxRetries: 1,
     semanticRetrySdkMaxRetries: 0,
     maxHttpAttempts: 3,
-    transportRetryUsageObservable: false
+    transportHttpAttemptCount,
+    transportRetryCount,
+    transportRetryUsageObservable: transportHttpAttemptCount > 0
   });
 };

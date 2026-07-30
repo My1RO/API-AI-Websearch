@@ -1,0 +1,54 @@
+{
+  "provenance": "Synthetic transport sequence. The pre-patch production logs retained semantic responses but did not retain individual SDK HTTP retries, which is the observability gap covered by this fixture.",
+  "sequence": [
+    {
+      "semanticAttemptKind": "initial",
+      "status": 503,
+      "requestIdHeader": "apim-request-id",
+      "requestId": "trace-initial-503",
+      "body": {
+        "error": {
+          "message": "Temporary service error",
+          "type": "server_error"
+        }
+      }
+    },
+    {
+      "semanticAttemptKind": "initial",
+      "status": 200,
+      "requestIdHeader": "x-request-id",
+      "requestId": "trace-initial-200",
+      "body": {
+        "status": "completed",
+        "output_text": "No structured provider profile was returned."
+      }
+    },
+    {
+      "semanticAttemptKind": "identity_retry",
+      "status": 200,
+      "requestIdHeader": "x-request-id",
+      "requestId": "trace-recovery-200",
+      "body": {
+        "status": "completed",
+        "output_text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"sourceId\":\"src-1\",\"sourceName\":null}],\"ratings\":[],\"websites\":[],\"publicInsuranceMentions\":[],\"confidenceNotes\":[],\"sources\":[{\"id\":\"src-1\",\"title\":\"Public directory\",\"domain\":\"npiprofile.com\",\"url\":\"https://npiprofile.com/provider/123\"}]}]}",
+        "output": [
+          {
+            "type": "message",
+            "content": [
+              {
+                "type": "output_text",
+                "text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"sourceId\":\"src-1\",\"sourceName\":null}],\"ratings\":[],\"websites\":[],\"publicInsuranceMentions\":[],\"confidenceNotes\":[],\"sources\":[{\"id\":\"src-1\",\"title\":\"Public directory\",\"domain\":\"npiprofile.com\",\"url\":\"https://npiprofile.com/provider/123\"}]}]}",
+                "annotations": [
+                  {
+                    "type": "url_citation",
+                    "url": "https://npiprofile.com/provider/123"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

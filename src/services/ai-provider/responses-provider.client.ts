@@ -22,6 +22,11 @@ import {
   logAiProviderSearchSummary,
   recordAiProviderUsage
 } from "./usage-telemetry";
+import {
+  createAiTransportSemanticAttemptTrace,
+  createAiTransportTracingFetch,
+  runWithAiTransportSemanticAttempt
+} from "./transport-attempt-telemetry";
 
 interface AzureWebSearchTool {
   type: "web_search";
@@ -87,7 +92,8 @@ export const createResponsesClient = (): OpenAI => {
   return new OpenAI({
     apiKey: env.azureOpenAiApiKey,
     baseURL: normalizedResponsesBaseUrl(),
-    maxRetries: INITIAL_SDK_MAX_RETRIES
+    maxRetries: INITIAL_SDK_MAX_RETRIES,
+    fetch: createAiTransportTracingFetch()
   });
 };
 
@@ -217,6 +223,7 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     const identityOnly = attempt === "identity_retry";
     const request = providerProfileResponseRequest(input, identityOnly);
     const maxRetries = attempt === "initial" ? INITIAL_SDK_MAX_RETRIES : SEMANTIC_RETRY_SDK_MAX_RETRIES;
+    const transportTrace = createAiTransportSemanticAttemptTrace(attempt);
     const startedAt = Date.now();
     let response: unknown;
     let outcome: AiProviderAttemptOutcome = "request_error";
@@ -236,7 +243,10 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     });
 
     try {
-      response = await this.responsesClient().responses.create(request as never, { maxRetries });
+      response = await runWithAiTransportSemanticAttempt(
+        transportTrace,
+        () => this.responsesClient().responses.create(request as never, { maxRetries })
+      );
       const status = (response as ResponseStatusShape).status;
       if (typeof status === "string" && status !== "completed") {
         outcome = "incomplete";
@@ -279,7 +289,10 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
         retryReason,
         outcome,
         durationMs: Date.now() - startedAt,
-        response
+        response,
+        semanticAttemptId: transportTrace.semanticAttemptId,
+        transportHttpAttemptCount: transportTrace.httpAttempts.length,
+        transportRetryCount: Math.max(0, transportTrace.httpAttempts.length - 1)
       }));
     }
   }

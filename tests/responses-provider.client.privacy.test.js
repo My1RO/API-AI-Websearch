@@ -229,7 +229,8 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(mockOpenAIConstructor).toHaveBeenCalledWith({
       apiKey: "test-azure-key",
       baseURL: "https://azure.example.openai.azure.com/openai/v1",
-      maxRetries: 1
+      maxRetries: 1,
+      fetch: expect.any(Function)
     });
     expect(mockCreateResponse).toHaveBeenCalledTimes(1);
 
@@ -314,7 +315,8 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(mockOpenAIConstructor).toHaveBeenCalledWith({
       apiKey: "test-azure-key",
       baseURL: "https://azure.example.openai.azure.com/openai/v1",
-      maxRetries: 1
+      maxRetries: 1,
+      fetch: expect.any(Function)
     });
     expect(mockCreateResponse).toHaveBeenCalledTimes(1);
 
