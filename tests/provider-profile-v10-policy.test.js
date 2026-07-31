@@ -60,4 +60,18 @@ describe("V10 location and opened-evidence prompt policy", () => {
     expect(providerProfileSystemInstructions).toMatch(/find-a-provider directory, verified-profile badge, official-looking branding/i);
     expect(providerProfileSystemInstructions).toMatch(/directory profile URL is never a website fact/i);
   });
+
+  it("qualifies evidence before conflict resolution and source hierarchy", () => {
+    const { providerProfileSystemInstructions } = loadPromptBuilder();
+
+    const qualification = providerProfileSystemInstructions.indexOf("First, qualify the evidence");
+    const conflictResolution = providerProfileSystemInstructions.indexOf("Second, resolve conflicts");
+    const sourceHierarchy = providerProfileSystemInstructions.indexOf("Third, apply source hierarchy");
+
+    expect(qualification).toBeGreaterThanOrEqual(0);
+    expect(conflictResolution).toBeGreaterThan(qualification);
+    expect(sourceHierarchy).toBeGreaterThan(conflictResolution);
+    expect(providerProfileSystemInstructions).toMatch(/source tier, domain, recency, or apparent official status cannot qualify or rescue it/i);
+    expect(providerProfileSystemInstructions).toMatch(/Never choose or retain an unsupported fact because its source ranks higher/i);
+  });
 });
