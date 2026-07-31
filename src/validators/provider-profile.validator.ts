@@ -22,17 +22,14 @@ export const createProviderProfilesSchema = z.object({
   lineOfCoverage: z.literal("Medical")
 }).strict();
 
-export const sourceSchema = z.object({
-  id: z.string().trim().min(1).max(80),
-  title: z.string().trim().min(1).max(255),
-  domain: z.string().trim().min(1).max(255),
-  url: z.string().trim().max(2048).optional()
+export const citationSchema = z.object({
+  sourceUrl: z.string().trim().min(1).max(2048),
+  sourceTitle: z.string().trim().min(1).max(255).nullable().optional()
 }).strip();
 
 export const sourcedValueSchema = z.object({
   value: z.string().trim().min(1).max(500),
-  sourceId: z.string().trim().min(1).max(80),
-  sourceName: z.string().trim().min(1).max(255).optional()
+  citation: citationSchema
 }).strip();
 
 export const providerProfileSchema = z.object({
@@ -48,8 +45,7 @@ export const providerProfileSchema = z.object({
         city: z.string().trim().max(120).nullable().optional(),
         state: z.string().trim().max(2).nullable().optional(),
         zip: z.string().trim().max(10).nullable().optional(),
-        sourceId: z.string().trim().min(1).max(80),
-        sourceName: z.string().trim().min(1).max(255).optional()
+        citation: citationSchema
       }).strip()
     )
     .default([]),
@@ -59,14 +55,12 @@ export const providerProfileSchema = z.object({
       z.object({
         value: z.string().trim().min(1).max(80),
         scale: z.string().trim().max(80).nullable().optional(),
-        sourceId: z.string().trim().min(1).max(80),
-        sourceName: z.string().trim().min(1).max(255).optional()
+        citation: citationSchema
       }).strip()
     )
     .default([]),
   websites: z.array(sourcedValueSchema).default([]),
   confidenceNotes: z.array(z.string().trim().min(1).max(500)).default([]),
-  sources: z.array(sourceSchema).default([])
 }).strip();
 
 export const providerProfilesSchema = z.array(providerProfileSchema);

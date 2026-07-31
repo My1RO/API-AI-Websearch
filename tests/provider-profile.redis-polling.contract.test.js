@@ -102,7 +102,7 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
     expect(writes.some((call) => call.includes(3600))).toBe(true);
   });
 
-  it("stores completed results with the shorter result TTL and without raw prompt/source URL payloads", async () => {
+  it("stores completed results with direct citations but without raw prompt or response payloads", async () => {
     const redis = createMockRedis();
     const api = resolveApi(redis);
 
@@ -111,17 +111,15 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
     await api.markCompleted("request-1", [
       {
         providerName: "Dr. Ada Smith",
-        phoneNumbers: [{ value: "+16174440123", sourceId: "nppes" }],
-        prompt: "FORBIDDEN_PROMPT",
-        rawResponse: "FORBIDDEN_RAW_RESPONSE",
-        sources: [
-          {
-            id: "nppes",
-            title: "NPPES",
-            domain: "npiregistry.cms.hhs.gov",
-            url: "https://example.invalid/source"
+        phoneNumbers: [{
+          value: "+16174440123",
+          citation: {
+            sourceUrl: "https://npiregistry.cms.hhs.gov/provider-view/1234567890",
+            sourceTitle: "NPPES record for Dr. Ada Smith"
           }
-        ]
+        }],
+        prompt: "FORBIDDEN_PROMPT",
+        rawResponse: "FORBIDDEN_RAW_RESPONSE"
       }
     ]);
 
@@ -130,7 +128,7 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
     expect(writes.some((call) => call.includes(1800))).toBe(true);
     expect(JSON.stringify(writes)).not.toContain("FORBIDDEN_PROMPT");
     expect(JSON.stringify(writes)).not.toContain("FORBIDDEN_RAW_RESPONSE");
-    expect(JSON.stringify(writes)).not.toContain("https://example.invalid/source");
+    expect(JSON.stringify(writes)).toContain("https://npiregistry.cms.hhs.gov/provider-view/1234567890");
   });
 
   it("returns expired when Redis has no job payload", async () => {
@@ -233,15 +231,23 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
         providerId: "1679525919",
         npi: "1679525919",
         providerName: "THE CLEVELAND CLINIC FOUNDATION",
-        phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
+        phoneNumbers: [{
+          value: "(216) 444-2200",
+          citation: {
+            sourceUrl: "https://npiprofile.com/provider/1679525919",
+            sourceTitle: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919"
+          }
+        }],
         locations: [{
           addressLine1: "9500 Euclid Ave",
           city: "Cleveland",
           state: "OH",
           zip: "44195",
-          sourceId: "directory"
-        }],
-        sources: [{ id: "directory", title: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919", domain: "npiprofile.com" }]
+          citation: {
+            sourceUrl: "https://npiprofile.com/provider/1679525919",
+            sourceTitle: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919"
+          }
+        }]
       }
     ]);
 
@@ -262,7 +268,7 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
       status: "queued",
       loading: true
     }));
-    expect(JSON.stringify(partial)).not.toContain("https://");
+    expect(JSON.stringify(partial)).toContain("https://npiprofile.com/provider/1679525919");
 
     const completed = await api.markProviderNoResults("request-1", secondProviderKey);
 

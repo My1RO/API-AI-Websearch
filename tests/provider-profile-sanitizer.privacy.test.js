@@ -1,7 +1,57 @@
-const {
-  sanitizeProviderProfiles,
-  sanitizeProviderProfilesForRequest
-} = require("../src/services/provider-profile-sanitizer.service");
+const sanitizer = require("../src/services/provider-profile-sanitizer.service");
+
+const citationProfiles = profiles => profiles.map(profile => {
+  const sources = new Map((profile.sources || []).map(source => [source.id, source]));
+  const citationFor = fact => {
+    if (fact?.citation) {
+      return fact.citation;
+    }
+    const sourceId = fact?.sourceId || fact?.source?.id;
+    if (!sourceId) {
+      return {};
+    }
+    const source = sources.get(sourceId) || fact?.source || {};
+    const sourceUrl = source.url || (source.domain ? `https://${source.domain}/${sourceId || "provider"}` : undefined);
+    return {
+      sourceUrl,
+      sourceTitle: fact?.sourceName || source.title || null
+    };
+  };
+  const sourced = fact => ({
+    value: fact?.value ?? fact,
+    citation: citationFor(fact)
+  });
+  const sourcedFacts = facts => (facts || []).map(sourced).filter(fact => fact.citation.sourceUrl);
+  return {
+    providerId: profile.providerId,
+    npi: profile.npi,
+    providerName: profile.providerName?.value || profile.providerName || profile.name,
+    specialties: sourcedFacts(profile.specialties),
+    locations: (profile.locations || profile.addresses || []).map(location => ({
+      addressLine1: location?.addressLine1?.value || location?.addressLine1 || location?.street1 || location?.address,
+      addressLine2: location?.addressLine2 || null,
+      city: location?.city?.value || location?.city || null,
+      state: location?.state?.value || location?.state || null,
+      zip: location?.zip?.value || location?.zip || null,
+      citation: citationFor(location?.addressLine1?.value ? location.addressLine1 : location)
+    })).filter(location => location.citation.sourceUrl),
+    phoneNumbers: sourcedFacts(profile.phoneNumbers),
+    ratings: (profile.ratings || []).map(rating => ({
+      value: rating.value,
+      scale: rating.scale || null,
+      citation: citationFor(rating)
+    })),
+    websites: sourcedFacts(profile.websites),
+    confidenceNotes: []
+  };
+});
+
+const sanitizeProviderProfiles = (profiles, options) => (
+  sanitizer.sanitizeProviderProfiles(citationProfiles(profiles), options)
+);
+const sanitizeProviderProfilesForRequest = (profiles, providers) => (
+  sanitizer.sanitizeProviderProfilesForRequest(citationProfiles(profiles), providers)
+);
 
 describe("provider profile sanitizer", () => {
   const baseProfile = {
@@ -63,7 +113,12 @@ describe("provider profile sanitizer", () => {
     });
 
     expect(profile.phoneNumbers).toEqual([
-      expect.objectContaining({ value: "(305) 585-1111", sourceId: "npi-registry" })
+      expect.objectContaining({
+        value: "(305) 585-1111",
+        citation: expect.objectContaining({
+          sourceUrl: "https://npiregistry.cms.hhs.gov/provider-view/1234567890"
+        })
+      })
     ]);
   });
 
@@ -298,8 +353,10 @@ describe("provider profile sanitizer", () => {
       {
         value: "4.8",
         scale: "5",
-        sourceId: "rating-source",
-        sourceName: "Public ratings"
+        citation: {
+          sourceUrl: "https://healthgrades.com/rating-source",
+          sourceTitle: "Public ratings"
+        }
       }
     ]);
   });
@@ -408,15 +465,19 @@ describe("provider profile sanitizer", () => {
         city: "Cleveland",
         state: "OH",
         zip: "44195",
-        sourceId: "src-1",
-        sourceName: "NPI 1234567890 Profile"
+        citation: {
+          sourceUrl: "https://npiprofile.com/src-1",
+          sourceTitle: "NPI 1234567890 Profile"
+        }
       }
     ]);
     expect(profile.phoneNumbers).toEqual([
       {
         value: "(216) 444-2200",
-        sourceId: "src-1",
-        sourceName: "NPI 1234567890 Profile"
+        citation: {
+          sourceUrl: "https://npiprofile.com/src-1",
+          sourceTitle: "NPI 1234567890 Profile"
+        }
       }
     ]);
     expect(profile.confidenceNotes).toEqual([]);
@@ -603,18 +664,14 @@ describe("provider profile sanitizer", () => {
 
     expect(profile.websites).toEqual([{
       value: "https://clevelandclinic.org/locations/main-campus",
-      sourceId: "official",
-      sourceName: "The Cleveland Clinic Foundation official site"
-    }]);
-    expect(profile.sources).toEqual([{
-      id: "official",
-      title: "The Cleveland Clinic Foundation official site",
-      domain: "clevelandclinic.org",
-      url: "https://clevelandclinic.org/locations/main-campus"
+      citation: {
+        sourceUrl: "https://clevelandclinic.org/locations/main-campus",
+        sourceTitle: "The Cleveland Clinic Foundation official site"
+      }
     }]);
   });
 
-  it("deduplicates and deterministically prioritizes requested-location and official-source facts", () => {
+  it("deduplicates while preserving the one-call model's ordering", () => {
     const [profile] = sanitizeProviderProfilesForRequest(
       [{
         ...baseProfile,
@@ -654,9 +711,12 @@ describe("provider profile sanitizer", () => {
     );
 
     expect(profile.phoneNumbers).toHaveLength(2);
-    expect(profile.phoneNumbers[0].sourceId).toBe("official");
-    expect(profile.locations[0].zip).toBe("44195");
-    expect(profile.ratings.map((rating) => rating.sourceId)).toEqual(["healthgrades", "zocdoc"]);
-    expect(profile.sources[0].id).toBe("official");
+    expect(profile.phoneNumbers[0].citation.sourceTitle).toMatch(/NPI 1234567890 Profile/);
+    expect(profile.locations[0].zip).toBe("44308");
+    expect(profile.ratings.map((rating) => rating.citation.sourceTitle)).toEqual([
+      "Healthgrades rating",
+      "Zocdoc rating"
+    ]);
+    expect(profile).not.toHaveProperty("sources");
   });
 });

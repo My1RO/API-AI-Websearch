@@ -11,17 +11,14 @@ export interface ProviderProfileRequestItem {
   zip?: string;
 }
 
-export interface ProviderSource {
-  id: string;
-  title: string;
-  domain: string;
-  url?: string;
+export interface ProviderCitation {
+  sourceUrl: string;
+  sourceTitle?: string | null;
 }
 
 export interface SourcedValue {
   value: string;
-  sourceId: string;
-  sourceName?: string;
+  citation: ProviderCitation;
 }
 
 export interface ProviderLocation {
@@ -30,15 +27,13 @@ export interface ProviderLocation {
   city?: string | null;
   state?: string | null;
   zip?: string | null;
-  sourceId: string;
-  sourceName?: string;
+  citation: ProviderCitation;
 }
 
 export interface ProviderRating {
   value: string;
   scale?: string | null;
-  sourceId: string;
-  sourceName?: string;
+  citation: ProviderCitation;
 }
 
 export interface ProviderProfile {
@@ -51,7 +46,6 @@ export interface ProviderProfile {
   ratings: ProviderRating[];
   websites: SourcedValue[];
   confidenceNotes?: string[];
-  sources: ProviderSource[];
 }
 
 export interface ProviderProfileProviderJob {

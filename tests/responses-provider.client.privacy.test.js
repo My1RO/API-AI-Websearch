@@ -847,16 +847,15 @@ describe("Azure OpenAI Responses client privacy contract", () => {
 
     expect(profiles).toHaveLength(1);
     expect(profiles[0].phoneNumbers).toEqual([
-      expect.objectContaining({ value: "2164442200", sourceId: "src-1" })
+      {
+        value: "2164442200",
+        citation: {
+          sourceTitle: "Public directory",
+          sourceUrl: "https://npiprofile.com/provider/123"
+        }
+      }
     ]);
-    expect(profiles[0].sources).toEqual([
-      expect.objectContaining({
-        id: "src-1",
-        title: "Public directory",
-        domain: "npiprofile.com",
-        url: "https://npiprofile.com/provider/123"
-      })
-    ]);
+    expect(profiles[0]).not.toHaveProperty("sources");
     expect(JSON.stringify(profiles)).not.toMatch(/providerIdentitySpan|factSpan|explicitFactDateSpan/);
   });
 

@@ -1,6 +1,5 @@
 import { AiProviderError } from "../../errors/http-error";
 import { providerProfileStructuredOutputSchema } from "../../validators/provider-profile.validator";
-import { ProviderProfile, ProviderSource } from "../../types/provider-profile";
 import { sanitizeProviderProfiles } from "../provider-profile-sanitizer.service";
 
 interface ResponseContentPart {
@@ -20,89 +19,6 @@ interface ResponseShape {
   output_parsed?: unknown;
   output?: ResponseOutputItem[];
 }
-
-interface StructuredCitation {
-  sourceUrl: string;
-  sourceTitle: string | null;
-}
-
-const sourceDomain = (url: string): string => {
-  try {
-    return new URL(url).hostname.toLowerCase();
-  } catch {
-    return "invalid.invalid";
-  }
-};
-
-const profilesWithDerivedSources = (
-  profiles: ReturnType<typeof providerProfileStructuredOutputSchema.parse>["profiles"]
-): ProviderProfile[] => profiles.map((profile) => {
-  const sourcesByUrl = new Map<string, ProviderSource>();
-
-  const sourceForCitation = (citation: StructuredCitation): ProviderSource => {
-    const existing = sourcesByUrl.get(citation.sourceUrl);
-    if (existing) {
-      return existing;
-    }
-
-    const domain = sourceDomain(citation.sourceUrl);
-    const source: ProviderSource = {
-      id: `src-${sourcesByUrl.size + 1}`,
-      title: citation.sourceTitle || domain,
-      domain,
-      url: citation.sourceUrl
-    };
-    sourcesByUrl.set(citation.sourceUrl, source);
-    return source;
-  };
-
-  const sourcedValue = <T extends { value: string; citation: StructuredCitation }>(fact: T) => {
-    const source = sourceForCitation(fact.citation);
-    return {
-      value: fact.value,
-      sourceId: source.id,
-      sourceName: source.title
-    };
-  };
-
-  const specialties = profile.specialties.map(sourcedValue);
-  const locations = profile.locations.map((location) => {
-    const source = sourceForCitation(location.citation);
-    return {
-      addressLine1: location.addressLine1,
-      addressLine2: location.addressLine2,
-      city: location.city,
-      state: location.state,
-      zip: location.zip,
-      sourceId: source.id,
-      sourceName: source.title
-    };
-  });
-  const phoneNumbers = profile.phoneNumbers.map(sourcedValue);
-  const ratings = profile.ratings.map((rating) => {
-    const source = sourceForCitation(rating.citation);
-    return {
-      value: rating.value,
-      scale: rating.scale,
-      sourceId: source.id,
-      sourceName: source.title
-    };
-  });
-  const websites = profile.websites.map(sourcedValue);
-
-  return {
-    providerId: profile.providerId || undefined,
-    npi: profile.npi || undefined,
-    providerName: profile.providerName,
-    specialties,
-    locations,
-    phoneNumbers,
-    ratings,
-    websites,
-    confidenceNotes: profile.confidenceNotes,
-    sources: [...sourcesByUrl.values()]
-  };
-});
 
 const stripCodeFence = (value: string): string => {
   return value
@@ -264,9 +180,7 @@ export const parseProviderProfilesFromResponse = (response: unknown) => {
     }
   }
 
-  const profiles = profilesWithDerivedSources(
-    providerProfileStructuredOutputSchema.parse(parsed).profiles
-  );
+  const profiles = providerProfileStructuredOutputSchema.parse(parsed).profiles;
 
   return sanitizeProviderProfiles(profiles, {
     allowedSourceUrls: extractResponseProvenanceUrls(response)

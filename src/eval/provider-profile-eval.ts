@@ -175,7 +175,10 @@ const formatLocation = (location: ProviderProfile["locations"][number]): string 
   location.zip
 ].filter(Boolean).join(" ");
 
-const emittedValues = (profile: ProviderProfile | undefined, field: EvalFieldName): Array<{ value: string; sourceId: string }> => {
+const emittedValues = (
+  profile: ProviderProfile | undefined,
+  field: EvalFieldName
+): Array<{ value: string; citation: { sourceUrl: string } }> => {
   if (!profile) {
     return [];
   }
@@ -183,7 +186,7 @@ const emittedValues = (profile: ProviderProfile | undefined, field: EvalFieldNam
     return profile.phoneNumbers;
   }
   if (field === "addresses") {
-    return profile.locations.map((location) => ({ value: formatLocation(location), sourceId: location.sourceId }));
+    return profile.locations.map((location) => ({ value: formatLocation(location), citation: location.citation }));
   }
   return profile[field];
 };
@@ -226,9 +229,7 @@ const confirmedGold = (facts: GoldFact[]): GoldFact[] => facts.filter((fact) => 
   fact.status === "confirmed_current" && fact.displaySafe && Boolean(fact.value)
 ));
 
-const isSourceSupported = (profile: ProviderProfile | undefined, sourceId: string): boolean => Boolean(
-  profile?.sources.some((source) => source.id === sourceId && source.domain && source.url)
-);
+const isSourceSupported = (sourceUrl: string): boolean => Boolean(safePublicUrl(sourceUrl));
 
 const scoreField = (
   field: EvalFieldName,
@@ -258,7 +259,7 @@ const scoreField = (
     goldCount: expected.length,
     recovered: [...expectedValues].filter((value) => emittedNormalized.includes(value)).length,
     topOneCorrect: expected.length > 0 && emittedNormalized.length > 0 && expectedValues.has(emittedNormalized[0]) ? 1 : 0,
-    citationPresent: emitted.filter((fact) => isSourceSupported(profile, fact.sourceId)).length,
+    citationPresent: emitted.filter((fact) => isSourceSupported(fact.citation.sourceUrl)).length,
     unsafeDisclosures
   };
 };
