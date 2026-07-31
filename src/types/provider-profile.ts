@@ -14,6 +14,9 @@ export interface ProviderProfileRequestItem {
 export interface ProviderCitation {
   sourceUrl: string;
   sourceTitle?: string | null;
+  providerIdentitySpan: string;
+  factSpan: string;
+  explicitFactDateSpan: string | null;
 }
 
 export interface SourcedValue {

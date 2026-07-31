@@ -7,11 +7,35 @@ import {
   SourcedValue
 } from "../types/provider-profile";
 import { providerProfilesSchema } from "../validators/provider-profile.validator";
-import { cleanPublicText, cleanSafeStoredFact, safePublicUrl } from "./sanitizer.service";
+import { cleanPublicText, safePublicUrl } from "./sanitizer.service";
 
 export interface ProviderProfileSanitizerOptions {
   allowedSourceUrls?: Iterable<string>;
 }
+
+export const canonicalPublicProvenanceUrl = (value: string | undefined): string | undefined => {
+  const safeUrl = safePublicUrl(value);
+  if (!safeUrl) {
+    return undefined;
+  }
+
+  const url = new URL(safeUrl);
+  if (url.hostname === "npiregistry.cms.hhs.gov") {
+    const providerViewNpi = url.pathname.match(/^\/provider-view\/(\d{10})\/?$/)?.[1];
+    const apiNpi = /^\/api\/?$/.test(url.pathname) && /^\d{10}$/.test(url.searchParams.get("number") || "")
+      ? url.searchParams.get("number") || undefined
+      : undefined;
+    const npi = providerViewNpi || apiNpi;
+    if (npi) {
+      return `nppes:${npi}`;
+    }
+  }
+
+  if (url.pathname.length > 1) {
+    url.pathname = url.pathname.replace(/\/+$/, "");
+  }
+  return url.toString();
+};
 
 const asRecord = (value: unknown): Record<string, unknown> | undefined => {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -35,7 +59,10 @@ const normalizeCitationInput = (value: unknown): Record<string, unknown> => {
   const citation = asRecord(value) || {};
   return {
     sourceUrl: coerceString(citation.sourceUrl),
-    sourceTitle: coerceString(citation.sourceTitle) || null
+    sourceTitle: coerceString(citation.sourceTitle) || null,
+    providerIdentitySpan: coerceString(citation.providerIdentitySpan),
+    factSpan: coerceString(citation.factSpan),
+    explicitFactDateSpan: coerceString(citation.explicitFactDateSpan) || null
   };
 };
 
@@ -86,21 +113,37 @@ const normalizeProfileInput = (value: unknown): Record<string, unknown> => {
 const faxPattern = /\b(fax|facsimile)\b/i;
 const personalPhoneLabelPattern = /\b(mobile|cell(?:ular| phone)?|personal|home)\b/i;
 const residentialAddressPattern = /\b(residential|residence|home address)\b/i;
-const selfDeclaredProhibitedSourcePattern = /\b(people[ -]?finder|people[ -]?search|personal record|residential record|home address|mobile number|cell phone|social media)\b/i;
 const generationArtifactPattern = /\b(this schema|response format|does not permit null|use null|likely validation|let'?s produce)\b/i;
 const placeholderAddressPattern = /^(?:\/?null|none|n\/?a|city|state|zip|address(?:line)?\s*\d?)$/i;
 const concatenatedFieldLabelPattern = /(?:address\s*line|city.*city|state.*state|zip.*zip)/i;
+const obviousPlaceholderPattern = /^(?:string(?:\s+optional)?|unknown|n\/?a|none|null|placeholder|sample|demo|test|lorem ipsum|source(?: name| label)?)$/i;
+const placeholderPhonePattern = /\b(?:\(?\d{3}\)?\D*)?555\D*\d{4}\b|\b(?:\(?\d{3}\)?\D*)?123\D*4567\b/i;
+
+const cleanProviderFact = (value: string | null | undefined, maximum = 500): string | undefined => {
+  const cleaned = cleanPublicText(value, maximum);
+  return !cleaned || obviousPlaceholderPattern.test(cleaned) || generationArtifactPattern.test(cleaned)
+    ? undefined
+    : cleaned;
+};
 
 const allowedUrlSet = (urls: Iterable<string> | undefined): Set<string> | undefined => {
   return urls === undefined
     ? undefined
-    : new Set([...urls].map((url) => safePublicUrl(url)).filter((url): url is string => Boolean(url)));
+    : new Set([...urls]
+      .map((url) => canonicalPublicProvenanceUrl(url))
+      .filter((url): url is string => Boolean(url)));
 };
 
 const citationHasAllowedProvenance = (
   sourceUrl: string,
   allowedUrls: Set<string> | undefined
-): boolean => allowedUrls === undefined || allowedUrls.has(sourceUrl);
+): boolean => {
+  if (allowedUrls === undefined) {
+    return true;
+  }
+  const canonical = canonicalPublicProvenanceUrl(sourceUrl);
+  return Boolean(canonical && allowedUrls.has(canonical));
+};
 
 const sanitizeCitation = (
   citation: ProviderCitation,
@@ -111,12 +154,17 @@ const sanitizeCitation = (
     return undefined;
   }
   const domain = new URL(sourceUrl).hostname.replace(/^www\./i, "");
-  if (citation.sourceTitle && selfDeclaredProhibitedSourcePattern.test(citation.sourceTitle)) {
+  const providerIdentitySpan = cleanPublicText(citation.providerIdentitySpan, 2000);
+  const factSpan = cleanPublicText(citation.factSpan, 2000);
+  if (!providerIdentitySpan || !factSpan) {
     return undefined;
   }
   return {
     sourceUrl,
-    sourceTitle: cleanSafeStoredFact(citation.sourceTitle || domain, 255) || domain
+    sourceTitle: cleanPublicText(citation.sourceTitle || domain, 255) || domain,
+    providerIdentitySpan,
+    factSpan,
+    explicitFactDateSpan: cleanPublicText(citation.explicitFactDateSpan, 1000) || null
   };
 };
 
@@ -124,7 +172,7 @@ const sanitizeSourcedValue = (
   value: SourcedValue,
   allowedUrls: Set<string> | undefined
 ): SourcedValue | undefined => {
-  const safeValue = cleanSafeStoredFact(value.value);
+  const safeValue = cleanProviderFact(value.value);
   const citation = sanitizeCitation(value.citation, allowedUrls);
   return safeValue && citation ? { value: safeValue, citation } : undefined;
 };
@@ -138,7 +186,9 @@ const sanitizePhoneNumber = (
     return undefined;
   }
   const digitCount = sanitized.value.replace(/\D/g, "").length;
-  return digitCount >= 7 && digitCount <= 15 ? sanitized : undefined;
+  return digitCount >= 7 && digitCount <= 15 && !placeholderPhonePattern.test(sanitized.value)
+    ? sanitized
+    : undefined;
 };
 
 const sanitizeWebsite = (
@@ -150,11 +200,11 @@ const sanitizeWebsite = (
     return undefined;
   }
   const website = safePublicUrl(value.value);
-  return website && website === citation.sourceUrl ? { value: website, citation } : undefined;
+  return website ? { value: website, citation } : undefined;
 };
 
 const optionalAddressPart = (value: string | null | undefined, maximum: number): string | null => {
-  const cleaned = cleanSafeStoredFact(value || "", maximum);
+  const cleaned = cleanProviderFact(value || "", maximum);
   return !cleaned
     || placeholderAddressPattern.test(cleaned)
     || generationArtifactPattern.test(cleaned)
@@ -167,7 +217,7 @@ const sanitizeLocation = (
   location: ProviderLocation,
   allowedUrls: Set<string> | undefined
 ): ProviderLocation | undefined => {
-  const addressLine1 = cleanSafeStoredFact(location.addressLine1, 255);
+  const addressLine1 = cleanProviderFact(location.addressLine1, 255);
   const rawAddress = [location.addressLine1, location.addressLine2, location.city, location.state, location.zip]
     .filter(Boolean).join(" ");
   const requiredAddress = [location.addressLine1, location.city, location.state, location.zip]
@@ -190,14 +240,14 @@ const sanitizeRating = (
   rating: ProviderRating,
   allowedUrls: Set<string> | undefined
 ): ProviderRating | undefined => {
-  const value = cleanSafeStoredFact(rating.value, 80);
+  const value = cleanProviderFact(rating.value, 80);
   const citation = sanitizeCitation(rating.citation, allowedUrls);
   if (!value || !citation) {
     return undefined;
   }
   return {
     value,
-    scale: cleanSafeStoredFact(rating.scale || "", 80) || null,
+    scale: cleanProviderFact(rating.scale || "", 80) || null,
     citation
   };
 };
@@ -242,7 +292,8 @@ const dedupeProfilePreservingModelOrder = (profile: ProviderProfile): ProviderPr
 };
 
 const hasDisplayableContactFacts = (profile: ProviderProfile): boolean => {
-  return profile.phoneNumbers.length > 0
+  return profile.specialties.length > 0
+    || profile.phoneNumbers.length > 0
     || profile.locations.length > 0
     || profile.ratings.length > 0
     || profile.websites.length > 0;
@@ -301,7 +352,7 @@ export const sanitizeProviderProfiles = (
   const allowedUrls = allowedUrlSet(options.allowedSourceUrls);
 
   return profiles.map((profile) => {
-    const providerName = cleanSafeStoredFact(profile.providerName, 255) || "Provider";
+    const providerName = cleanProviderFact(profile.providerName, 255) || "Provider";
     const providerNpi = cleanPublicText(profile.npi, 10);
     const websiteCandidates = profile.websites
       .map((website) => sanitizeWebsite(website, allowedUrls))

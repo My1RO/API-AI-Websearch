@@ -24,8 +24,11 @@ export const createProviderProfilesSchema = z.object({
 
 export const citationSchema = z.object({
   sourceUrl: z.string().trim().min(1).max(2048),
-  sourceTitle: z.string().trim().min(1).max(255).nullable().optional()
-}).strip();
+  sourceTitle: z.string().trim().min(1).max(255).nullable().optional(),
+  providerIdentitySpan: z.string().trim().min(1).max(2000),
+  factSpan: z.string().trim().min(1).max(2000),
+  explicitFactDateSpan: z.string().trim().min(1).max(1000).nullable()
+}).strict();
 
 export const sourcedValueSchema = z.object({
   value: z.string().trim().min(1).max(500),
@@ -67,30 +70,30 @@ export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
   sourceUrl: z.string().describe(
-    "The exact public http or https page URL opened with open_page that contains both evidence spans. Never a search-results URL or a URL seen only in a search result."
+    "The exact consulted public http or https page URL that supports this fact for the requested provider."
   ),
-  sourceTitle: z.string().nullable().describe("The title of that exact opened page, or null when unavailable."),
+  sourceTitle: z.string().nullable().describe("The title of the cited page, or null when unavailable."),
   providerIdentitySpan: z.string().describe(
-    "A short, contiguous, verbatim passage copied from the opened page body that establishes the exact requested provider's identity. Never paraphrase or copy a search snippet."
+    "A short passage from the cited page that establishes the requested provider's NPI or name."
   ),
   factSpan: z.string().describe(
-    "A short, contiguous, verbatim passage copied from the same opened page body that directly contains or establishes this exact fact for the provider. Never paraphrase or copy a search snippet."
+    "A short passage from the same cited page that establishes this exact fact for the provider."
   ),
   explicitFactDateSpan: z.string().nullable().describe(
-    "A short, contiguous, verbatim passage from the same opened page containing an explicit date that governs this exact fact, or null when the page has no such date. Retrieval time, copyright years, and unrelated dates do not qualify."
+    "A passage from that page containing an explicit date that governs this exact fact, or null when no such date exists."
   )
 }).strict();
 
 const structuredSourcedValueSchema = z.object({
   value: z.string().describe("The public professional fact exactly as supported by the cited source."),
-  citation: structuredCitationSchema.describe("Evidence from the exact opened page that supports only this fact.")
+  citation: structuredCitationSchema.describe("Evidence from the exact consulted page that supports only this fact.")
 }).strict();
 
 const structuredPhoneSchema = z.object({
   value: z.string().describe(
     "A professional voice phone number for the exact provider. Never a fax, mobile, cell, personal, home, or uncertain-purpose number."
   ),
-  citation: structuredCitationSchema.describe("Evidence from the exact opened page that establishes this professional voice phone.")
+  citation: structuredCitationSchema.describe("Evidence from the exact consulted page that establishes this professional voice phone.")
 }).strict();
 
 const structuredLocationSchema = z.object({
@@ -99,13 +102,13 @@ const structuredLocationSchema = z.object({
   city: z.string().nullable().describe("City for the verified professional location, or null."),
   state: z.string().nullable().describe("State for the verified professional location, or null."),
   zip: z.string().nullable().describe("ZIP code for the verified professional location, or null."),
-  citation: structuredCitationSchema.describe("Evidence from the exact opened page that establishes this professional location.")
+  citation: structuredCitationSchema.describe("Evidence from the exact consulted page that establishes this professional location.")
 }).strict();
 
 const structuredRatingSchema = z.object({
   value: z.string().describe("The numeric rating supported by the exact provider page on the cited rating source."),
   scale: z.string().nullable().describe("The numeric maximum rating scale, or null when unavailable."),
-  citation: structuredCitationSchema.describe("Evidence from the exact opened provider-rating page that establishes this rating.")
+  citation: structuredCitationSchema.describe("Evidence from the exact consulted provider-rating page that establishes this rating.")
 }).strict();
 
 const structuredProviderProfileSchema = z.object({
@@ -120,8 +123,12 @@ const structuredProviderProfileSchema = z.object({
     "Verified professional voice contacts for the exact provider only. Never fax, mobile, cell, personal, home, or uncertain-purpose numbers."
   ),
   ratings: z.array(structuredRatingSchema),
-  websites: z.array(structuredSourcedValueSchema),
-  confidenceNotes: z.array(z.string())
+  websites: z.array(z.object({
+    value: z.string().describe("The provider, practice, clinic, facility, hospital, or health-system website URL."),
+    citation: structuredCitationSchema.describe(
+      "Evidence from a consulted page that establishes the exact provider's organizational ownership of this website."
+    )
+  }).strict())
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({

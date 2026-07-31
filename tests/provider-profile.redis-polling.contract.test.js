@@ -115,7 +115,10 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
           value: "+16174440123",
           citation: {
             sourceUrl: "https://npiregistry.cms.hhs.gov/provider-view/1234567890",
-            sourceTitle: "NPPES record for Dr. Ada Smith"
+            sourceTitle: "NPPES record for Dr. Ada Smith",
+            providerIdentitySpan: "Dr. Ada Smith NPI 1234567890",
+            factSpan: "+16174440123",
+            explicitFactDateSpan: null
           }
         }],
         prompt: "FORBIDDEN_PROMPT",
@@ -235,7 +238,10 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
           value: "(216) 444-2200",
           citation: {
             sourceUrl: "https://npiprofile.com/provider/1679525919",
-            sourceTitle: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919"
+            sourceTitle: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919",
+            providerIdentitySpan: "THE CLEVELAND CLINIC FOUNDATION NPI 1679525919",
+            factSpan: "(216) 444-2200",
+            explicitFactDateSpan: null
           }
         }],
         locations: [{
@@ -245,7 +251,10 @@ describeWhenHookExists("provider profile Redis polling contract", () => {
           zip: "44195",
           citation: {
             sourceUrl: "https://npiprofile.com/provider/1679525919",
-            sourceTitle: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919"
+            sourceTitle: "THE CLEVELAND CLINIC FOUNDATION — NPI 1679525919",
+            providerIdentitySpan: "THE CLEVELAND CLINIC FOUNDATION NPI 1679525919",
+            factSpan: "9500 Euclid Ave, Cleveland, OH 44195",
+            explicitFactDateSpan: null
           }
         }]
       }

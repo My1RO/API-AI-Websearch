@@ -115,8 +115,7 @@ const citedProfileResponse = profiles => {
         scale: rating.scale ?? null,
         citation: citation(rating.sourceId, rating.value)
       })),
-      websites: (profile.websites || []).map(sourcedValue),
-      confidenceNotes: profile.confidenceNotes || []
+      websites: (profile.websites || []).map(sourcedValue)
     };
   });
   const outputText = JSON.stringify({ profiles: strictProfiles });
@@ -296,11 +295,11 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(JSON.stringify(request.text.format)).toMatch(/providerIdentitySpan/);
     expect(JSON.stringify(request.text.format)).toMatch(/factSpan/);
     expect(JSON.stringify(request.text.format)).toMatch(/explicitFactDateSpan/);
-    expect(JSON.stringify(request.text.format)).toMatch(/short, contiguous, verbatim passage/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/passage from the same cited page/i);
     expect(JSON.stringify(request.text.format)).not.toMatch(/sourceId|"sources"/);
     expect(JSON.stringify(request.text.format)).not.toMatch(/insurance|payer|health.?plan|network|coverage/i);
     expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
-    expect(request.instructions).toMatch(/Do not search for or return insurance, payer, health-plan, network, or coverage information/i);
+    expect(request.instructions).toMatch(/Do not search for, send back, infer, or discuss insurance, payer, health-plan, network, coverage/i);
     expect(request.instructions).toMatch(/professional voice number/i);
     expect(request.instructions).toMatch(/uncertain-purpose/i);
     expect(request.instructions).toMatch(/professional practice, clinic, facility, hospital, or office location/i);
@@ -820,7 +819,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     );
   });
 
-  it("rejects a fact whose citation URL was not opened", async () => {
+  it("rejects a fact whose citation URL is absent from every Azure provenance channel", async () => {
     const response = successfulProfileResponse();
     response.output_text = response.output_text.replace(
       "https://npiprofile.com/provider/123",
@@ -839,7 +838,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles).toEqual([]);
   });
 
-  it("retains an opened page without requiring a native annotation", async () => {
+  it("accepts an action.sources citation without requiring an annotation or open-page action", async () => {
     const response = successfulProfileResponse();
     response.output.find(item => item.type === "message").content[0].annotations = [];
     response.output.unshift({
@@ -863,13 +862,16 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       {
         value: "2164442200",
         citation: {
+          explicitFactDateSpan: null,
+          factSpan: "2164442200",
+          providerIdentitySpan: "Public Provider",
           sourceTitle: "Public directory",
           sourceUrl: "https://npiprofile.com/provider/123"
         }
       }
     ]);
     expect(profiles[0]).not.toHaveProperty("sources");
-    expect(JSON.stringify(profiles)).not.toMatch(/providerIdentitySpan|factSpan|explicitFactDateSpan/);
+    expect(JSON.stringify(profiles)).toMatch(/providerIdentitySpan|factSpan|explicitFactDateSpan/);
   });
 
   it("retains exact pages opened by Azure web search as API provenance", async () => {
@@ -896,7 +898,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles[0].phoneNumbers).toHaveLength(1);
   });
 
-  it("does not substitute search-only NPPES provenance for the exact opened citation URL", async () => {
+  it("canonicalizes equivalent NPPES provider-view and API URLs by exact NPI", async () => {
     const response = successfulProfileResponse();
     response.output.find(item => item.type === "message").content[0].annotations = [];
     response.output_parsed.profiles[0].npi = "1234567890";
@@ -923,10 +925,11 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toHaveLength(1);
   });
 
-  it("rejects a fact whose returned evidence span does not contain its value", async () => {
+  it("preserves a provenance-backed fact without a deterministic span-value veto", async () => {
     const response = successfulProfileResponse();
     response.output_parsed.profiles[0].phoneNumbers[0].citation.factSpan = "Scheduling is available by telephone.";
     mockCreateResponse.mockResolvedValue(response);
@@ -938,10 +941,11 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers[0].citation.factSpan).toBe("Scheduling is available by telephone.");
   });
 
-  it("rejects a location when any emitted address component is absent from its fact span", async () => {
+  it("does not host-reject a location because one emitted component is absent from its fact span", async () => {
     const response = citedProfileResponse([{
       providerId: "provider-123",
       providerName: "Public Provider",
@@ -971,10 +975,11 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].locations).toHaveLength(1);
   });
 
-  it("rejects a rating when its emitted scale is absent from its fact span", async () => {
+  it("does not host-reject a rating because its scale is absent from its fact span", async () => {
     const response = citedProfileResponse([{
       providerId: "provider-123",
       providerName: "Public Provider",
@@ -998,6 +1003,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].ratings).toHaveLength(1);
   });
 });

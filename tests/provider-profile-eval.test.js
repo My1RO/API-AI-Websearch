@@ -66,7 +66,10 @@ const evalCase = {
 
 const citation = {
   sourceUrl: "https://publicclinic.org/contact",
-  sourceTitle: "Public Clinic"
+  sourceTitle: "Public Clinic",
+  providerIdentitySpan: "Public Clinic NPI 1234567890",
+  factSpan: "100 Public Street, Cleveland, OH 44113; (216) 444-2200",
+  explicitFactDateSpan: null
 };
 
 const profile = {

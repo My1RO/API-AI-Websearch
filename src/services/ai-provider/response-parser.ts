@@ -1,7 +1,9 @@
 import { AiProviderError } from "../../errors/http-error";
 import { providerProfileStructuredOutputSchema } from "../../validators/provider-profile.validator";
-import { sanitizeProviderProfiles } from "../provider-profile-sanitizer.service";
-import { safePublicUrl } from "../sanitizer.service";
+import {
+  canonicalPublicProvenanceUrl,
+  sanitizeProviderProfiles
+} from "../provider-profile-sanitizer.service";
 
 interface ResponseContentPart {
   type?: string;
@@ -23,82 +25,26 @@ interface ResponseShape {
 
 type StructuredProfiles = ReturnType<typeof providerProfileStructuredOutputSchema.parse>["profiles"];
 
-const normalizedEvidenceText = (value: string): string => value
-  .normalize("NFKD")
-  .toLowerCase()
-  .replace(/[^a-z0-9]+/g, "")
-  .trim();
+const citationUrlsFromProfiles = (
+  profiles: StructuredProfiles,
+): string[] => profiles.flatMap((profile) => [
+  ...profile.specialties,
+  ...profile.locations,
+  ...profile.phoneNumbers,
+  ...profile.ratings,
+  ...profile.websites
+].map((fact) => fact.citation.sourceUrl));
 
-const spanContainsTextValue = (span: string, value: string): boolean => {
-  const normalizedSpan = normalizedEvidenceText(span);
-  const normalizedValue = normalizedEvidenceText(value);
-  return Boolean(normalizedSpan && normalizedValue && normalizedSpan.includes(normalizedValue));
-};
-
-const spanContainsPhoneValue = (span: string, value: string): boolean => {
-  const spanDigits = span.replace(/\D/g, "");
-  const valueDigits = value.replace(/\D/g, "");
-  if (!spanDigits || !valueDigits) {
-    return false;
-  }
-  const alternatives = valueDigits.length === 11 && valueDigits.startsWith("1")
-    ? [valueDigits, valueDigits.slice(1)]
-    : [valueDigits, `1${valueDigits}`];
-  return alternatives.some((candidate) => spanDigits.includes(candidate));
-};
-
-const spanContainsEveryPresentValue = (
-  span: string,
-  values: Array<string | null>
-): boolean => values.filter((value): value is string => Boolean(value)).every((value) => (
-  spanContainsTextValue(span, value)
-));
-
-const openedUrlSet = (response: unknown): Set<string> => new Set(
-  extractResponseWebSearchOpenedUrls(response)
-    .map((url) => safePublicUrl(url))
-    .filter((url): url is string => Boolean(url))
-);
-
-const citationWasOpened = (sourceUrl: string, openedUrls: Set<string>): boolean => {
-  const normalized = safePublicUrl(sourceUrl);
-  return Boolean(normalized && openedUrls.has(normalized));
-};
-
-export const filterProfilesByCitationEvidence = (
+export const extractResponseProvenanceMismatchUrls = (
   profiles: StructuredProfiles,
   response: unknown
-): StructuredProfiles => {
-  const openedUrls = openedUrlSet(response);
-  return profiles.map((profile) => ({
-    ...profile,
-    specialties: profile.specialties.filter((fact) => (
-      citationWasOpened(fact.citation.sourceUrl, openedUrls)
-      && spanContainsTextValue(fact.citation.factSpan, fact.value)
-    )),
-    locations: profile.locations.filter((location) => (
-      citationWasOpened(location.citation.sourceUrl, openedUrls)
-      && spanContainsEveryPresentValue(location.citation.factSpan, [
-        location.addressLine1,
-        location.addressLine2,
-        location.city,
-        location.state,
-        location.zip
-      ])
-    )),
-    phoneNumbers: profile.phoneNumbers.filter((phone) => (
-      citationWasOpened(phone.citation.sourceUrl, openedUrls)
-      && spanContainsPhoneValue(phone.citation.factSpan, phone.value)
-    )),
-    ratings: profile.ratings.filter((rating) => (
-      citationWasOpened(rating.citation.sourceUrl, openedUrls)
-      && spanContainsEveryPresentValue(rating.citation.factSpan, [rating.value, rating.scale])
-    )),
-    websites: profile.websites.filter((website) => (
-      citationWasOpened(website.citation.sourceUrl, openedUrls)
-      && safePublicUrl(website.value) === safePublicUrl(website.citation.sourceUrl)
-    ))
-  }));
+): string[] => {
+  const allowed = new Set(extractResponseProvenanceUrls(response)
+    .map((url) => canonicalPublicProvenanceUrl(url))
+    .filter((url): url is string => Boolean(url)));
+  return [...new Set(citationUrlsFromProfiles(profiles)
+    .map((url) => canonicalPublicProvenanceUrl(url))
+    .filter((url): url is string => typeof url === "string" && !allowed.has(url)))];
 };
 
 const stripCodeFence = (value: string): string => {
@@ -261,10 +207,15 @@ export const parseProviderProfilesFromResponse = (response: unknown) => {
     }
   }
 
-  const profiles = filterProfilesByCitationEvidence(
-    providerProfileStructuredOutputSchema.parse(parsed).profiles,
-    response
-  );
+  const profiles = providerProfileStructuredOutputSchema.parse(parsed).profiles;
+  const provenanceMismatches = extractResponseProvenanceMismatchUrls(profiles, response);
+  if (provenanceMismatches.length > 0) {
+    console.log("AI provider citation provenance mismatch", {
+      reason: "absent_from_all_native_provenance_channels",
+      citationCount: citationUrlsFromProfiles(profiles).length,
+      mismatchCount: provenanceMismatches.length
+    });
+  }
 
   return sanitizeProviderProfiles(profiles, {
     allowedSourceUrls: extractResponseProvenanceUrls(response)

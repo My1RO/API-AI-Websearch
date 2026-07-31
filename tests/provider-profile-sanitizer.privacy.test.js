@@ -3,18 +3,28 @@ const sanitizer = require("../src/services/provider-profile-sanitizer.service");
 const citationProfiles = profiles => profiles.map(profile => {
   const sources = new Map((profile.sources || []).map(source => [source.id, source]));
   const citationFor = fact => {
-    if (fact?.citation) {
-      return fact.citation;
-    }
+    const factText = fact?.value ?? [
+      fact?.addressLine1?.value || fact?.addressLine1 || fact?.street1 || fact?.address,
+      fact?.addressLine2,
+      fact?.city?.value || fact?.city,
+      fact?.state?.value || fact?.state,
+      fact?.zip?.value || fact?.zip
+    ].filter(Boolean).join(" ");
+    const directCitation = fact?.citation || {};
     const sourceId = fact?.sourceId || fact?.source?.id;
-    if (!sourceId) {
+    if (!sourceId && !directCitation.sourceUrl) {
       return {};
     }
     const source = sources.get(sourceId) || fact?.source || {};
-    const sourceUrl = source.url || (source.domain ? `https://${source.domain}/${sourceId || "provider"}` : undefined);
+    const sourceUrl = directCitation.sourceUrl || source.url
+      || (source.domain ? `https://${source.domain}/${sourceId || "provider"}` : undefined);
     return {
       sourceUrl,
-      sourceTitle: fact?.sourceName || source.title || null
+      sourceTitle: directCitation.sourceTitle ?? fact?.sourceName ?? source.title ?? null,
+      providerIdentitySpan: directCitation.providerIdentitySpan
+        || `${profile.providerName?.value || profile.providerName || profile.name} ${profile.npi || ""}`.trim(),
+      factSpan: directCitation.factSpan || String(factText || "Public professional fact"),
+      explicitFactDateSpan: directCitation.explicitFactDateSpan ?? null
     };
   };
   const sourced = fact => ({
@@ -359,7 +369,10 @@ describe("provider profile sanitizer", () => {
         scale: "5",
         citation: {
           sourceUrl: "https://healthgrades.com/rating-source",
-          sourceTitle: "Public ratings"
+          sourceTitle: "Public ratings",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "4.8",
+          explicitFactDateSpan: null
         }
       }
     ]);
@@ -473,7 +486,10 @@ describe("provider profile sanitizer", () => {
         zip: "44195",
         citation: {
           sourceUrl: "https://npiprofile.com/src-1",
-          sourceTitle: "NPI 1234567890 Profile"
+          sourceTitle: "NPI 1234567890 Profile",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "9500 Euclid Ave",
+          explicitFactDateSpan: null
         }
       }
     ]);
@@ -482,7 +498,10 @@ describe("provider profile sanitizer", () => {
         value: "(216) 444-2200",
         citation: {
           sourceUrl: "https://npiprofile.com/src-1",
-          sourceTitle: "NPI 1234567890 Profile"
+          sourceTitle: "NPI 1234567890 Profile",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "(216) 444-2200",
+          explicitFactDateSpan: null
         }
       }
     ]);
@@ -635,7 +654,7 @@ describe("provider profile sanitizer", () => {
     expect(profiles).toEqual([]);
   });
 
-  it("rejects personal-directory contacts, non-public domains, and malformed phone numbers", () => {
+  it("does not semantically classify an unlabeled number by source domain", () => {
     const profiles = sanitizeProviderProfiles([
       {
         ...baseProfile,
@@ -651,7 +670,11 @@ describe("provider profile sanitizer", () => {
       }
     ]);
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toEqual([
+      expect.objectContaining({ value: "(216) 444-2200" })
+    ]);
+    expect(profiles[0].locations).toEqual([]);
   });
 
   it("retains a canonical official website and exact supporting page URL", () => {
@@ -672,7 +695,10 @@ describe("provider profile sanitizer", () => {
       value: "https://clevelandclinic.org/locations/main-campus",
       citation: {
         sourceUrl: "https://clevelandclinic.org/locations/main-campus",
-        sourceTitle: "The Cleveland Clinic Foundation official site"
+        sourceTitle: "The Cleveland Clinic Foundation official site",
+        providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+        factSpan: "https://clevelandclinic.org/locations/main-campus?tracking=1",
+        explicitFactDateSpan: null
       }
     }]);
   });
