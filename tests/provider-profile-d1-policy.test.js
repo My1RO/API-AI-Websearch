@@ -35,7 +35,7 @@ describe("D1 concise direct-citation policy", () => {
   it("uses broad consulted-page provenance and contains no open-page requirement", () => {
     const { providerProfileSystemInstructions } = loadPolicy();
 
-    expect(providerProfileSystemInstructions).toMatch(/sourceUrl is the exact consulted public page supporting that fact/i);
+    expect(providerProfileSystemInstructions).toMatch(/sourceUrl must be that exact fact-supporting page/i);
     expect(providerProfileSystemInstructions).toMatch(/Every emitted fact must carry its own citation object/i);
     expect(providerProfileSystemInstructions).not.toMatch(/open_page|opened page|must be opened/i);
     expect(providerProfileSystemInstructions).not.toMatch(/silently audit every fact|pre-emission audit/i);

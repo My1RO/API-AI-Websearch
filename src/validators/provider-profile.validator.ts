@@ -70,17 +70,17 @@ export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
   sourceUrl: z.string().describe(
-    "The exact consulted public http or https page URL that supports this fact for the requested provider."
+    "The exact consulted public http or https page URL that directly supports this fact for the requested provider; never a search-results page, snippet, or different corroborating page."
   ),
   sourceTitle: z.string().nullable().describe("The title of the cited page, or null when unavailable."),
   providerIdentitySpan: z.string().describe(
-    "A short passage from the cited page that establishes the requested provider's NPI or name."
+    "A short contiguous passage, or faithful rendered-text equivalent, from the cited page that establishes the requested provider's NPI or name."
   ),
   factSpan: z.string().describe(
-    "A short passage from the same cited page that establishes this exact fact for the provider."
+    "A short contiguous passage, or faithful rendered-text equivalent, from the same cited page that establishes the exact emitted value for this provider."
   ),
   explicitFactDateSpan: z.string().nullable().describe(
-    "A passage from that page containing an explicit date that governs this exact fact, or null when no such date exists."
+    "A passage from that page containing an explicit date that governs this exact provider, field, and value, or null when no such date exists; retrieval dates, copyright years, and generic page-update dates do not qualify."
   )
 }).strict();
 
