@@ -1,6 +1,7 @@
 import { AiProviderError } from "../../errors/http-error";
 import { providerProfileStructuredOutputSchema } from "../../validators/provider-profile.validator";
 import { sanitizeProviderProfiles } from "../provider-profile-sanitizer.service";
+import { safePublicUrl } from "../sanitizer.service";
 
 interface ResponseContentPart {
   type?: string;
@@ -19,6 +20,73 @@ interface ResponseShape {
   output_parsed?: unknown;
   output?: ResponseOutputItem[];
 }
+
+type StructuredProfiles = ReturnType<typeof providerProfileStructuredOutputSchema.parse>["profiles"];
+
+const normalizedEvidenceText = (value: string): string => value
+  .normalize("NFKD")
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "")
+  .trim();
+
+const spanContainsTextValue = (span: string, value: string): boolean => {
+  const normalizedSpan = normalizedEvidenceText(span);
+  const normalizedValue = normalizedEvidenceText(value);
+  return Boolean(normalizedSpan && normalizedValue && normalizedSpan.includes(normalizedValue));
+};
+
+const spanContainsPhoneValue = (span: string, value: string): boolean => {
+  const spanDigits = span.replace(/\D/g, "");
+  const valueDigits = value.replace(/\D/g, "");
+  if (!spanDigits || !valueDigits) {
+    return false;
+  }
+  const alternatives = valueDigits.length === 11 && valueDigits.startsWith("1")
+    ? [valueDigits, valueDigits.slice(1)]
+    : [valueDigits, `1${valueDigits}`];
+  return alternatives.some((candidate) => spanDigits.includes(candidate));
+};
+
+const openedUrlSet = (response: unknown): Set<string> => new Set(
+  extractResponseWebSearchOpenedUrls(response)
+    .map((url) => safePublicUrl(url))
+    .filter((url): url is string => Boolean(url))
+);
+
+const citationWasOpened = (sourceUrl: string, openedUrls: Set<string>): boolean => {
+  const normalized = safePublicUrl(sourceUrl);
+  return Boolean(normalized && openedUrls.has(normalized));
+};
+
+export const filterProfilesByCitationEvidence = (
+  profiles: StructuredProfiles,
+  response: unknown
+): StructuredProfiles => {
+  const openedUrls = openedUrlSet(response);
+  return profiles.map((profile) => ({
+    ...profile,
+    specialties: profile.specialties.filter((fact) => (
+      citationWasOpened(fact.citation.sourceUrl, openedUrls)
+      && spanContainsTextValue(fact.citation.factSpan, fact.value)
+    )),
+    locations: profile.locations.filter((location) => (
+      citationWasOpened(location.citation.sourceUrl, openedUrls)
+      && spanContainsTextValue(location.citation.factSpan, location.addressLine1)
+    )),
+    phoneNumbers: profile.phoneNumbers.filter((phone) => (
+      citationWasOpened(phone.citation.sourceUrl, openedUrls)
+      && spanContainsPhoneValue(phone.citation.factSpan, phone.value)
+    )),
+    ratings: profile.ratings.filter((rating) => (
+      citationWasOpened(rating.citation.sourceUrl, openedUrls)
+      && spanContainsTextValue(rating.citation.factSpan, rating.value)
+    )),
+    websites: profile.websites.filter((website) => (
+      citationWasOpened(website.citation.sourceUrl, openedUrls)
+      && safePublicUrl(website.value) === safePublicUrl(website.citation.sourceUrl)
+    ))
+  }));
+};
 
 const stripCodeFence = (value: string): string => {
   return value
@@ -180,7 +248,10 @@ export const parseProviderProfilesFromResponse = (response: unknown) => {
     }
   }
 
-  const profiles = providerProfileStructuredOutputSchema.parse(parsed).profiles;
+  const profiles = filterProfilesByCitationEvidence(
+    providerProfileStructuredOutputSchema.parse(parsed).profiles,
+    response
+  );
 
   return sanitizeProviderProfiles(profiles, {
     allowedSourceUrls: extractResponseProvenanceUrls(response)

@@ -33,6 +33,13 @@
         "output_text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"citation\":{\"sourceUrl\":\"https://npiprofile.com/provider/123\",\"sourceTitle\":\"Public directory\",\"providerIdentitySpan\":\"Public Provider\",\"factSpan\":\"2164442200\",\"explicitFactDateSpan\":null}}],\"ratings\":[],\"websites\":[],\"confidenceNotes\":[]}]}",
         "output": [
           {
+            "type": "web_search_call",
+            "action": {
+              "type": "open_page",
+              "url": "https://npiprofile.com/provider/123"
+            }
+          },
+          {
             "type": "message",
             "content": [
               {

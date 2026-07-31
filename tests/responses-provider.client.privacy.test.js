@@ -120,6 +120,13 @@ const citedProfileResponse = profiles => {
     };
   });
   const outputText = JSON.stringify({ profiles: strictProfiles });
+  const openedUrls = [...new Set(strictProfiles.flatMap(profile => [
+    ...profile.specialties,
+    ...profile.locations,
+    ...profile.phoneNumbers,
+    ...profile.ratings,
+    ...profile.websites
+  ].map(fact => fact.citation.sourceUrl)))];
   return {
     status: "completed",
     usage: {
@@ -131,7 +138,12 @@ const citedProfileResponse = profiles => {
     },
     output_parsed: { profiles: strictProfiles },
     output_text: outputText,
-    output: [{
+    output: [
+      ...openedUrls.map(url => ({
+        type: "web_search_call",
+        action: { type: "open_page", url }
+      })),
+      {
       type: "message",
       content: [{
         type: "output_text",
@@ -141,7 +153,8 @@ const citedProfileResponse = profiles => {
           url: "https://npiprofile.com/provider/123"
         }]
       }]
-    }]
+      }
+    ]
   };
 };
 
@@ -792,7 +805,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
         outputTokens: 110,
         reasoningOutputTokens: 24,
         totalTokens: 1_210,
-        webSearchCalls: 3,
+        webSearchCalls: 4,
         estimated: true,
         pricingVersion: "azure-contract-2026-07",
         retryReasons: ["malformed_identity_retry"],
@@ -807,7 +820,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     );
   });
 
-  it("retains only sources backed by actual response citation annotations", async () => {
+  it("rejects a fact whose citation URL was not opened", async () => {
     const response = successfulProfileResponse();
     response.output_text = response.output_text.replace(
       "https://npiprofile.com/provider/123",
@@ -826,9 +839,9 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles).toEqual([]);
   });
 
-  it("retains sources returned in Azure web-search action metadata", async () => {
+  it("retains an opened page without requiring a native annotation", async () => {
     const response = successfulProfileResponse();
-    response.output[0].content[0].annotations = [];
+    response.output.find(item => item.type === "message").content[0].annotations = [];
     response.output.unshift({
       type: "web_search_call",
       action: {
@@ -861,7 +874,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
 
   it("retains exact pages opened by Azure web search as API provenance", async () => {
     const response = successfulProfileResponse();
-    response.output[0].content[0].annotations = [];
+    response.output.find(item => item.type === "message").content[0].annotations = [];
     response.output_parsed.profiles[0].phoneNumbers[0].citation.sourceUrl = "https://npiregistry.cms.hhs.gov/api/?number=123&version=2.1";
     response.output.unshift({
       type: "web_search_call",
@@ -883,9 +896,9 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles[0].phoneNumbers).toHaveLength(1);
   });
 
-  it("allows only same-NPI NPPES API and provider-view provenance equivalence", async () => {
+  it("does not substitute search-only NPPES provenance for the exact opened citation URL", async () => {
     const response = successfulProfileResponse();
-    response.output[0].content[0].annotations = [];
+    response.output.find(item => item.type === "message").content[0].annotations = [];
     response.output_parsed.profiles[0].npi = "1234567890";
     response.output_parsed.profiles[0].phoneNumbers[0].citation = {
       sourceUrl: "https://npiregistry.cms.hhs.gov/api/?number=1234567890&version=2.1",
@@ -910,7 +923,21 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toHaveLength(1);
-    expect(profiles[0].phoneNumbers).toHaveLength(1);
+    expect(profiles).toEqual([]);
+  });
+
+  it("rejects a fact whose returned evidence span does not contain its value", async () => {
+    const response = successfulProfileResponse();
+    response.output_parsed.profiles[0].phoneNumbers[0].citation.factSpan = "Scheduling is available by telephone.";
+    mockCreateResponse.mockResolvedValue(response);
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    const profiles = await client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    });
+
+    expect(profiles).toEqual([]);
   });
 });
