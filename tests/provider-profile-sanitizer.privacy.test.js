@@ -280,6 +280,94 @@ describe("provider profile sanitizer", () => {
     expect(profile.locations).toHaveLength(2);
   });
 
+  it.each([
+    {
+      trace: "D4/P018",
+      npi: "1881655736",
+      providerName: "JEANINE SILER JONES LCSW",
+      addressLine1: "239 S French Broad Ave",
+      addressLine2: ":null",
+      city: "Asheville",
+      state: "NC",
+      zip: "28801",
+      sourceUrl: "https://silerjonescounseling.com/"
+    },
+    {
+      trace: "D3/P035",
+      npi: "1629635941",
+      providerName: "INDIA C BROWN LSW",
+      addressLine1: "3500 Carnegie Ave",
+      addressLine2: ": null,",
+      city: "Cleveland",
+      state: "OH",
+      zip: "44115-2641",
+      sourceUrl: "https://opennpi.com/provider/1629635941"
+    }
+  ])("normalizes the $trace punctuation-wrapped null address scalar without dropping the location", (fixture) => {
+    const profiles = sanitizer.sanitizeProviderProfiles([{
+      providerId: fixture.npi,
+      npi: fixture.npi,
+      providerName: fixture.providerName,
+      specialties: [],
+      locations: [{
+        addressLine1: fixture.addressLine1,
+        addressLine2: fixture.addressLine2,
+        city: fixture.city,
+        state: fixture.state,
+        zip: fixture.zip,
+        citation: {
+          sourceUrl: fixture.sourceUrl,
+          sourceTitle: fixture.providerName,
+          providerIdentitySpan: `${fixture.providerName} NPI ${fixture.npi}`,
+          factSpan: `${fixture.addressLine1}, ${fixture.city}, ${fixture.state} ${fixture.zip}`,
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].locations).toEqual([
+      expect.objectContaining({
+        addressLine1: fixture.addressLine1,
+        addressLine2: null,
+        city: fixture.city,
+        state: fixture.state,
+        zip: fixture.zip
+      })
+    ]);
+  });
+
+  it("limits punctuation-wrapped null repair to nullable address components", () => {
+    const [profile] = sanitizer.sanitizeProviderProfiles([{
+      providerId: "1881655736",
+      npi: "1881655736",
+      providerName: "JEANINE SILER JONES LCSW",
+      specialties: [],
+      locations: [{
+        addressLine1: "239 S French Broad Ave",
+        addressLine2: "Null Street Office",
+        city: "Asheville",
+        state: "NC",
+        zip: "28801",
+        citation: {
+          sourceUrl: "https://silerjonescounseling.com/",
+          sourceTitle: "Siler Jones Counseling",
+          providerIdentitySpan: "Jeanine Siler Jones, LCSW",
+          factSpan: "239 S French Broad Ave, Null Street Office, Asheville, NC 28801",
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profile.locations[0].addressLine2).toBe("Null Street Office");
+  });
+
   it("accepts a facility phone and website only through an exact accepted-address anchor", () => {
     const [profile] = sanitizeProviderProfiles([{
       ...baseProfile,

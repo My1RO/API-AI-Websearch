@@ -55,6 +55,16 @@ const coerceString = (value: unknown): string | undefined => {
   return undefined;
 };
 
+// Azure structured output can occasionally render an intended nullable scalar
+// as the literal word "null" wrapped only in punctuation. This is a lexical
+// representation repair, not an address classification.
+const punctuationWrappedNullPattern = /^[\s\p{P}]*null[\s\p{P}]*$/iu;
+
+const normalizeNullableAddressComponentInput = (value: unknown): string | null => {
+  const text = coerceString(value);
+  return !text || punctuationWrappedNullPattern.test(text) ? null : text;
+};
+
 const normalizeCitationInput = (value: unknown): Record<string, unknown> => {
   const citation = asRecord(value) || {};
   return {
@@ -78,10 +88,10 @@ const normalizeLocationInput = (value: unknown): Record<string, unknown> => {
   const location = asRecord(value) || {};
   return {
     addressLine1: coerceString(location.addressLine1),
-    addressLine2: coerceString(location.addressLine2) || null,
-    city: coerceString(location.city) || null,
-    state: coerceString(location.state) || null,
-    zip: coerceString(location.zip) || null,
+    addressLine2: normalizeNullableAddressComponentInput(location.addressLine2),
+    city: normalizeNullableAddressComponentInput(location.city),
+    state: normalizeNullableAddressComponentInput(location.state),
+    zip: normalizeNullableAddressComponentInput(location.zip),
     citation: normalizeCitationInput(location.citation)
   };
 };
