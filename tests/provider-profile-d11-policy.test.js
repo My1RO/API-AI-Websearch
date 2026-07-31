@@ -12,7 +12,7 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
   it("reconciles same-name different-NPI evidence before any field is emitted", () => {
     expect(providerProfileSystemInstructions).toMatch(/Before emitting any field, reconcile all consulted evidence for same-name, different-NPI entities/i);
     expect(providerProfileSystemInstructions).toMatch(/candidate and bundle level/i);
-    expect(providerProfileSystemInstructions).toMatch(/bundle that exclusively co-binds it.*another NPI or an incompatible suite or location/i);
+    expect(providerProfileSystemInstructions).toMatch(/bundle that exclusively co-binds it.*another NPI or another provider operation/i);
     expect(providerProfileSystemInstructions).toMatch(/omit that candidate before recency or source priority/i);
     expect(providerProfileSystemInstructions).toMatch(/Apply this field-locally and preserve unrelated facts/i);
   });
@@ -37,7 +37,7 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
   });
 
   it("applies Q1 then Q2 then Q3 among eligible readable citations", () => {
-    expect(providerProfileSystemInstructions).toMatch(/Among comparably supported eligible facts, put first an exact first-party provider or organization page, then an exact-provider government registry including NPPES, then an established exact-provider professional directory/i);
+    expect(providerProfileSystemInstructions).toMatch(/final source-hierarchy tie-breaker.*otherwise-equivalent eligible values, prefer an exact first-party provider or organization page, then an exact-provider government registry including NPPES, then an established exact-provider professional directory/i);
     expect(providerProfileSystemInstructions).toMatch(/Prefer the highest-priority eligible page whose body or rendered content you actually inspected/i);
   });
 

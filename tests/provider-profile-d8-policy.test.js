@@ -16,14 +16,14 @@ describe("D8 concise single-pass synthesis", () => {
   });
 
   it("handles candidate-specific NPI conflicts and shared assets", () => {
-    expect(providerProfileSystemInstructions).toMatch(/assigns a candidate, or a bundle that exclusively co-binds it, to another NPI/i);
+    expect(providerProfileSystemInstructions).toMatch(/assigns a candidate, or a bundle that exclusively co-binds it, to another NPI or another provider operation/i);
     expect(providerProfileSystemInstructions).toMatch(/shared-asset exception.*separate affirmative evidence/i);
-    expect(providerProfileSystemInstructions).toMatch(/incompatible suite or location/i);
+    expect(providerProfileSystemInstructions).toMatch(/incompatible suite or location by itself excludes only a location-scoped contact candidate/i);
   });
 
   it("keeps undated evidence eligible and orders only qualified facts", () => {
     expect(providerProfileSystemInstructions).toMatch(/Undated supported evidence remains eligible/i);
-    expect(providerProfileSystemInstructions).toMatch(/Among comparably supported eligible facts/i);
+    expect(providerProfileSystemInstructions).toMatch(/otherwise-equivalent eligible values/i);
     expect(providerProfileSystemInstructions).toMatch(/NPPES is valid but can be stale/i);
     expect(providerProfileSystemInstructions).toMatch(/official branding is not correctness or independent corroboration/i);
   });
