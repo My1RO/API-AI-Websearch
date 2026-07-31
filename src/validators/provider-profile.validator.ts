@@ -71,18 +71,32 @@ export const providerProfileSchema = z.object({
 
 export const providerProfilesSchema = z.array(providerProfileSchema);
 
+const structuredCitationSchema = z.object({
+  sourceUrl: z.string().describe(
+    "The exact public http or https page URL opened with open_page that contains both evidence spans. Never a search-results URL or a URL seen only in a search result."
+  ),
+  sourceTitle: z.string().nullable().describe("The title of that exact opened page, or null when unavailable."),
+  providerIdentitySpan: z.string().describe(
+    "A short, contiguous, verbatim passage copied from the opened page body that establishes the exact requested provider's identity. Never paraphrase or copy a search snippet."
+  ),
+  factSpan: z.string().describe(
+    "A short, contiguous, verbatim passage copied from the same opened page body that directly contains or establishes this exact fact for the provider. Never paraphrase or copy a search snippet."
+  ),
+  explicitFactDateSpan: z.string().nullable().describe(
+    "A short, contiguous, verbatim passage from the same opened page containing an explicit date that governs this exact fact, or null when the page has no such date. Retrieval time, copyright years, and unrelated dates do not qualify."
+  )
+}).strict();
+
 const structuredSourcedValueSchema = z.object({
   value: z.string().describe("The public professional fact exactly as supported by the cited source."),
-  sourceId: z.string().describe("The id of the source object that supports this fact."),
-  sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
+  citation: structuredCitationSchema.describe("Evidence from the exact opened page that supports only this fact.")
 }).strict();
 
 const structuredPhoneSchema = z.object({
   value: z.string().describe(
     "A professional voice phone number for the exact provider. Never a fax, mobile, cell, personal, home, or uncertain-purpose number."
   ),
-  sourceId: z.string().describe("The id of the exact public source page that establishes this professional phone."),
-  sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
+  citation: structuredCitationSchema.describe("Evidence from the exact opened page that establishes this professional voice phone.")
 }).strict();
 
 const structuredLocationSchema = z.object({
@@ -91,22 +105,13 @@ const structuredLocationSchema = z.object({
   city: z.string().nullable().describe("City for the verified professional location, or null."),
   state: z.string().nullable().describe("State for the verified professional location, or null."),
   zip: z.string().nullable().describe("ZIP code for the verified professional location, or null."),
-  sourceId: z.string().describe("The id of the exact public source page that establishes this professional location."),
-  sourceName: z.string().nullable().describe("The public source title, or null when unavailable.")
+  citation: structuredCitationSchema.describe("Evidence from the exact opened page that establishes this professional location.")
 }).strict();
 
 const structuredRatingSchema = z.object({
-  value: z.string(),
-  scale: z.string().nullable(),
-  sourceId: z.string(),
-  sourceName: z.string().nullable()
-}).strict();
-
-const structuredSourceSchema = z.object({
-  id: z.string().describe("A stable id referenced by facts in this profile."),
-  title: z.string().describe("The title of the public source page."),
-  domain: z.string().describe("The public hostname of the source page."),
-  url: z.string().describe("The exact public http or https page URL consulted by web search.")
+  value: z.string().describe("The numeric rating supported by the exact provider page on the cited rating source."),
+  scale: z.string().nullable().describe("The numeric maximum rating scale, or null when unavailable."),
+  citation: structuredCitationSchema.describe("Evidence from the exact opened provider-rating page that establishes this rating.")
 }).strict();
 
 const structuredProviderProfileSchema = z.object({
@@ -122,8 +127,7 @@ const structuredProviderProfileSchema = z.object({
   ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(structuredSourcedValueSchema),
-  confidenceNotes: z.array(z.string()),
-  sources: z.array(structuredSourceSchema)
+  confidenceNotes: z.array(z.string())
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({

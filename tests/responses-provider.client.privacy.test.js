@@ -73,25 +73,52 @@ const loadClient = (overrides = {}) => {
 };
 
 const citedProfileResponse = profiles => {
-  const strictProfiles = profiles.map(profile => ({
-    providerId: profile.providerId ?? null,
-    npi: profile.npi ?? null,
-    providerName: profile.providerName,
-    specialties: (profile.specialties || []).map(value => ({ sourceName: null, ...value })),
-    locations: (profile.locations || []).map(location => ({
-      addressLine2: null,
-      city: null,
-      state: null,
-      zip: null,
-      sourceName: null,
-      ...location
-    })),
-    phoneNumbers: (profile.phoneNumbers || []).map(value => ({ sourceName: null, ...value })),
-    ratings: (profile.ratings || []).map(rating => ({ scale: null, sourceName: null, ...rating })),
-    websites: (profile.websites || []).map(value => ({ sourceName: null, ...value })),
-    confidenceNotes: profile.confidenceNotes || [],
-    sources: profile.sources || []
-  }));
+  const strictProfiles = profiles.map(profile => {
+    const sourcesById = new Map((profile.sources || []).map(source => [source.id, source]));
+    const citation = (sourceId, factSpan) => {
+      const source = sourcesById.get(sourceId);
+      return {
+        sourceUrl: source?.url || "https://npiprofile.com/provider/123",
+        sourceTitle: source?.title || null,
+        providerIdentitySpan: profile.providerName,
+        factSpan,
+        explicitFactDateSpan: null
+      };
+    };
+    const sourcedValue = value => ({
+      value: value.value,
+      citation: citation(value.sourceId, value.value)
+    });
+
+    return {
+      providerId: profile.providerId ?? null,
+      npi: profile.npi ?? null,
+      providerName: profile.providerName,
+      specialties: (profile.specialties || []).map(sourcedValue),
+      locations: (profile.locations || []).map(location => ({
+        addressLine1: location.addressLine1,
+        addressLine2: location.addressLine2 ?? null,
+        city: location.city ?? null,
+        state: location.state ?? null,
+        zip: location.zip ?? null,
+        citation: citation(location.sourceId, [
+          location.addressLine1,
+          location.addressLine2,
+          location.city,
+          location.state,
+          location.zip
+        ].filter(Boolean).join(" "))
+      })),
+      phoneNumbers: (profile.phoneNumbers || []).map(sourcedValue),
+      ratings: (profile.ratings || []).map(rating => ({
+        value: rating.value,
+        scale: rating.scale ?? null,
+        citation: citation(rating.sourceId, rating.value)
+      })),
+      websites: (profile.websites || []).map(sourcedValue),
+      confidenceNotes: profile.confidenceNotes || []
+    };
+  });
   const outputText = JSON.stringify({ profiles: strictProfiles });
   return {
     status: "completed",
@@ -253,6 +280,11 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     }));
     expect(JSON.stringify(request.text.format)).toMatch(/Verified professional practice, office, clinic, facility, or hospital locations/i);
     expect(JSON.stringify(request.text.format)).toMatch(/Verified professional voice contacts/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/providerIdentitySpan/);
+    expect(JSON.stringify(request.text.format)).toMatch(/factSpan/);
+    expect(JSON.stringify(request.text.format)).toMatch(/explicitFactDateSpan/);
+    expect(JSON.stringify(request.text.format)).toMatch(/short, contiguous, verbatim passage/i);
+    expect(JSON.stringify(request.text.format)).not.toMatch(/sourceId|"sources"/);
     expect(JSON.stringify(request.text.format)).not.toMatch(/insurance|payer|health.?plan|network|coverage/i);
     expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
     expect(request.instructions).toMatch(/Do not search for or return insurance, payer, health-plan, network, or coverage information/i);
@@ -781,7 +813,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       "https://npiprofile.com/provider/123",
       "https://npiprofile.com/provider/not-cited"
     );
-    response.output_parsed.profiles[0].sources[0].url = "https://npiprofile.com/provider/not-cited";
+    response.output_parsed.profiles[0].phoneNumbers[0].citation.sourceUrl = "https://npiprofile.com/provider/not-cited";
     mockCreateResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
@@ -817,12 +849,21 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles[0].phoneNumbers).toEqual([
       expect.objectContaining({ value: "2164442200", sourceId: "src-1" })
     ]);
+    expect(profiles[0].sources).toEqual([
+      expect.objectContaining({
+        id: "src-1",
+        title: "Public directory",
+        domain: "npiprofile.com",
+        url: "https://npiprofile.com/provider/123"
+      })
+    ]);
+    expect(JSON.stringify(profiles)).not.toMatch(/providerIdentitySpan|factSpan|explicitFactDateSpan/);
   });
 
   it("retains exact pages opened by Azure web search as API provenance", async () => {
     const response = successfulProfileResponse();
     response.output[0].content[0].annotations = [];
-    response.output_parsed.profiles[0].sources[0].url = "https://npiregistry.cms.hhs.gov/api/?number=123&version=2.1";
+    response.output_parsed.profiles[0].phoneNumbers[0].citation.sourceUrl = "https://npiregistry.cms.hhs.gov/api/?number=123&version=2.1";
     response.output.unshift({
       type: "web_search_call",
       action: {
@@ -847,11 +888,12 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     const response = successfulProfileResponse();
     response.output[0].content[0].annotations = [];
     response.output_parsed.profiles[0].npi = "1234567890";
-    response.output_parsed.profiles[0].sources[0] = {
-      id: "src-1",
-      title: "NPPES record for NPI 1234567890",
-      domain: "npiregistry.cms.hhs.gov",
-      url: "https://npiregistry.cms.hhs.gov/api/?number=1234567890&version=2.1"
+    response.output_parsed.profiles[0].phoneNumbers[0].citation = {
+      sourceUrl: "https://npiregistry.cms.hhs.gov/api/?number=1234567890&version=2.1",
+      sourceTitle: "NPPES record for NPI 1234567890",
+      providerIdentitySpan: "Public Provider NPI 1234567890",
+      factSpan: "2164442200",
+      explicitFactDateSpan: null
     };
     response.output.unshift({
       type: "web_search_call",

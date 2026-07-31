@@ -36,7 +36,8 @@ describe("V8 evidence-open prompt policy", () => {
     expect(providerProfileSystemInstructions).toMatch(/opened page body directly contains or establishes the exact fact/i);
     expect(providerProfileSystemInstructions).toMatch(/search-results page, result title, or snippet is discovery evidence only/i);
     expect(providerProfileSystemInstructions).toMatch(/never cite it or emit a fact supported only by it/i);
-    expect(providerProfileSystemInstructions).toMatch(/Each fact's sourceId must reference its exact opened supporting page/i);
+    expect(providerProfileSystemInstructions).toMatch(/Every emitted fact must carry its own citation object/i);
+    expect(providerProfileSystemInstructions).toMatch(/providerIdentitySpan and citation\.factSpan must be short, contiguous, verbatim passages/i);
   });
 
   it("uses the requested location first and stops tier chasing after sufficient evidence", () => {

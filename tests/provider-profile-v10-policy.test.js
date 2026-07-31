@@ -34,11 +34,10 @@ describe("V10 location and opened-evidence prompt policy", () => {
   it("requires a silent final audit against actual open_page actions", () => {
     const { providerProfileSystemInstructions } = loadPromptBuilder();
 
-    expect(providerProfileSystemInstructions).toMatch(/silently audit provenance/i);
-    expect(providerProfileSystemInstructions).toMatch(/sources array must be a subset of the exact URLs you opened with open_page/i);
+    expect(providerProfileSystemInstructions).toMatch(/silently audit every fact/i);
+    expect(providerProfileSystemInstructions).toMatch(/citation\.sourceUrl must be the exact URL opened with open_page/i);
     expect(providerProfileSystemInstructions).toMatch(/URL merely listed by a search action is not opened/i);
-    expect(providerProfileSystemInstructions).toMatch(/Delete every fact whose source was not opened or whose exact value is not directly contained or established by that same opened page body/i);
-    expect(providerProfileSystemInstructions).toMatch(/delete orphaned sources/i);
+    expect(providerProfileSystemInstructions).toMatch(/delete it unless its source URL was opened and both required spans occur on that same opened page/i);
   });
 
   it("uses conflict-specific dates without rejecting undated evidence", () => {
