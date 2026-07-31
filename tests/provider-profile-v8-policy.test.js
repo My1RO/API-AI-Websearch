@@ -57,7 +57,8 @@ describe("V8 evidence-open prompt policy", () => {
     const identityProviders = JSON.parse(identityPrompt.split("Providers: ")[1]);
 
     expect(providerProfileSystemInstructions).toMatch(/scale is only the numeric maximum/i);
-    expect(providerProfileSystemInstructions).toMatch(/insurance count is eligible only when the exact cited page explicitly states that exact count/i);
+    expect(providerProfileSystemInstructions).toMatch(/Do not search for or return insurance, payer, health-plan, network, or coverage information/i);
+    expect(providerProfileSystemInstructions).not.toMatch(/insurance count|insurance-acceptance statement/i);
     expect(providerProfileSystemInstructions).toMatch(/nullable field with no supported value, return null/i);
     expect(providerProfileSystemInstructions).toMatch(/never use punctuation such as '\.', ',', or '-' as a placeholder/i);
     expect(fullProviders).toEqual([providerInput.providers[0]]);

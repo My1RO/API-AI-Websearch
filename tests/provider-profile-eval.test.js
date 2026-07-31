@@ -79,7 +79,6 @@ const profile = {
   phoneNumbers: [{ value: "(216) 444-2200", sourceId: "official" }],
   ratings: [],
   websites: [],
-  publicInsuranceMentions: [],
   sources: [{
     id: "official",
     title: "Public Clinic",

@@ -180,7 +180,6 @@ const normalizeProfileInput = (value: unknown): Record<string, unknown> => {
     phoneNumbers: asArray(profile.phoneNumbers || profile.phones || profile.phone_numbers).map(normalizeSourcedValueInput).filter(hasNormalizedValue),
     ratings: asArray(profile.ratings).map(normalizeRatingInput).filter(hasNormalizedValue),
     websites: asArray(profile.websites || profile.links || profile.website).map(normalizeSourcedValueInput).filter(hasNormalizedValue),
-    publicInsuranceMentions: asArray(profile.publicInsuranceMentions || profile.insuranceMentions).map(normalizeSourcedValueInput).filter(hasNormalizedValue),
     confidenceNotes: Array.isArray(profile.confidenceNotes) ? profile.confidenceNotes.map(coerceString).filter(Boolean) : [],
     sources: asArray(profile.sources).map(normalizeSourceInput).filter(hasNormalizedSourceLocation)
   };
@@ -641,8 +640,7 @@ const sourceIdsForProfile = (profile: ProviderProfile): Set<string> => {
       ...profile.locations,
       ...profile.phoneNumbers,
       ...profile.ratings,
-      ...profile.websites,
-      ...profile.publicInsuranceMentions
+      ...profile.websites
     ]
       .map((fact) => fact.sourceId)
       .filter(Boolean)
@@ -793,9 +791,6 @@ export const sanitizeProviderProfiles = (
           const source = sources.get(website.sourceId);
           return sourceIsDirectlyAttributed(source) || sourceHasAcceptedAddressAnchor(source);
         }),
-      publicInsuranceMentions: profile.publicInsuranceMentions
-        .map((mention) => sanitizeSourcedValue(mention, sources, sanitized.sourceIdMap))
-        .filter((mention): mention is SourcedValue => Boolean(mention)),
       confidenceNotes: [],
       sources: []
     };

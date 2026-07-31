@@ -38,7 +38,6 @@ new ProviderProfileResponsesClient()
         locationCount: firstProfile.locations.length,
         phoneCount: firstProfile.phoneNumbers.length,
         ratingCount: firstProfile.ratings.length,
-        publicInsuranceMentionCount: firstProfile.publicInsuranceMentions.length,
         sourceCount: firstProfile.sources.length
       } : null
     }, null, 2)}\n`);

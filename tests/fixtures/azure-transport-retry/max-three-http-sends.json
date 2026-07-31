@@ -30,14 +30,14 @@
       "requestId": "trace-recovery-200",
       "body": {
         "status": "completed",
-        "output_text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"sourceId\":\"src-1\",\"sourceName\":null}],\"ratings\":[],\"websites\":[],\"publicInsuranceMentions\":[],\"confidenceNotes\":[],\"sources\":[{\"id\":\"src-1\",\"title\":\"Public directory\",\"domain\":\"npiprofile.com\",\"url\":\"https://npiprofile.com/provider/123\"}]}]}",
+        "output_text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"sourceId\":\"src-1\",\"sourceName\":null}],\"ratings\":[],\"websites\":[],\"confidenceNotes\":[],\"sources\":[{\"id\":\"src-1\",\"title\":\"Public directory\",\"domain\":\"npiprofile.com\",\"url\":\"https://npiprofile.com/provider/123\"}]}]}",
         "output": [
           {
             "type": "message",
             "content": [
               {
                 "type": "output_text",
-                "text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"sourceId\":\"src-1\",\"sourceName\":null}],\"ratings\":[],\"websites\":[],\"publicInsuranceMentions\":[],\"confidenceNotes\":[],\"sources\":[{\"id\":\"src-1\",\"title\":\"Public directory\",\"domain\":\"npiprofile.com\",\"url\":\"https://npiprofile.com/provider/123\"}]}]}",
+                "text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"sourceId\":\"src-1\",\"sourceName\":null}],\"ratings\":[],\"websites\":[],\"confidenceNotes\":[],\"sources\":[{\"id\":\"src-1\",\"title\":\"Public directory\",\"domain\":\"npiprofile.com\",\"url\":\"https://npiprofile.com/provider/123\"}]}]}",
                 "annotations": [
                   {
                     "type": "url_citation",

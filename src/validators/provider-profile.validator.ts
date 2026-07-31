@@ -65,7 +65,6 @@ export const providerProfileSchema = z.object({
     )
     .default([]),
   websites: z.array(sourcedValueSchema).default([]),
-  publicInsuranceMentions: z.array(sourcedValueSchema).default([]),
   confidenceNotes: z.array(z.string().trim().min(1).max(500)).default([]),
   sources: z.array(sourceSchema).default([])
 }).strip();
@@ -123,7 +122,6 @@ const structuredProviderProfileSchema = z.object({
   ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(structuredSourcedValueSchema),
-  publicInsuranceMentions: z.array(structuredSourcedValueSchema),
   confidenceNotes: z.array(z.string()),
   sources: z.array(structuredSourceSchema)
 }).strict();

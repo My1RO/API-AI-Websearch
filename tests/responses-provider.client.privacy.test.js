@@ -89,7 +89,6 @@ const citedProfileResponse = profiles => {
     phoneNumbers: (profile.phoneNumbers || []).map(value => ({ sourceName: null, ...value })),
     ratings: (profile.ratings || []).map(rating => ({ scale: null, sourceName: null, ...rating })),
     websites: (profile.websites || []).map(value => ({ sourceName: null, ...value })),
-    publicInsuranceMentions: (profile.publicInsuranceMentions || []).map(value => ({ sourceName: null, ...value })),
     confidenceNotes: profile.confidenceNotes || [],
     sources: profile.sources || []
   }));
@@ -127,7 +126,6 @@ const successfulProfileResponse = () => citedProfileResponse([
     locations: [],
     phoneNumbers: [{ value: "2164442200", sourceId: "src-1" }],
     ratings: [],
-    publicInsuranceMentions: [],
     confidenceNotes: [],
     sources: [{
       id: "src-1",
@@ -255,7 +253,9 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     }));
     expect(JSON.stringify(request.text.format)).toMatch(/Verified professional practice, office, clinic, facility, or hospital locations/i);
     expect(JSON.stringify(request.text.format)).toMatch(/Verified professional voice contacts/i);
+    expect(JSON.stringify(request.text.format)).not.toMatch(/insurance|payer|health.?plan|network|coverage/i);
     expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
+    expect(request.instructions).toMatch(/Do not search for or return insurance, payer, health-plan, network, or coverage information/i);
     expect(request.instructions).toMatch(/professional voice number/i);
     expect(request.instructions).toMatch(/uncertain-purpose/i);
     expect(request.instructions).toMatch(/professional practice, clinic, facility, hospital, or office location/i);
@@ -381,7 +381,6 @@ describe("Azure OpenAI Responses client privacy contract", () => {
               ],
               phoneNumbers: [{ value: "216-444-2200", sourceId: "src-1" }],
               ratings: [],
-              publicInsuranceMentions: [],
               confidenceNotes: [],
               sources: [{
                 id: "src-1",

@@ -50,7 +50,6 @@ export interface ProviderProfile {
   phoneNumbers: SourcedValue[];
   ratings: ProviderRating[];
   websites: SourcedValue[];
-  publicInsuranceMentions: SourcedValue[];
   confidenceNotes?: string[];
   sources: ProviderSource[];
 }

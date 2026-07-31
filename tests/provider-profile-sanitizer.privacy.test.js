@@ -12,7 +12,6 @@ describe("provider profile sanitizer", () => {
     locations: [],
     phoneNumbers: [],
     ratings: [],
-    publicInsuranceMentions: [],
     confidenceNotes: [],
     sources: []
   };
@@ -145,7 +144,7 @@ describe("provider profile sanitizer", () => {
     }
   );
 
-  it("retains CareSource while continuing to reject source placeholders", () => {
+  it("unconditionally removes plan and insurance information from legacy inputs", () => {
     const [profile] = sanitizeProviderProfiles([{
       ...baseProfile,
       phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
@@ -153,6 +152,7 @@ describe("provider profile sanitizer", () => {
         { value: "CareSource Medicaid", sourceId: "directory" },
         { value: "Source Name", sourceId: "directory" }
       ],
+      insuranceMentions: [{ value: "Tailored Plan", sourceId: "directory" }],
       sources: [{
         id: "directory",
         title: "The Cleveland Clinic Foundation NPI 1234567890",
@@ -160,7 +160,8 @@ describe("provider profile sanitizer", () => {
       }]
     }]);
 
-    expect(profile.publicInsuranceMentions.map(({ value }) => value)).toEqual(["CareSource Medicaid"]);
+    expect(profile).not.toHaveProperty("publicInsuranceMentions");
+    expect(profile).not.toHaveProperty("insuranceMentions");
   });
 
   it("strips optional generation artifacts, retains apartment-style professional locations, and rejects explicit residential locations", () => {
@@ -394,7 +395,6 @@ describe("provider profile sanitizer", () => {
         ],
         phoneNumbers: [{ value: "(216) 444-2200", source: { id: "src-1", title: "NPI 1234567890 Profile" } }],
         ratings: [],
-        publicInsuranceMentions: [],
         confidenceNotes: "Public directory match",
         sources: [{ id: "src-1", title: "NPI 1234567890 Profile", domain: "npiprofile.com" }]
       }
@@ -457,7 +457,7 @@ describe("provider profile sanitizer", () => {
     ]);
 
     expect(profile.specialties).toEqual([]);
-    expect(profile.publicInsuranceMentions).toEqual([]);
+    expect(profile).not.toHaveProperty("publicInsuranceMentions");
     expect(profile.phoneNumbers).toHaveLength(1);
     expect(profile.locations).toHaveLength(1);
   });
