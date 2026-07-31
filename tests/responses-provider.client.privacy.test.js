@@ -940,4 +940,64 @@ describe("Azure OpenAI Responses client privacy contract", () => {
 
     expect(profiles).toEqual([]);
   });
+
+  it("rejects a location when any emitted address component is absent from its fact span", async () => {
+    const response = citedProfileResponse([{
+      providerId: "provider-123",
+      providerName: "Public Provider",
+      specialties: [],
+      locations: [{
+        addressLine1: "9500 Euclid Ave",
+        city: "Cleveland",
+        state: "OH",
+        zip: "44195",
+        sourceId: "src-1"
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: [],
+      sources: [{
+        id: "src-1",
+        title: "Public provider page",
+        url: "https://provider.example.org/location"
+      }]
+    }]);
+    response.output_parsed.profiles[0].locations[0].citation.factSpan = "9500 Euclid Ave, Cleveland, OH";
+    mockCreateResponse.mockResolvedValue(response);
+    const { ProviderProfileResponsesClient } = loadClient();
+
+    const profiles = await new ProviderProfileResponsesClient().searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    });
+
+    expect(profiles).toEqual([]);
+  });
+
+  it("rejects a rating when its emitted scale is absent from its fact span", async () => {
+    const response = citedProfileResponse([{
+      providerId: "provider-123",
+      providerName: "Public Provider",
+      specialties: [],
+      locations: [],
+      phoneNumbers: [],
+      ratings: [{ value: "4.8", scale: "5", sourceId: "src-1" }],
+      websites: [],
+      sources: [{
+        id: "src-1",
+        title: "Public rating page",
+        url: "https://ratings.example.org/provider"
+      }]
+    }]);
+    response.output_parsed.profiles[0].ratings[0].citation.factSpan = "Provider rating: 4.8";
+    mockCreateResponse.mockResolvedValue(response);
+    const { ProviderProfileResponsesClient } = loadClient();
+
+    const profiles = await new ProviderProfileResponsesClient().searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    });
+
+    expect(profiles).toEqual([]);
+  });
 });

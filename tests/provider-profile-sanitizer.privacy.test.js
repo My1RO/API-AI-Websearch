@@ -66,7 +66,7 @@ describe("provider profile sanitizer", () => {
     sources: []
   };
 
-  it("drops ratings from directory-only sources while preserving supported contact facts", () => {
+  it("does not use a closed domain list to classify rating-source semantics", () => {
     const [profile] = sanitizeProviderProfiles([
       {
         ...baseProfile,
@@ -93,7 +93,7 @@ describe("provider profile sanitizer", () => {
 
     expect(profile.phoneNumbers).toHaveLength(1);
     expect(profile.locations).toHaveLength(1);
-    expect(profile.ratings).toEqual([]);
+    expect(profile.ratings).toHaveLength(1);
   });
 
   it("accepts professional contact facts from the current CMS NPI Registry hostname", () => {
@@ -147,7 +147,7 @@ describe("provider profile sanitizer", () => {
     ]);
   });
 
-  it("rejects personal phone labels and expanded people-finder domains", () => {
+  it("rejects literal personal phone labels without semantically classifying an unlabeled number by domain", () => {
     const profiles = sanitizeProviderProfiles([{
       ...baseProfile,
       phoneNumbers: [
@@ -177,11 +177,14 @@ describe("provider profile sanitizer", () => {
     });
 
     expect(profiles).toHaveLength(1);
-    expect(profiles[0].phoneNumbers.map(({ value }) => value)).toEqual(["Office: (305) 444-1213"]);
+    expect(profiles[0].phoneNumbers.map(({ value }) => value)).toEqual([
+      "Office: (305) 444-1213",
+      "(305) 777-1217"
+    ]);
   });
 
   it.each(["truepeoplesearch.com", "411.com", "findwhocallsyou.com", "lookup.robokiller.com"])(
-    "blocks provider-attributed contact facts from %s",
+    "leaves open-domain source eligibility for %s to the one-call model contract",
     (domain) => {
       const url = `https://${domain}/provider/1234567890`;
       const profiles = sanitizeProviderProfiles([{
@@ -195,7 +198,8 @@ describe("provider profile sanitizer", () => {
         }]
       }], { allowedSourceUrls: [url] });
 
-      expect(profiles).toEqual([]);
+      expect(profiles).toHaveLength(1);
+      expect(profiles[0].phoneNumbers).toHaveLength(1);
     }
   );
 
@@ -302,7 +306,7 @@ describe("provider profile sanitizer", () => {
     expect(profile.websites).toHaveLength(1);
   });
 
-  it("rejects a generic facility contact without provider, domain, or address attribution", () => {
+  it("does not infer provider attribution from source-title or URL tokens", () => {
     const [profile] = sanitizeProviderProfiles([{
       ...baseProfile,
       npi: "1568203883",
@@ -331,7 +335,7 @@ describe("provider profile sanitizer", () => {
       }]
     }]);
 
-    expect(profile.phoneNumbers.map(({ value }) => value)).toEqual(["713-566-5098"]);
+    expect(profile.phoneNumbers.map(({ value }) => value)).toEqual(["713-566-5098", "713-566-5100"]);
   });
 
   it("allows ratings from public review or rating sources", () => {
@@ -389,7 +393,7 @@ describe("provider profile sanitizer", () => {
     expect(profiles).toEqual([]);
   });
 
-  it("drops Figma/demo source labels and placeholder phone formats", () => {
+  it("drops placeholder phone formats without treating an unfamiliar domain as semantic evidence", () => {
     const profiles = sanitizeProviderProfiles([
       {
         ...baseProfile,
@@ -414,7 +418,9 @@ describe("provider profile sanitizer", () => {
       }
     ]);
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toEqual([]);
+    expect(profiles[0].locations).toHaveLength(1);
   });
 
   it("drops profile shells that have no safe contact facts", () => {

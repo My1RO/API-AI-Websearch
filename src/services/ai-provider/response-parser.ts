@@ -47,6 +47,13 @@ const spanContainsPhoneValue = (span: string, value: string): boolean => {
   return alternatives.some((candidate) => spanDigits.includes(candidate));
 };
 
+const spanContainsEveryPresentValue = (
+  span: string,
+  values: Array<string | null>
+): boolean => values.filter((value): value is string => Boolean(value)).every((value) => (
+  spanContainsTextValue(span, value)
+));
+
 const openedUrlSet = (response: unknown): Set<string> => new Set(
   extractResponseWebSearchOpenedUrls(response)
     .map((url) => safePublicUrl(url))
@@ -71,7 +78,13 @@ export const filterProfilesByCitationEvidence = (
     )),
     locations: profile.locations.filter((location) => (
       citationWasOpened(location.citation.sourceUrl, openedUrls)
-      && spanContainsTextValue(location.citation.factSpan, location.addressLine1)
+      && spanContainsEveryPresentValue(location.citation.factSpan, [
+        location.addressLine1,
+        location.addressLine2,
+        location.city,
+        location.state,
+        location.zip
+      ])
     )),
     phoneNumbers: profile.phoneNumbers.filter((phone) => (
       citationWasOpened(phone.citation.sourceUrl, openedUrls)
@@ -79,7 +92,7 @@ export const filterProfilesByCitationEvidence = (
     )),
     ratings: profile.ratings.filter((rating) => (
       citationWasOpened(rating.citation.sourceUrl, openedUrls)
-      && spanContainsTextValue(rating.citation.factSpan, rating.value)
+      && spanContainsEveryPresentValue(rating.citation.factSpan, [rating.value, rating.scale])
     )),
     websites: profile.websites.filter((website) => (
       citationWasOpened(website.citation.sourceUrl, openedUrls)
