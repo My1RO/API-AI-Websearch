@@ -70,11 +70,11 @@ export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
   sourceUrl: z.string().describe(
-    "The exact consulted public http or https page URL that directly supports this fact for the requested provider; never a search-results page, snippet, or different corroborating page."
+    "The exact consulted public http or https page whose body or rendered content was read and directly supports this same fact for the requested provider. Never a search-results page, snippet-only result, metadata-only or unread page, or different corroborating page when readable support was consulted."
   ),
   sourceTitle: z.string().nullable().describe("The title of the cited page, or null when unavailable."),
   providerIdentitySpan: z.string().describe(
-    "A short contiguous passage, or faithful rendered-text equivalent, from this cited page. Copy the shortest sufficient passage verbatim whenever possible. It must contain the exact requested NPI when the page shows it; otherwise it must contain the exact provider name plus a disambiguating organization or location. Never use ellipses, combine noncontiguous passages, paraphrase, or quote only a page title when supporting page text exists."
+    "A short contiguous passage, or faithful rendered-text equivalent, from this cited page's body or rendered content. Copy the shortest sufficient passage verbatim whenever possible. It must contain the exact requested NPI when the page shows it; otherwise it must contain the exact provider name plus a disambiguating organization or location after same-name different-NPI bundle reconciliation. Same-name branding alone is insufficient. Never use ellipses, combine noncontiguous passages, paraphrase, or quote only a page title when supporting page text exists."
   ),
   factSpan: z.string().describe(
     "A short contiguous passage, or faithful rendered-text equivalent, from this same cited page. Copy the shortest sufficient passage verbatim whenever possible. It must contain the complete emitted value or faithful formatting equivalent and text binding it to this fact type for the identity-qualified provider. Never use ellipses, combine noncontiguous passages, paraphrase, quote only a page title when supporting page text exists, or use text for another field or entity."
@@ -124,9 +124,9 @@ const structuredProviderProfileSchema = z.object({
   ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(z.object({
-    value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity, never an unresolved or legacy alternate."),
+    value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity, reconciled as a candidate within its page, address, phone, and organization bundle; never an unresolved, different-NPI, or legacy alternate."),
     citation: structuredCitationSchema.describe(
-      "Evidence from one consulted page whose factSpan establishes the exact provider's organizational ownership or operation of this website and identifies the emitted domain or the cited first-party homepage itself. When sourceUrl is the first-party homepage, its identity or ownership passage may establish the homepage itself; an address or phone passage alone does not support a website."
+      "Evidence from one consulted readable page whose body or rendered content establishes the requested provider's organizational ownership or operation of this website after same-name different-NPI bundle reconciliation and identifies the emitted domain or cited first-party homepage itself. When sourceUrl is the first-party homepage, its identity or ownership passage may establish the homepage itself only if the reconciled bundle is compatible; an address, phone, same name, or branding alone does not support a website."
     )
   }).strict()).describe(
     "Identity-qualified current websites ordered for display. Index zero must be the best eligible default after conflict resolution and source hierarchy. Additional domains require affirmative evidence of concurrent operation, not merely separate listings."
