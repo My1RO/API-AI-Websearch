@@ -74,10 +74,10 @@ const structuredCitationSchema = z.object({
   ),
   sourceTitle: z.string().nullable().describe("The title of the cited page, or null when unavailable."),
   providerIdentitySpan: z.string().describe(
-    "A short contiguous passage, or faithful rendered-text equivalent, from the cited page that establishes the requested provider's NPI or name."
+    "A short contiguous passage or faithful rendered-text equivalent from this cited page that identifies the requested provider by exact NPI when shown, otherwise by exact name plus disambiguating organization or location. A same-name passage is insufficient when consulted evidence assigns the candidate to another NPI."
   ),
   factSpan: z.string().describe(
-    "A short contiguous passage, or faithful rendered-text equivalent, from the same cited page that establishes the exact emitted value for this provider."
+    "A short contiguous passage or faithful rendered-text equivalent from this same cited page that establishes this exact emitted value for the identity-qualified provider; never text for another field or entity."
   ),
   explicitFactDateSpan: z.string().nullable().describe(
     "A passage from that page containing an explicit date that governs this exact provider, field, and value, or null when no such date exists; retrieval dates, copyright years, and generic page-update dates do not qualify."
@@ -113,22 +113,24 @@ const structuredRatingSchema = z.object({
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
-  npi: z.string().nullable(),
-  providerName: z.string(),
+  npi: z.string().nullable().describe("The exact requested 10-digit NPI for this profile; never a nearby or same-name entity's NPI."),
+  providerName: z.string().describe("The requested provider or entity name attached to the requested NPI, not merely a same-name organization."),
   specialties: z.array(structuredSourcedValueSchema),
   locations: z.array(structuredLocationSchema).describe(
-    "Verified professional practice, office, clinic, facility, or hospital locations for the exact provider only. Never residential, people-search, or uncertain-purpose addresses."
+    "Verified professional practice, office, clinic, facility, or hospital locations for the exact provider only, ordered for display. Index zero must be the best eligible default after evidence qualification, conflict resolution, fact-applicable recency, and source hierarchy. Additional values require affirmative concurrent compatibility. Never residential, people-search, or uncertain-purpose addresses."
   ),
   phoneNumbers: z.array(structuredPhoneSchema).describe(
-    "Verified professional voice contacts for the exact provider only. Never fax, mobile, cell, personal, home, or uncertain-purpose numbers."
+    "Verified professional voice contacts for the exact provider only, ordered for display. Index zero must be the best eligible default after evidence qualification, conflict resolution, fact-applicable recency, and source hierarchy. Additional values require affirmative concurrent compatibility. Never fax, mobile, cell, personal, home, or uncertain-purpose numbers."
   ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(z.object({
-    value: z.string().describe("The provider, practice, clinic, facility, hospital, or health-system website URL."),
+    value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity, never an unresolved or legacy alternate."),
     citation: structuredCitationSchema.describe(
-      "Evidence from a consulted page that establishes the exact provider's organizational ownership of this website."
+      "Evidence from one consulted page that establishes the exact provider's organizational ownership or operation of this website. When sourceUrl is the first-party homepage, its identity or ownership passage may establish the homepage itself; an address or phone passage alone does not support a website."
     )
-  }).strict())
+  }).strict()).describe(
+    "Identity-qualified current websites ordered for display. Index zero must be the best eligible default after conflict resolution and source hierarchy. Additional domains require affirmative evidence of concurrent operation, not merely separate listings."
+  )
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({
