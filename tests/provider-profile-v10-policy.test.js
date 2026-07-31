@@ -26,7 +26,8 @@ describe("V10 location and opened-evidence prompt policy", () => {
     expect(providerProfileSystemInstructions).toMatch(/Location never decides exact NPI-and-name identity/i);
     expect(providerProfileSystemInstructions).toMatch(/requested city, state, and ZIP define the product scope for contact facts/i);
     expect(providerProfileSystemInstructions).toMatch(/Never substitute a contact in a conflicting state or clearly incompatible city or region/i);
-    expect(providerProfileSystemInstructions).toMatch(/returning empty locations and phoneNumbers instead of an out-of-scope contact/i);
+    expect(providerProfileSystemInstructions).toMatch(/emit empty locations and phoneNumbers and never substitute an out-of-scope contact/i);
+    expect(providerProfileSystemInstructions).not.toMatch(/keep eligible identity and specialty facts/i);
     expect(prompt).toContain('"city":"MIAMI","state":"FL","zip":"33129"');
   });
 
