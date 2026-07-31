@@ -27,8 +27,8 @@ describe("D1 concise direct-citation policy", () => {
     const prompt = buildProviderProfilePrompt(providerInput);
 
     expect(providerProfileSystemInstructions).toMatch(/NPI plus name are primary identity/i);
-    expect(providerProfileSystemInstructions).toMatch(/Location scopes and orders contact facts but never overrides exact identity/i);
-    expect(providerProfileSystemInstructions).toMatch(/specialty difference must not reject an exact NPI-and-name match/i);
+    expect(providerProfileSystemInstructions).toMatch(/location scopes contacts but cannot override identity/i);
+    expect(providerProfileSystemInstructions).toMatch(/specialty is a weak, possibly stale cross-check and never an identity gate/i);
     expect(prompt).toContain('"city":"MIAMI","state":"FL","zip":"33129"');
   });
 
@@ -36,31 +36,31 @@ describe("D1 concise direct-citation policy", () => {
     const { providerProfileSystemInstructions } = loadPolicy();
 
     expect(providerProfileSystemInstructions).toMatch(/sourceUrl must be that exact fact-supporting page/i);
-    expect(providerProfileSystemInstructions).toMatch(/Every emitted fact must carry its own citation object/i);
+    expect(providerProfileSystemInstructions).toMatch(/Every emitted fact needs one direct citation tied to one exact consulted public page/i);
     expect(providerProfileSystemInstructions).not.toMatch(/open_page|opened page|must be opened/i);
     expect(providerProfileSystemInstructions).not.toMatch(/silently audit every fact|pre-emission audit/i);
   });
 
   it("qualifies evidence before conflicts and conditional hierarchy", () => {
     const { providerProfileSystemInstructions } = loadPolicy();
-    const qualification = providerProfileSystemInstructions.indexOf("First qualify");
-    const conflicts = providerProfileSystemInstructions.indexOf("Second resolve");
-    const hierarchy = providerProfileSystemInstructions.indexOf("Third apply");
+    const qualification = providerProfileSystemInstructions.indexOf("attach it to the exact requested entity");
+    const conflicts = providerProfileSystemInstructions.indexOf("resolve candidate-specific identity and same-field conflicts");
+    const hierarchy = providerProfileSystemInstructions.indexOf("then apply source priority and order the output");
 
     expect(qualification).toBeGreaterThanOrEqual(0);
     expect(conflicts).toBeGreaterThan(qualification);
     expect(hierarchy).toBeGreaterThan(conflicts);
-    expect(providerProfileSystemInstructions).toMatch(/Source class, recency, or official branding cannot rescue an ineligible fact/i);
+    expect(providerProfileSystemInstructions).toMatch(/Source class, apparent recency, or official branding cannot rescue an ineligible fact/i);
     expect(providerProfileSystemInstructions).toMatch(/NPPES is valid but can be stale/i);
-    expect(providerProfileSystemInstructions).toMatch(/Official does not mean correct or independent/i);
+    expect(providerProfileSystemInstructions).toMatch(/official branding is not correctness or independent corroboration/i);
   });
 
   it("keeps undated evidence eligible and makes conflict omission field-local", () => {
     const { providerProfileSystemInstructions } = loadPolicy();
 
-    expect(providerProfileSystemInstructions).toMatch(/Undated exact-provider professional evidence remains eligible/i);
+    expect(providerProfileSystemInstructions).toMatch(/Undated supported evidence remains eligible/i);
     expect(providerProfileSystemInstructions).toMatch(/explicitFactDateSpan must be null/i);
-    expect(providerProfileSystemInstructions).toMatch(/omit only the disputed field or value, not the otherwise supported profile/i);
+    expect(providerProfileSystemInstructions).toMatch(/Omit a former, legacy, or unresolved conflicting candidate while preserving unrelated facts/i);
   });
 
   it("keeps plan data outside the prompt and strict output contract", () => {

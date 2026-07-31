@@ -295,7 +295,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(JSON.stringify(request.text.format)).toMatch(/providerIdentitySpan/);
     expect(JSON.stringify(request.text.format)).toMatch(/factSpan/);
     expect(JSON.stringify(request.text.format)).toMatch(/explicitFactDateSpan/);
-    expect(JSON.stringify(request.text.format)).toMatch(/passage.*from the same cited page/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/factSpan.*from this same cited page/i);
     expect(JSON.stringify(request.text.format)).not.toMatch(/sourceId|"sources"/);
     expect(JSON.stringify(request.text.format)).not.toMatch(/insurance|payer|health.?plan|network|coverage/i);
     expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
