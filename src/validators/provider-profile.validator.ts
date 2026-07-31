@@ -74,13 +74,13 @@ const structuredCitationSchema = z.object({
   ),
   sourceTitle: z.string().nullable().describe("The title of the cited page, or null when unavailable."),
   providerIdentitySpan: z.string().describe(
-    "A short contiguous passage, or faithful rendered-text equivalent, from this cited page's body or rendered content. Copy the shortest sufficient passage verbatim whenever possible. It must contain the exact requested NPI when the page shows it; otherwise it must contain the exact provider name plus a disambiguating organization or location after same-name different-NPI bundle reconciliation. Same-name branding alone is insufficient. Never use ellipses, combine noncontiguous passages, paraphrase, or quote only a page title when supporting page text exists."
+    "A short contiguous passage, or faithful rendered-text equivalent, from this cited page's body or rendered content. Copy the shortest sufficient passage verbatim whenever possible. It must contain the exact requested NPI when the page shows it; otherwise it must contain the exact requested provider name plus a compatible disambiguating organization or location on a provider-specific page after same-name different-NPI bundle reconciliation. General branding, affiliation, or a health-system homepage alone is insufficient. Never use ellipses, combine noncontiguous passages, paraphrase, or quote only a page title when supporting page text exists."
   ),
   factSpan: z.string().describe(
     "A short contiguous passage, or faithful rendered-text equivalent, from this same cited page. Copy the shortest sufficient passage verbatim whenever possible. It must contain the complete emitted value or faithful formatting equivalent and text binding it to this fact type for the identity-qualified provider. Never use ellipses, combine noncontiguous passages, paraphrase, quote only a page title when supporting page text exists, or use text for another field or entity."
   ),
   explicitFactDateSpan: z.string().nullable().describe(
-    "A contiguous passage from that page containing an explicit date that governs this exact provider, field, and value, or null when no such date exists. Retrieval dates, copyright years, and generic page-update dates do not qualify. NPPES or registry record enumeration, creation, or last-update dates also do not qualify unless explicitly attached to this exact value."
+    "A contiguous passage from that page that co-binds the complete exact value and an explicit effective or current date governing this exact provider, field, and value, or null when no such passage exists. Retrieval dates and copyright years do not qualify. Generic page-update dates do not qualify. NPPES or registry enumeration, creation, or record-wide last-update dates do not date each fact and do not qualify. Undated supported evidence remains eligible."
   )
 }).strict();
 
@@ -126,7 +126,7 @@ const structuredProviderProfileSchema = z.object({
   websites: z.array(z.object({
     value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity, reconciled as a candidate within its page, address, phone, and organization bundle; never an unresolved, different-NPI, or legacy alternate."),
     citation: structuredCitationSchema.describe(
-      "Evidence from one consulted readable page whose body or rendered content establishes the requested provider's organizational ownership or operation of this website after same-name different-NPI bundle reconciliation and identifies the emitted domain or cited first-party homepage itself. When sourceUrl is the first-party homepage, its identity or ownership passage may establish the homepage itself only if the reconciled bundle is compatible; an address, phone, same name, or branding alone does not support a website."
+      "Evidence from one inspected readable page whose body or rendered content establishes the requested provider's organizational ownership or operation of this exact website after field-local same-name different-NPI bundle reconciliation and identifies the emitted domain or cited first-party homepage itself. A provider-specific page may attach the domain by exact requested NPI, or by exact requested name plus compatible organization or location. General branding, affiliation, a health-system homepage, or absence of exclusivity alone does not support a website."
     )
   }).strict()).describe(
     "Identity-qualified current websites ordered for display. Index zero must be the best eligible default after conflict resolution and source hierarchy. Additional domains require affirmative evidence of concurrent operation, not merely separate listings."

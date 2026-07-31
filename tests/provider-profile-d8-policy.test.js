@@ -16,9 +16,9 @@ describe("D8 concise single-pass synthesis", () => {
   });
 
   it("handles candidate-specific NPI conflicts and shared assets", () => {
-    expect(providerProfileSystemInstructions).toMatch(/affirmatively assigns it.*different NPI/i);
-    expect(providerProfileSystemInstructions).toMatch(/genuinely shared health-system, group, facility, scheduling line, homepage, or address remains eligible/i);
-    expect(providerProfileSystemInstructions).toMatch(/exclusive or incompatible attachment/i);
+    expect(providerProfileSystemInstructions).toMatch(/assigns a candidate, or a bundle that exclusively co-binds it, to another NPI/i);
+    expect(providerProfileSystemInstructions).toMatch(/shared-asset exception.*separate affirmative evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/incompatible suite or location/i);
   });
 
   it("keeps undated evidence eligible and orders only qualified facts", () => {
