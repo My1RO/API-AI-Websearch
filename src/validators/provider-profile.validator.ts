@@ -106,9 +106,9 @@ const structuredLocationSchema = z.object({
 }).strict();
 
 const structuredRatingSchema = z.object({
-  value: z.string().describe("The numeric rating supported by the exact provider page on the cited rating source."),
-  scale: z.string().nullable().describe("The numeric maximum rating scale, or null when unavailable."),
-  citation: structuredCitationSchema.describe("Evidence from this rating item's exact opened and inspected exact-provider rating page. providerIdentitySpan must identify the requested provider; factSpan must contain this exact rating value and its scale when non-null. Never use another provider's rating or another fact item's evidence.")
+  value: z.string().describe("The exact numeric rating value directly shown for the requested provider on this item's opened exact-provider rating page; never a review count or another metric."),
+  scale: z.string().describe("The non-null numeric maximum rating scale directly shown with this exact rating value on the same opened exact-provider rating page. Do not infer a scale; omit the entire rating item if unavailable or uncertain."),
+  citation: structuredCitationSchema.describe("Evidence from this rating item's exact opened and inspected exact-provider rating page. providerIdentitySpan must identify the requested provider; factSpan must contain both this exact rating value and its non-null numeric maximum scale. Do not copy a review count or unrelated metric. Never use another provider's rating or another fact item's evidence.")
 }).strict();
 
 const structuredProviderProfileSchema = z.object({
@@ -122,7 +122,7 @@ const structuredProviderProfileSchema = z.object({
   phoneNumbers: z.array(structuredPhoneSchema).describe(
     "Verified professional voice contacts for the exact provider only, ordered for display. Index zero must be the best eligible default after evidence qualification, conflict resolution, fact-applicable recency, and source hierarchy. Emit more than one competing phone only when consulted evidence affirmatively establishes concurrent compatibility; otherwise emit at most the one best eligible phone. Never fax, mobile, cell, personal, home, or uncertain-purpose numbers."
   ),
-  ratings: z.array(structuredRatingSchema),
+  ratings: z.array(structuredRatingSchema).describe("Exact-provider ratings only. Every emitted item must have both a directly supported numeric value and non-null numeric maximum scale from one opened exact-provider rating page; otherwise use an empty array."),
   websites: z.array(z.object({
     value: z.string().describe("The exact inspected current provider, practice, clinic, facility, or hospital page URL for the exact requested entity; never generalize an inspected provider page to an uninspected health-system root. Evaluate the domain field-locally: an address, suite, or phone conflict alone does not implicate it. Omit the domain only when readable evidence binds that exact domain to a conflicting organizational subpart, different NPI, or different provider operation, unless affirmative evidence attaches that domain to the requested provider or compatible organization. Explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence may establish that attachment. Never an unresolved, different-NPI, or legacy alternate."),
     citation: structuredCitationSchema.describe(
