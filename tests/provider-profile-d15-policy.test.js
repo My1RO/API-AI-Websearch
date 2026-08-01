@@ -10,6 +10,15 @@ const profileShape = providerProfileStructuredOutputSchema.shape.profiles.elemen
 describe("D15 Entity Type 2 same-base organizational safeguard", () => {
   it("rejects a P039-style same-base conflicting organizational subpart bundle", () => {
     expect(providerProfileSystemInstructions).toMatch(
+      /requested provider may be an organization.*first inspect at least one readable exact-NPI registry or exact-NPI profile page/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /Do not count exact-NPI search metadata as that inspection/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /If no such exact-NPI page can be inspected.*do not use a same-base first-party bundle that conflicts/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
       /exact-NPI evidence identifies the requested NPI as an Entity Type 2 organization/i
     );
     expect(providerProfileSystemInstructions).toMatch(
@@ -31,16 +40,22 @@ describe("D15 Entity Type 2 same-base organizational safeguard", () => {
       /does not reject a distinct-address additional professional office for an organization merely because exact-NPI evidence omits it/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /one inspected provider-specific first-party page directly co-binds the exact requested organization to a complete professional office at a distinct base address and that office's professional voice phone/i
+      /provider-specific first-party page establishes a compatible distinct-address additional office.*exact requested organization.*complete professional address/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /with no conflicting-NPI or conflicting-operation evidence.*affirmative evidence of a compatible additional office and emit its address and phone under the ordinary field rules/i
+      /Qualify that office's phone independently.*own cited page.*exact phone.*compatible office/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /Never require the address and phone to appear on one page or require either field as a precondition for emitting the other/i
     );
     expect(profileShape.locations.element.shape.addressLine1.description).toMatch(
       /distinct-address additional office remains eligible under ordinary identity and conflict rules/i
     );
     expect(profileShape.locations.description).toMatch(
-      /provider-specific first-party page.*exact organization.*complete distinct-base-address professional office and its professional voice phone.*no conflicting-NPI or conflicting-operation evidence/i
+      /provider-specific first-party page.*exact organization.*complete distinct-base-address professional office.*no conflicting-NPI or conflicting-operation evidence/i
+    );
+    expect(profileShape.locations.description).toMatch(
+      /Qualify and cite any phone for that office independently; neither field is required to emit the other/i
     );
   });
 
