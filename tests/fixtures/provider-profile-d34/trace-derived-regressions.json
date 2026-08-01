@@ -1,0 +1,25 @@
+{
+  "provenance": "Development-only regression sentinels derived from canonical D33 production traces and the fixed gpt-5.6-sol/high categorical judgments for P007, P014, P024, and P050. No holdout data, network access, or new model calls were used.",
+  "cases": [
+    {
+      "caseId": "P007",
+      "observedFailure": "The specialty retained a lower-tier citation although an inspected readable exact-provider Q1 page supported the same specialty value.",
+      "requiredBehavior": "After value selection, replace the lower-tier citation with the inspected readable same-value Q1 page without changing the specialty value."
+    },
+    {
+      "caseId": "P014",
+      "observedFailure": "The response cited lower-tier or unreadable pages despite readable same-value Q1 support, and withheld an eligible provider-specific first-party biography or team page across compatible affiliations.",
+      "requiredBehavior": "Use readable same-value Q1 citations, never an unread access-challenge page; emit the eligible provider-specific first-party biography or team page unless affirmative former, different-provider, or incompatible-operation evidence exists."
+    },
+    {
+      "caseId": "P024",
+      "observedFailure": "The response withheld an eligible exact-provider Q1 professional phone in the presence of a conflicting undated Q3 listing and used an expanded specialty value as factSpan although the source only said PA-C.",
+      "requiredBehavior": "Emit the eligible Q1 phone unless affirmative ineligibility or incompatible-operation evidence exists; for the Physician Assistant expansion, quote the exact source credential PA-C as factSpan."
+    },
+    {
+      "caseId": "P050",
+      "observedFailure": "Earlier treatment risked fabricating website marketing prose instead of quoting the page; D33 corrected this and D34 must preserve it.",
+      "requiredBehavior": "Use sourceUrl as direct website evidence and copy the shortest exact provider or organization heading or name passage, never synthesized marketing text."
+    }
+  ]
+}
