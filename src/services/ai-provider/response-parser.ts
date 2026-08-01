@@ -216,7 +216,10 @@ export const parseProviderProfilesFromResponse = (response: unknown) => {
     });
   }
 
-  return sanitizeProviderProfiles(profiles, {
-    allowedSourceUrls: extractResponseProvenanceUrls(response)
-  });
+  // Azure can return a valid directly cited structured fact without repeating
+  // that URL in annotations or web-search action sources. Keep the mismatch as
+  // telemetry above, but do not turn incomplete native provenance metadata into
+  // a destructive production gate. The citation still passes the structured
+  // schema and the sanitizer's independently checkable URL/text invariants.
+  return sanitizeProviderProfiles(profiles);
 };

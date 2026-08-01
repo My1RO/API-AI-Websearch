@@ -871,7 +871,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     );
   });
 
-  it("rejects a fact whose citation URL is absent from every Azure provenance channel", async () => {
+  it("retains a direct structured citation absent from every Azure provenance channel", async () => {
     const response = successfulProfileResponse();
     response.output_text = response.output_text.replace(
       "https://npiprofile.com/provider/123",
@@ -887,7 +887,22 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toEqual([
+      expect.objectContaining({
+        value: "2164442200",
+        citation: expect.objectContaining({
+          sourceUrl: "https://npiprofile.com/provider/not-cited"
+        })
+      })
+    ]);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider citation provenance mismatch",
+      expect.objectContaining({
+        reason: "absent_from_all_native_provenance_channels",
+        mismatchCount: 1
+      })
+    );
   });
 
   it("accepts an action.sources citation without requiring an annotation or open-page action", async () => {

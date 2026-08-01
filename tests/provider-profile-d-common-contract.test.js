@@ -75,14 +75,22 @@ describe("common D-series production contract", () => {
     expect(parsed[0].phoneNumbers[0].citation).toEqual(citation("Office: 617-444-0123"));
   });
 
-  it("logs and vetoes a citation absent from every native provenance channel", () => {
+  it("logs but retains a direct citation absent from every native provenance channel", () => {
     const raw = response({
       type: "web_search_call",
       action: { type: "search", sources: [{ type: "url", url: "https://other.example.org/provider" }] }
     });
 
     expect(extractResponseProvenanceMismatchUrls(raw.output_parsed.profiles, raw)).toEqual([sourceUrl]);
-    expect(parseProviderProfilesFromResponse(raw)).toEqual([]);
+    expect(parseProviderProfilesFromResponse(raw)).toEqual([
+      expect.objectContaining({
+        npi: "1234567890",
+        phoneNumbers: [expect.objectContaining({
+          value: "Office: 617-444-0123",
+          citation: expect.objectContaining({ sourceUrl })
+        })]
+      })
+    ]);
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "AI provider citation provenance mismatch",
       expect.objectContaining({
@@ -90,6 +98,63 @@ describe("common D-series production contract", () => {
         mismatchCount: 1
       })
     );
+  });
+
+  it("preserves the direct address and phone from the logged D31B/P022 mismatch trace", () => {
+    const healthgradesUrl = "https://healthgrades.com/providers/marina-rodriguez-y9s62sz";
+    const identitySpan = "About Me NPI: 1326489170 biography Marina Rodriguez, NP is a nurse practitioner in Upper Arlington, OH.";
+    const raw = response({
+      type: "web_search_call",
+      action: {
+        type: "search",
+        sources: [{
+          type: "url",
+          url: "https://health.usnews.com/nurse-practitioners/marina-rodriguez-2172346"
+        }]
+      }
+    }, {
+      providerId: "1326489170",
+      npi: "1326489170",
+      providerName: "MARINA R RODRIGUEZ NP",
+      specialties: [],
+      locations: [{
+        addressLine1: "3924 Mountview Rd",
+        addressLine2: null,
+        city: "Upper Arlington",
+        state: "OH",
+        zip: "43220",
+        citation: {
+          sourceUrl: healthgradesUrl,
+          sourceTitle: "Marina Rodriguez, NP - Nurse Practitioner in Upper Arlington, OH",
+          providerIdentitySpan: identitySpan,
+          factSpan: "Practice 1 Office 3924 Mountview Rd Upper Arlington, OH 43220",
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [{
+        value: "(614) 338-9158",
+        citation: {
+          sourceUrl: healthgradesUrl,
+          sourceTitle: "Marina Rodriguez, NP - Nurse Practitioner in Upper Arlington, OH",
+          providerIdentitySpan: identitySpan,
+          factSpan: "Practice 1 Office 3924 Mountview Rd Upper Arlington, OH 43220 (614) 338-9158",
+          explicitFactDateSpan: null
+        }
+      }],
+      websites: []
+    });
+
+    expect(extractResponseProvenanceMismatchUrls(raw.output_parsed.profiles, raw))
+      .toEqual([healthgradesUrl]);
+    const [parsed] = parseProviderProfilesFromResponse(raw);
+    expect(parsed.locations).toEqual([expect.objectContaining({
+      addressLine1: "3924 Mountview Rd",
+      city: "Upper Arlington",
+      zip: "43220"
+    })]);
+    expect(parsed.phoneNumbers).toEqual([
+      expect.objectContaining({ value: "(614) 338-9158" })
+    ]);
   });
 
   it("uses bounded canonical equivalence without cross-NPI NPPES substitution", () => {
