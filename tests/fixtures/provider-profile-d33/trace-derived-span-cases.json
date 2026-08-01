@@ -9,7 +9,7 @@
     {
       "caseId": "P001",
       "risk": "a shortened common name can attach another professional's contact facts to the requested provider",
-      "policy": "without exact NPI in the local identity span, require the exact requested professional name plus a compatible disambiguating organization or location"
+      "policy": "treat the shortened name as insufficient by itself, but permit page-level reconciliation through multiple compatible provider-specific biographical identifiers with no conflicting-provider evidence"
     }
   ]
 }

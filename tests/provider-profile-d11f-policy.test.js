@@ -6,7 +6,7 @@ const {
   providerProfileSystemInstructions
 } = require("../src/services/prompt-builder.service");
 
-const D33_SCHEMA_FILE_SHA256 = "fc1e8ea536c9b910948e374b705de59e791938d8f67cb4e9e1eabb1dd65d319a";
+const D33_SCHEMA_FILE_SHA256 = "997b415f1e01f373cdc41706e94ee7046d20a6556de30471813f8f202bff639c";
 
 describe("D11F field-local conflict and two-stage selection policy", () => {
   it("does not use stale suite/location hints as exclusion gates", () => {

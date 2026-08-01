@@ -61,17 +61,23 @@ describe("D33 balanced citation-span discipline", () => {
     expect(specialtyCitation.shape.factSpan.description).not.toMatch(/use another.*or omit the item/i);
   });
 
-  it("requires exact local identity and warns against shortened common-name attachment", () => {
+  it("allows shortened common names only after multi-identifier page-level reconciliation", () => {
     expect(traceFixture.provenance).toMatch(/Development-only.*No holdout data and no new model calls/i);
     expect(traceFixture.cases.map(({ caseId }) => caseId)).toEqual(["P024", "P001"]);
     for (const citation of [specialtyCitation, websiteCitation]) {
       expect(citation.shape.providerIdentitySpan.description).toMatch(
-        /either the exact requested NPI, or the exact requested professional name plus a compatible disambiguating organization or location/i
+        /ordinarily contain either the exact requested NPI, or the exact requested professional name plus a compatible disambiguating organization or location/i
       );
       expect(citation.shape.providerIdentitySpan.description).toMatch(
-        /shortened given-name-plus-surname passage is not exact.*common name.*same span contains the exact requested NPI/i
+        /shortened given-name-plus-surname passage without local NPI is insufficient by itself.*common name.*may serve as this item-local span.*multiple distinct compatible biographical identifiers.*training or education.*compatible specialty or location.*no conflicting-provider evidence/i
+      );
+      expect(citation.shape.providerIdentitySpan.description).toMatch(
+        /NPI and full requested name remain primary identity evidence.*Specialty alone, location alone.*never sufficient/i
       );
     }
+    expect(traceFixture.cases.find(({ caseId }) => caseId === "P001").policy).toMatch(
+      /insufficient by itself.*page-level reconciliation.*multiple compatible provider-specific biographical identifiers.*no conflicting-provider evidence/i
+    );
   });
 
   it("preserves D31B specialty semantics and no-ratings model contract", () => {
