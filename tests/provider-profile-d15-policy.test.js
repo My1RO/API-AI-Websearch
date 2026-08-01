@@ -25,13 +25,13 @@ describe("D15 Entity Type 2 same-base organizational safeguard", () => {
       /same base street but conflict on an added, missing, or different suite or organizational subpart, or conflict on phone/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /treat the first-party bundle as an unresolved organizational-identity conflict/i
+      /treat the conflicting address, suite, and phone field candidates as unresolved organizational-identity conflicts/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /First-party name, branding, apparent currentness, and base-street overlap cannot override that conflict/i
+      /First-party name, branding, apparent currentness, and base-street overlap cannot override those field conflicts/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Emit a conflicting suite or subpart, contact, or domain.*only when separate affirmative evidence either attaches that exact same value to the requested NPI or.*establishes shared or concurrent use/i
+      /Emit a conflicting suite, subpart, address, or phone only when separate affirmative evidence either attaches that exact same value to the requested NPI or.*establishes shared or concurrent use/i
     );
   });
 
@@ -76,7 +76,7 @@ describe("D15 Entity Type 2 same-base organizational safeguard", () => {
       /same-base organizational safeguard does not apply to an Entity Type 1 individual/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /identity-qualified current provider-specific page remains eligible under the other conflict rules/i
+      /exact-NPI, identity-qualified, active first-party provider page.*emit that eligible value and rank it first/i
     );
   });
 
@@ -88,7 +88,7 @@ describe("D15 Entity Type 2 same-base organizational safeguard", () => {
       /Entity Type 2 organization.*same-name first-party bundle at the same base street.*conflicts with exact-NPI evidence/i
     );
     expect(profileShape.websites.element.shape.value.description).toMatch(
-      /Entity Type 2 organization.*same-name first-party bundle at the same base street.*conflicts on phone or organizational subpart/i
+      /Evaluate the domain field-locally: an address, suite, or phone conflict alone does not implicate it/i
     );
   });
 });
