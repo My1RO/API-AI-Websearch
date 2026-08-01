@@ -11,7 +11,7 @@ const sourceUrlDescription = profileShape.specialties.element.shape.citation.sha
 describe("D18 readable-page and item-local citation contract", () => {
   it("prefers a readable same-value source inspected in this call", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /first an exact-provider first-party page, otherwise an exact-provider government page, otherwise a readable established exact-provider professional directory/i
+      /first-party page supports that same value.*Otherwise cite inspected same-value exact-provider government evidence.*professional-directory evidence/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /Readable page content returned with search counts.*bare result URL, title, snippet, source listing.*does not/i

@@ -23,10 +23,10 @@ describe("D27 field-local completion and same-value citation contract", () => {
 
   it("requires the best same-value citation without changing the selected value", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /MUST cite the highest-priority eligible inspected page that supports the same selected value/i
+      /mandatory citation-only pass.*same complete value or a faithful formatting equivalent/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /must never replace the selected value with a different value merely to obtain a higher source tier/i
+      /changes only the citation, never the selected value/i
     );
   });
 

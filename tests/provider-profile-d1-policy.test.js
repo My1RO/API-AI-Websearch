@@ -36,8 +36,8 @@ describe("D1 concise direct-citation policy", () => {
     const { providerProfileSystemInstructions } = loadPolicy();
 
     expect(providerProfileSystemInstructions).toMatch(/sourceUrl must be the exact URL associated with that readable fact-supporting page content/i);
-    expect(providerProfileSystemInstructions).toMatch(/Every emitted fact needs one direct citation tied to one exact consulted public page/i);
-    expect(providerProfileSystemInstructions).toMatch(/readable body or rendered content must have been returned and inspected in this call/i);
+    expect(providerProfileSystemInstructions).toMatch(/For each selected non-rating fact, inspect the readable exact-provider pages already consulted/i);
+    expect(providerProfileSystemInstructions).toMatch(/Never cite an unread, metadata-only, access-challenge, rate-limit, or error page/i);
     expect(providerProfileSystemInstructions).not.toMatch(/silently audit every fact|pre-emission audit/i);
   });
 

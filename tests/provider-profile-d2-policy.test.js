@@ -7,7 +7,7 @@ const {
 
 describe("D2 explicit citation-evidence contract", () => {
   it("binds every fact and both spans to one exact consulted page", () => {
-    expect(providerProfileSystemInstructions).toMatch(/tied to one exact consulted public page/i);
+    expect(providerProfileSystemInstructions).toMatch(/For each selected non-rating fact, inspect the readable exact-provider pages already consulted/i);
     expect(providerProfileSystemInstructions).toMatch(/not a search-results page, bare snippet, tool-action URL without readable page content, or a different corroborating page/i);
     expect(providerProfileSystemInstructions).toMatch(/short contiguous passage, or faithful rendered-text equivalent/i);
     expect(providerProfileSystemInstructions).toMatch(/Never repair a weak citation by borrowing identity or fact evidence from another page/i);

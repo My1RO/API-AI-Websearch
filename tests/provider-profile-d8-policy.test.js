@@ -29,7 +29,7 @@ describe("D8 concise single-pass synthesis", () => {
   });
 
   it("uses one page per direct fact citation and explicit-date semantics", () => {
-    expect(providerProfileSystemInstructions).toMatch(/Every emitted fact needs one direct citation/i);
+    expect(providerProfileSystemInstructions).toMatch(/perform one mandatory citation-only pass/i);
     expect(providerProfileSystemInstructions).toMatch(/factSpan.*from the same page/i);
     expect(providerProfileSystemInstructions).toMatch(/explicitFactDateSpan must be null unless/i);
     expect(citationShape.providerIdentitySpan.description).toMatch(/from this cited page/i);

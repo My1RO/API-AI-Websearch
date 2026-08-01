@@ -29,8 +29,8 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
   });
 
   it("selects citations only after eligibility from readable fact-supporting pages", () => {
-    expect(providerProfileSystemInstructions).toMatch(/After selecting an eligible value, choose its citation independently/i);
-    expect(providerProfileSystemInstructions).toMatch(/MUST cite the highest-priority eligible inspected page that supports the same selected value/i);
+    expect(providerProfileSystemInstructions).toMatch(/After values are fixed, perform one mandatory citation-only pass/i);
+    expect(providerProfileSystemInstructions).toMatch(/If any exact-provider first-party page supports that same value, cite the best such Q1 page/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not cite metadata-only, error, snippet-only, title-only, unavailable, or unread evidence/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not replace a more provider-specific fact with a different general value merely because.*source tier is higher/i);
     expect(providerProfileSystemInstructions).toMatch(/Citation choice cannot make an ineligible candidate eligible/i);
@@ -39,7 +39,7 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
 
   it("applies Q1 then Q2 then Q3 among eligible readable citations", () => {
     expect(providerProfileSystemInstructions).toMatch(/final source-hierarchy tie-breaker.*otherwise-equivalent eligible values, prefer an exact first-party provider or organization page, then an exact-provider government registry including NPPES, then an established exact-provider professional directory/i);
-    expect(providerProfileSystemInstructions).toMatch(/first an exact-provider first-party page, otherwise an exact-provider government page, otherwise a readable established exact-provider professional directory/i);
+    expect(providerProfileSystemInstructions).toMatch(/first-party page supports that same value.*Otherwise cite inspected same-value exact-provider government evidence.*professional-directory evidence/i);
   });
 
   it("retains D9 conflict and fact-date behavior plus D10 span completeness", () => {
