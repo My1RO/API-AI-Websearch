@@ -8,7 +8,7 @@ const {
 describe("D2 explicit citation-evidence contract", () => {
   it("binds every fact and both spans to one exact consulted page", () => {
     expect(providerProfileSystemInstructions).toMatch(/tied to one exact consulted public page/i);
-    expect(providerProfileSystemInstructions).toMatch(/not a search-results page, snippet, tool-action URL without readable opened content, or a different corroborating page/i);
+    expect(providerProfileSystemInstructions).toMatch(/not a search-results page, bare snippet, tool-action URL without readable page content, or a different corroborating page/i);
     expect(providerProfileSystemInstructions).toMatch(/short contiguous passage, or faithful rendered-text equivalent/i);
     expect(providerProfileSystemInstructions).toMatch(/Never repair a weak citation by borrowing identity or fact evidence from another page/i);
   });
@@ -22,8 +22,8 @@ describe("D2 explicit citation-evidence contract", () => {
     expect(dateDescription).toMatch(/generic page-update dates do not qualify/i);
   });
 
-  it("adds an in-call opened-page check without a separate audit payload or call", () => {
-    expect(providerProfileSystemInstructions).toMatch(/verify separately for every emitted item that its own sourceUrl was opened in this call/i);
+  it("adds an in-call readable-page check without a separate audit payload or call", () => {
+    expect(providerProfileSystemInstructions).toMatch(/verify separately for every emitted item that readable content from its own sourceUrl was inspected in this call/i);
     expect(providerProfileSystemInstructions).not.toMatch(/silent pre-emission audit|audit every candidate/i);
   });
 });

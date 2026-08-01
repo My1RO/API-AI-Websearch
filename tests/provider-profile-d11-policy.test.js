@@ -30,11 +30,11 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
 
   it("selects citations only after eligibility from readable fact-supporting pages", () => {
     expect(providerProfileSystemInstructions).toMatch(/After selecting an eligible value, choose its citation independently/i);
-    expect(providerProfileSystemInstructions).toMatch(/highest-priority eligible page whose body or rendered content you actually opened and inspected in this call/i);
+    expect(providerProfileSystemInstructions).toMatch(/highest-priority eligible page whose readable body or rendered content was returned and inspected in this call/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not cite metadata-only, error, snippet-only, title-only, unavailable, or unread evidence/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not replace a more provider-specific fact with a different general value merely because.*source tier is higher/i);
     expect(providerProfileSystemInstructions).toMatch(/Citation choice cannot make an ineligible candidate eligible/i);
-    expect(citationShape.sourceUrl.description).toMatch(/body or rendered content was opened and inspected in this call/i);
+    expect(citationShape.sourceUrl.description).toMatch(/readable body or rendered content was returned and inspected in this call/i);
   });
 
   it("applies Q1 then Q2 then Q3 among eligible readable citations", () => {

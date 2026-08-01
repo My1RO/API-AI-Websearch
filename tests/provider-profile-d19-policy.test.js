@@ -21,19 +21,19 @@ describe("D19 complete ratings and registry concurrency policy", () => {
     );
   });
 
-  it("requires a directly supported value and non-null scale for every rating", () => {
+  it("requires a directly supported value and never infers a rating scale", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /Emit a rating only when one opened exact-provider rating page directly provides both the exact numeric rating value and a non-null numeric maximum scale/i
+      /Emit a rating only when one consulted readable exact-provider rating page directly provides the exact numeric rating value/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/Omit the rating when either value or scale is unavailable or uncertain/i);
-    expect(ratingShape.scale.isNullable()).toBe(false);
-    expect(ratingShape.scale.description).toMatch(/non-null numeric maximum rating scale.*Do not infer a scale/i);
-    expect(profileShape.ratings.description).toMatch(/directly supported numeric value and non-null numeric maximum scale/i);
+    expect(providerProfileSystemInstructions).toMatch(/otherwise set scale to null.*Never infer a scale/i);
+    expect(ratingShape.scale.isNullable()).toBe(true);
+    expect(ratingShape.scale.description).toMatch(/or null when that page does not state the scale.*Never infer a scale/i);
+    expect(profileShape.ratings.description).toMatch(/directly supported numeric value.*otherwise set scale to null and never infer it/i);
   });
 
   it("does not substitute a review count for rating evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /do not copy a review count or another unrelated metric into the rating value, scale, or supporting span/i
+      /never copy a review count or another unrelated metric into the rating value, scale, or supporting span/i
     );
     expect(ratingShape.value.description).toMatch(/never a review count or another metric/i);
     expect(ratingShape.citation.description).toMatch(/Do not copy a review count or unrelated metric/i);

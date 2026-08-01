@@ -53,9 +53,9 @@ describe("D13 first-party inspection and implicated-website policy", () => {
   });
 
   it("requires a website span to establish the domain rather than another field", () => {
-    expect(providerProfileSystemInstructions).toMatch(/factSpan must establish the exact emitted domain or site/i);
-    expect(providerProfileSystemInstructions).toMatch(/never borrow an address-only or phone-only passage as website evidence/i);
-    expect(profileShape.websites.element.shape.citation.description).toMatch(/factSpan must establish the exact emitted domain or site/i);
+    expect(providerProfileSystemInstructions).toMatch(/factSpan must literally copy the full emitted URL/i);
+    expect(providerProfileSystemInstructions).toMatch(/borrow an address-only or phone-only passage as website evidence/i);
+    expect(profileShape.websites.element.shape.citation.description).toMatch(/factSpan must literally copy the full emitted URL/i);
     expect(profileShape.websites.element.shape.citation.description).toMatch(/address-only or phone-only passage cannot support a website/i);
   });
 });
