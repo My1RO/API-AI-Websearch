@@ -6,7 +6,7 @@ const {
   providerProfileSystemInstructions
 } = require("../src/services/prompt-builder.service");
 
-const D31C_SCHEMA_FILE_SHA256 = "1776ef3604f8a776678a087f414c4563d2d20d5ffe1d1bf11dffed8593a328b4";
+const D33_SCHEMA_FILE_SHA256 = "fc1e8ea536c9b910948e374b705de59e791938d8f67cb4e9e1eabb1dd65d319a";
 
 describe("D11F field-local conflict and two-stage selection policy", () => {
   it("does not use stale suite/location hints as exclusion gates", () => {
@@ -30,8 +30,8 @@ describe("D11F field-local conflict and two-stage selection policy", () => {
     expect(providerProfileSystemInstructions).toMatch(/This pass changes only the citation, never the selected value/i);
   });
 
-  it("pins the D31C field-specific structured-output policy", () => {
+  it("pins the D33 field-specific structured-output policy", () => {
     const bytes = fs.readFileSync(path.join(__dirname, "../src/validators/provider-profile.validator.ts"));
-    expect(crypto.createHash("sha256").update(bytes).digest("hex")).toBe(D31C_SCHEMA_FILE_SHA256);
+    expect(crypto.createHash("sha256").update(bytes).digest("hex")).toBe(D33_SCHEMA_FILE_SHA256);
   });
 });

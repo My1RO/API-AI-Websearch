@@ -1,0 +1,15 @@
+{
+  "provenance": "Development-only policy sentinels derived from canonical P024 and P001 traces. No holdout data and no new model calls.",
+  "cases": [
+    {
+      "caseId": "P024",
+      "risk": "a qualified first-party page can place exact-NPI evidence, exact provider name, and supported contact facts in separate readable regions",
+      "policy": "qualify identity from the whole page, then cite separate contiguous item-local identity and fact spans without demanding NPI in every span"
+    },
+    {
+      "caseId": "P001",
+      "risk": "a shortened common name can attach another professional's contact facts to the requested provider",
+      "policy": "without exact NPI in the local identity span, require the exact requested professional name plus a compatible disambiguating organization or location"
+    }
+  ]
+}

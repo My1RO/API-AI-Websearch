@@ -28,9 +28,10 @@ describe("D10 current-default and span-fidelity repair", () => {
   });
 
   it("binds identity and complete fact values within their own spans", () => {
-    expect(providerProfileSystemInstructions).toMatch(/providerIdentitySpan must contain the exact NPI when the page shows it/i);
+    expect(providerProfileSystemInstructions).toMatch(/providerIdentitySpan must contain either the exact requested NPI, or the exact requested professional name plus a compatible disambiguating organization or location/i);
+    expect(providerProfileSystemInstructions).toMatch(/Do not require providerIdentitySpan to contain NPI merely because the page displays NPI in another region/i);
     expect(providerProfileSystemInstructions).toMatch(/factSpan must contain the complete emitted value or faithful punctuation, whitespace, postal, or rendered-text equivalent/i);
-    expect(citationShape.providerIdentitySpan.description).toMatch(/exact requested NPI when the page shows it/i);
+    expect(citationShape.providerIdentitySpan.description).toMatch(/exact-NPI evidence in a separate region.*do not require this local span to contain NPI/i);
     expect(citationShape.factSpan.description).toMatch(/complete emitted value or faithful formatting equivalent/i);
   });
 
