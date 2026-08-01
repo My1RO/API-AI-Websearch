@@ -29,7 +29,7 @@ describe("D10 current-default and span-fidelity repair", () => {
 
   it("binds identity and complete fact values within their own spans", () => {
     expect(providerProfileSystemInstructions).toMatch(/providerIdentitySpan must contain the exact NPI when the page shows it/i);
-    expect(providerProfileSystemInstructions).toMatch(/factSpan must contain the complete emitted value or faithful formatting equivalent/i);
+    expect(providerProfileSystemInstructions).toMatch(/factSpan must contain the complete emitted value or faithful punctuation, whitespace, postal, or rendered-text equivalent/i);
     expect(citationShape.providerIdentitySpan.description).toMatch(/exact requested NPI when the page shows it/i);
     expect(citationShape.factSpan.description).toMatch(/complete emitted value or faithful formatting equivalent/i);
   });

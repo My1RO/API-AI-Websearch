@@ -16,14 +16,10 @@ describe("D26 trace-corrected production prompt contract", () => {
     expect(fixture.provenance).toMatch(/no model calls or holdout data/i);
   });
 
-  it("removes fallback rating search while retaining surfaced ratings", () => {
-    expect(providerProfileSystemInstructions).toMatch(/Ratings remain eligible only when a numeric lead surfaces/i);
-    expect(providerProfileSystemInstructions).toMatch(/(?:do not|never) run a dedicated rating or reviews query/i);
+  it("allows one bounded rating query only after mandatory provider work", () => {
+    expect(providerProfileSystemInstructions).toMatch(/only after mandatory identity, first-party, contact.*run at most one dedicated exact-provider rating query/i);
     expect(providerProfileSystemInstructions).toMatch(
       /After exact-NPI identity, do not answer until this action order is complete: FIRST obtain readable content.*first-party page.*SECOND inspect.*alternate-NPI evidence.*THIRD.*rating page/i
-    );
-    expect(providerProfileSystemInstructions).not.toMatch(
-      /run one exact-provider name plus NPI rating or reviews query/i
     );
   });
 
