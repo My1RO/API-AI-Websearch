@@ -6,7 +6,7 @@ const {
   providerProfileSystemInstructions
 } = require("../src/services/prompt-builder.service");
 
-const D23_SCHEMA_FILE_SHA256 = "593cd9073415360c5226f531e9d7b35cf3c35a492ba3bf61b6d1786c9e49537a";
+const D24_SCHEMA_FILE_SHA256 = "35f4901a468d43df00aefa6629cdf3b2f5bfe3442eda5252eff300266200767c";
 
 describe("D11F field-local conflict and two-stage selection policy", () => {
   it("does not use stale suite/location hints as exclusion gates", () => {
@@ -16,7 +16,8 @@ describe("D11F field-local conflict and two-stage selection policy", () => {
 
   it("still excludes any fact expressly co-bound to another NPI operation", () => {
     expect(providerProfileSystemInstructions).toMatch(/expressly co-binds a candidate or its operational bundle to another NPI or another provider operation/i);
-    expect(providerProfileSystemInstructions).toMatch(/Omit an implicated candidate unless.*exact same value to the requested NPI/i);
+    expect(providerProfileSystemInstructions).toMatch(/Omit an implicated non-domain candidate unless.*exact same value to the requested NPI/i);
+    expect(providerProfileSystemInstructions).toMatch(/For an implicated domain, use only the domain-specific attachment and rescue rules that follow/i);
   });
 
   it("uses hierarchy only after semantic value selection", () => {
@@ -29,8 +30,8 @@ describe("D11F field-local conflict and two-stage selection policy", () => {
     expect(providerProfileSystemInstructions).toMatch(/citation selection must not revisit or replace the selected value/i);
   });
 
-  it("pins the D23 field-specific structured-output policy", () => {
+  it("pins the D24 field-specific structured-output policy", () => {
     const bytes = fs.readFileSync(path.join(__dirname, "../src/validators/provider-profile.validator.ts"));
-    expect(crypto.createHash("sha256").update(bytes).digest("hex")).toBe(D23_SCHEMA_FILE_SHA256);
+    expect(crypto.createHash("sha256").update(bytes).digest("hex")).toBe(D24_SCHEMA_FILE_SHA256);
   });
 });

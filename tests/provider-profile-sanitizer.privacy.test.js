@@ -157,6 +157,37 @@ describe("provider profile sanitizer", () => {
     ]);
   });
 
+  it("keeps a website only when its value canonically matches its own citation URL", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      websites: [{
+        value: "https://care.example.org/provider/1234567890/",
+        citation: {
+          sourceUrl: "https://care.example.org/provider/1234567890",
+          sourceTitle: "Provider page",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "The Cleveland Clinic Foundation provider profile",
+          explicitFactDateSpan: null
+        }
+      }, {
+        value: "https://wrong.example.org/provider/1234567890",
+        citation: {
+          sourceUrl: "https://care.example.org/provider/1234567890",
+          sourceTitle: "Provider page",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "The Cleveland Clinic Foundation provider profile",
+          explicitFactDateSpan: null
+        }
+      }]
+    }], {
+      allowedSourceUrls: ["https://care.example.org/provider/1234567890"]
+    });
+
+    expect(profile.websites).toEqual([
+      expect.objectContaining({ value: "https://care.example.org/provider/1234567890/" })
+    ]);
+  });
+
   it("rejects literal personal phone labels without semantically classifying an unlabeled number by domain", () => {
     const profiles = sanitizeProviderProfiles([{
       ...baseProfile,

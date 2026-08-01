@@ -22,7 +22,7 @@ describe("D20 completion and citation repair", () => {
   it("requires the emitted website and citation to use the exact opened page URL", () => {
     expect(providerProfileSystemInstructions).toMatch(/website value must be the exact URL of the consulted readable provider.*page/i);
     expect(providerProfileSystemInstructions).toMatch(/Never construct or generalize an inspected subpage into an uninspected root/i);
-    expect(websiteShape.value.description).toMatch(/exact URL of the consulted readable provider.*page/i);
+    expect(websiteShape.value.description).toMatch(/exact URL of a consulted readable provider-specific or organization-specific provider.*page/i);
     expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/exact URL of this consulted readable provider.*page/i);
     expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/must exactly equal the emitted website value/i);
   });

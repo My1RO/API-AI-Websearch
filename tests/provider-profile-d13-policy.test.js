@@ -25,8 +25,9 @@ describe("D13 first-party inspection and implicated-website policy", () => {
       /expressly co-binds a candidate or its operational bundle to another NPI or another provider operation/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Omit an implicated candidate unless separate affirmative evidence explicitly attaches the exact same value to the requested NPI and establishes nonexclusive or shared use/i
+      /Omit an implicated non-domain candidate unless separate affirmative evidence explicitly attaches the exact same value to the requested NPI and establishes nonexclusive or shared use/i
     );
+    expect(providerProfileSystemInstructions).toMatch(/For an implicated domain, use only the domain-specific attachment and rescue rules that follow/i);
     expect(providerProfileSystemInstructions).toMatch(
       /exact-NPI evidence about a different value is insufficient/i
     );
@@ -54,7 +55,7 @@ describe("D13 first-party inspection and implicated-website policy", () => {
 
   it("uses sourceUrl as direct URL evidence while requiring page-local operation evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(/sourceUrl is the direct URL evidence/i);
-    expect(providerProfileSystemInstructions).toMatch(/page-local text that establishes the exact provider or compatible organization operates that page or site/i);
+    expect(providerProfileSystemInstructions).toMatch(/page-local text that identifies the exact requested provider or compatible organization on that provider-specific or organization-specific page/i);
     expect(profileShape.websites.element.shape.citation.description).toMatch(/sourceUrl itself is the website URL evidence/i);
     expect(profileShape.websites.element.shape.citation.description).toMatch(/address-only or phone-only passage cannot support a website/i);
   });

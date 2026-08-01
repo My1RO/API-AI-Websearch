@@ -210,7 +210,11 @@ const sanitizeWebsite = (
     return undefined;
   }
   const website = safePublicUrl(value.value);
-  return website ? { value: website, citation } : undefined;
+  const websiteKey = canonicalPublicProvenanceUrl(website);
+  const citationKey = canonicalPublicProvenanceUrl(citation.sourceUrl);
+  return website && websiteKey && websiteKey === citationKey
+    ? { value: website, citation }
+    : undefined;
 };
 
 const optionalAddressPart = (value: string | null | undefined, maximum: number): string | null => {

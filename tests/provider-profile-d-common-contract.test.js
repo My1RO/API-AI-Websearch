@@ -158,20 +158,20 @@ describe("common D-series production contract", () => {
     expect(sanitizeProviderProfilesForRequest([{ ...exactIdentity, npi: "1098765432" }], request)).toEqual([]);
   });
 
-  it("retains a specialty-only profile and a homepage supported by a different cited page", () => {
+  it("retains a specialty-only profile and a website equal to its directly cited page", () => {
     const firstPartyEvidence = "https://provider.example.org/about/ada-smith";
     const [sanitized] = sanitizeProviderProfiles([profile({
       specialties: [{ value: "Family Medicine", citation: citation("Family Medicine") }],
       phoneNumbers: [],
       websites: [{
-        value: "https://provider.example.org/",
+        value: firstPartyEvidence,
         citation: citation("Ada Smith practices with Provider Example", firstPartyEvidence)
       }]
     })], { allowedSourceUrls: [sourceUrl, firstPartyEvidence] });
 
     expect(sanitized.specialties).toHaveLength(1);
     expect(sanitized.websites[0]).toEqual(expect.objectContaining({
-      value: "https://provider.example.org/",
+      value: firstPartyEvidence,
       citation: expect.objectContaining({ sourceUrl: firstPartyEvidence })
     }));
   });

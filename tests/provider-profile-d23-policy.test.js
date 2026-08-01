@@ -30,6 +30,7 @@ describe("D23 mandatory first-party inspection and direct website citation", () 
     expect(websiteShape.value.description).toMatch(/must equal this item's citation\.sourceUrl/i);
     expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/direct URL evidence/i);
     expect(websiteShape.citation.shape.factSpan.description).toMatch(/span need not repeat the URL/i);
-    expect(websiteShape.citation.shape.factSpan.description).toMatch(/operates this page or site/i);
+    expect(websiteShape.citation.shape.factSpan.description).toMatch(/provider-specific or organization-specific page/i);
+    expect(websiteShape.citation.shape.factSpan.description).toMatch(/need not repeat the URL or state who technically operates the site/i);
   });
 });

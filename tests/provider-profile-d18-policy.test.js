@@ -40,7 +40,7 @@ describe("D18 readable-page and item-local citation contract", () => {
     );
     expect(providerProfileSystemInstructions).toMatch(/sourceUrl is the direct URL evidence/i);
     expect(profileShape.websites.element.shape.value.description).toMatch(
-      /exact URL of the consulted readable provider.*page.*must equal this item's citation\.sourceUrl/i
+      /exact URL of a consulted readable provider-specific or organization-specific provider.*page.*must equal this item's citation\.sourceUrl/i
     );
     expect(profileShape.websites.element.shape.citation.description).toMatch(
       /sourceUrl itself is the website URL evidence.*factSpan need not repeat the URL.*Title-only evidence is insufficient/i

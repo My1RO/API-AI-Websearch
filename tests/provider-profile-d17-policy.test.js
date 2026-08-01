@@ -35,7 +35,7 @@ describe("D17 field-local conflicts and current first-party precedence", () => {
 
   it("allows explicit rebrand or ownership continuity to attach a current domain", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence.*may rescue the current domain/i
+      /explicit rebranding, acquisition, ownership-continuity, or redirect evidence.*may rescue it/i
     );
     expect(profileShape.websites.element.shape.value.description).toMatch(
       /Explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence may establish that attachment/i

@@ -23,7 +23,7 @@ describe("D21 narrow exact-identity domain rescue", () => {
 
   it("fails closed on affirmative domain-to-other-entity evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /domain is eligible unless affirmative readable evidence binds that domain to a different NPI, organizational subpart, or provider operation/i
+      /Absent such domain-specific attachment or rescue evidence, omit the domain when affirmative readable evidence binds that domain to a different NPI, organizational subpart, or provider operation/i
     );
     expect(websiteShape.value.description).toMatch(
       /Omit the domain when affirmative readable evidence binds it to a conflicting organizational subpart, different NPI, or different provider operation/i
