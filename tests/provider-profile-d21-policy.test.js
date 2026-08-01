@@ -10,14 +10,15 @@ const websiteShape = providerProfileStructuredOutputSchema.shape.profiles.elemen
 describe("D21 narrow exact-identity domain rescue", () => {
   it("attaches a current first-party domain through exact-NPI legal, DBA, or alias evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /readable exact-NPI evidence that confirms the requested organization's legal, DBA, or alias name may attach a current first-party domain/i
+      /otherwise-unimplicated domain only, readable exact-NPI evidence that confirms the requested organization's legal, DBA, or alias name/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /readable content from that domain co-binds that exact confirmed name to a complete compatible professional street address with city, state, and ZIP/i
+      /readable content from the inspected first-party page that co-binds that exact confirmed name to the requested organization is sufficient attachment/i
     );
+    expect(providerProfileSystemInstructions).toMatch(/complete professional address corroborates this attachment but is not mandatory/i);
     expect(providerProfileSystemInstructions).toMatch(/The first-party page need not repeat the NPI/i);
     expect(websiteShape.value.description).toMatch(
-      /exact-NPI evidence confirming the organization's legal, DBA, or alias name.*co-binds that exact name to a complete compatible professional street address with city, state, and ZIP/i
+      /exact-NPI evidence confirming the organization's legal, DBA, or alias name.*co-binds that exact confirmed name to the requested organization.*exact consulted page URL as the website/i
     );
   });
 

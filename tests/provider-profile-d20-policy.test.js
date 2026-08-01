@@ -10,10 +10,12 @@ const ratingShape = profileShape.ratings.element.shape;
 const websiteShape = profileShape.websites.element.shape;
 
 describe("D20 completion and citation repair", () => {
-  it("uses remaining search budget to inspect plausible first-party and rating pages before omission", () => {
+  it("uses remaining search budget for mandatory first-party work before optional surfaced ratings", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /Before omitting a website or rating, or choosing a lower-tier or different-value source instead, inspect a surfaced plausible exact-provider first-party or rating page/i
+      /Before omitting a website or choosing a lower-tier or different-value source instead, inspect a surfaced plausible exact-provider first-party page/i
     );
+    expect(providerProfileSystemInstructions).toMatch(/Ratings remain eligible only when a numeric lead surfaces/i);
+    expect(providerProfileSystemInstructions).toMatch(/do not run a dedicated rating or reviews query/i);
     expect(providerProfileSystemInstructions).toMatch(/bare result URL, title, snippet, source listing.*does not/i);
     expect(providerProfileSystemInstructions).toMatch(/Readable page content returned with search counts/i);
     expect(providerProfileSystemInstructions).toMatch(/one consulted readable exact-provider rating page directly provides the exact numeric rating value/i);

@@ -19,7 +19,7 @@ describe("D24 broadened discovery and unified domain attachment", () => {
     expect(providerProfileSystemInstructions).toMatch(
       /For an implicated domain, only explicit rebranding, acquisition, ownership-continuity, or redirect evidence.*shared or concurrent use.*may rescue it/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/legal, DBA, or alias plus compatible complete-address rule may attach an otherwise unimplicated domain only/i);
+    expect(providerProfileSystemInstructions).toMatch(/ordinary exact-name attachment rule never rescues a domain implicated/i);
     expect(providerProfileSystemInstructions).toMatch(/Absent such domain-specific attachment or rescue evidence, omit the domain/i);
   });
 

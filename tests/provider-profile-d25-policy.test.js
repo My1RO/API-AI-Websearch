@@ -10,10 +10,10 @@ const websiteShape = providerProfileStructuredOutputSchema.shape.profiles.elemen
 describe("D25 same-name different-NPI website conflict resolution", () => {
   it("prioritizes a surfaced first-party page over redundant registry inspection", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /do not inspect a second registry or directory while a surfaced plausible first-party page remains uninspected/i
+      /first inspect a surfaced plausible exact-provider first-party page/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /inspect that first-party page next, unless its readable body was already returned with search/i
+      /Do not inspect a redundant registry or directory while required first-party or relevant alternate-NPI evidence remains uninspected/i
     );
   });
 
@@ -41,17 +41,11 @@ describe("D25 same-name different-NPI website conflict resolution", () => {
 
   it("does not let name plus compatible address rescue an implicated domain", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /legal, DBA, or alias plus compatible complete-address rule may attach an otherwise unimplicated domain only/i
+      /ordinary exact-name attachment rule never rescues a domain implicated/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /never rescues a domain implicated by a different NPI, organizational subpart, or provider operation/i
     );
   });
 
-  it("uses remaining search budget for one exact-provider rating query", () => {
-    expect(providerProfileSystemInstructions).toMatch(
-      /if no numeric rating lead has surfaced and tool budget remains, run one exact-provider name plus NPI rating or reviews query/i
-    );
-    expect(providerProfileSystemInstructions).toMatch(/before leaving ratings empty/i);
-  });
 });

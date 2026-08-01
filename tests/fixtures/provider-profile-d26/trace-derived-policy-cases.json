@@ -1,0 +1,32 @@
+{
+  "provenance": "Compact policy fixtures derived from fresh D25 pilot traces. They contain only public provider evidence and expected prompt-contract outcomes; no model calls or holdout data.",
+  "cases": [
+    {
+      "caseId": "P009",
+      "scenario": "exact_npi_name_address_first_party_attachment",
+      "exactNpiName": "CORAL WEST COMMUNITY HOSPITAL",
+      "firstPartyUrl": "https://www.cwcommunityhospital.com/",
+      "completeAddress": "2500 SW 75 Avenue, Miami, FL 33155",
+      "expectedPolicy": "emit_exact_consulted_page_url"
+    },
+    {
+      "caseId": "P035",
+      "scenario": "registry_secondary_location_conflicts_with_surfaced_first_party",
+      "registryLabel": "Secondary Practice Location",
+      "surfacedFirstPartyUrl": "https://www.uhhospitals.org/doctors/Brown-India-1629635941",
+      "expectedPolicy": "inspect_first_party_before_redundant_registry_and_do_not_infer_concurrency"
+    },
+    {
+      "caseId": "P039",
+      "scenario": "same_name_alternate_npi_surfaced",
+      "alternateNpi": "1518700202",
+      "expectedPolicy": "inspect_alternate_npi_or_omit_website"
+    },
+    {
+      "caseId": "P020",
+      "scenario": "rating_lead_surfaced_during_mandatory_work",
+      "rating": "4.6",
+      "expectedPolicy": "rating_remains_eligible_without_fallback_rating_query"
+    }
+  ]
+}
