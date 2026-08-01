@@ -1,8 +1,10 @@
+const fs = require("node:fs");
+const path = require("node:path");
+
 const ORIGINAL_ENV = process.env;
 
-const loadRuntimeWithEnv = (overrides = {}) => {
-  jest.resetModules();
-  process.env = {
+const configureTestEnv = (overrides = {}) => {
+  const nextEnv = {
     ...ORIGINAL_ENV,
     NODE_ENV: "test",
     AI_FEATURE_ENABLED: "true",
@@ -13,7 +15,27 @@ const loadRuntimeWithEnv = (overrides = {}) => {
     ...overrides
   };
 
+  for (const [key, value] of Object.entries(nextEnv)) {
+    if (value === undefined) {
+      delete nextEnv[key];
+    }
+  }
+
+  process.env = nextEnv;
+};
+
+const loadRuntimeWithEnv = (overrides = {}) => {
+  jest.resetModules();
+  configureTestEnv(overrides);
+
   return require("../src/config/runtime");
+};
+
+const loadEnvWithEnv = (overrides = {}) => {
+  jest.resetModules();
+  configureTestEnv(overrides);
+
+  return require("../src/config/env");
 };
 
 describe("Azure-only AI runtime fail-closed configuration", () => {
@@ -122,5 +144,34 @@ describe("Azure-only AI runtime fail-closed configuration", () => {
       ready: true,
       baseUrl: "https://foundry-lucie-ai.openai.azure.com/openai/v1"
     });
+  });
+
+  it.each([undefined, ""])("defaults an absent deployment and reasoning value (%p) to Terra low", absentValue => {
+    const { env } = loadEnvWithEnv({
+      AZURE_OPENAI_DEPLOYMENT: absentValue,
+      AI_REASONING_EFFORT: absentValue
+    });
+
+    expect(env.azureOpenAiDeployment).toBe("gpt-5.6-terra");
+    expect(env.aiReasoningEffort).toBe("low");
+  });
+
+  it("preserves explicit deployment and reasoning overrides", () => {
+    const { env } = loadEnvWithEnv({
+      AZURE_OPENAI_DEPLOYMENT: "gpt-5.6-sol",
+      AI_REASONING_EFFORT: "high"
+    });
+
+    expect(env.azureOpenAiDeployment).toBe("gpt-5.6-sol");
+    expect(env.aiReasoningEffort).toBe("high");
+  });
+
+  it("documents non-secret local defaults without embedding Azure credentials", () => {
+    const envTemplate = fs.readFileSync(path.join(__dirname, "../.env.dist"), "utf8");
+
+    expect(envTemplate).toMatch(/^AZURE_OPENAI_ENDPOINT=$/m);
+    expect(envTemplate).toMatch(/^AZURE_OPENAI_API_KEY=$/m);
+    expect(envTemplate).toMatch(/^AZURE_OPENAI_DEPLOYMENT=gpt-5\.6-terra$/m);
+    expect(envTemplate).toMatch(/^AI_REASONING_EFFORT=low$/m);
   });
 });
