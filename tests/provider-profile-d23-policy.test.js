@@ -21,7 +21,7 @@ describe("D23 mandatory first-party inspection and direct website citation", () 
       /reconcile every first-party suite, phone, address, and domain bundle against the requested NPI/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /do reject it when the website itself co-binds the conflicting different-NPI bundle/i
+      /site and domain are implicated rather than merely affected by an unrelated field conflict/i
     );
     expect(websiteShape.value.description).toMatch(/unresolved different-NPI or different-operation bundle/i);
   });
