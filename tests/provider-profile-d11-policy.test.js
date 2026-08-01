@@ -17,13 +17,14 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
     expect(providerProfileSystemInstructions).toMatch(/Apply this field-locally and preserve unrelated facts/i);
   });
 
-  it("treats websites as bundled candidates and requires independent sharing evidence", () => {
-    expect(providerProfileSystemInstructions).toMatch(/website as a candidate inside its page, address, phone, and organization bundle/i);
+  it("reconciles websites field-locally and requires independent sharing evidence", () => {
+    expect(providerProfileSystemInstructions).toMatch(/suite, address, or phone conflict does not by itself implicate a website/i);
+    expect(providerProfileSystemInstructions).toMatch(/Treat a domain as implicated only when readable evidence binds that exact domain/i);
     expect(providerProfileSystemInstructions).toMatch(/shared-asset exception uses separate affirmative evidence that attaches the exact same value to the requested provider/i);
     expect(providerProfileSystemInstructions).toMatch(/exact requested NPI, or by exact requested name plus compatible organization or location on a provider-specific page/i);
     expect(providerProfileSystemInstructions).toMatch(/establishes nonexclusive or shared use/i);
     expect(providerProfileSystemInstructions).toMatch(/Same branding, general affiliation, a health-system homepage, or absence of exclusivity is insufficient/i);
-    expect(profileShape.websites.element.shape.value.description).toMatch(/reconciled as a candidate within its page, address, phone, and organization bundle/i);
+    expect(profileShape.websites.element.shape.value.description).toMatch(/Evaluate the domain field-locally/i);
     expect(profileShape.websites.element.shape.citation.description).toMatch(/exact requested name plus compatible organization or location/i);
   });
 
