@@ -19,7 +19,7 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
 
   it("treats websites as bundled candidates and requires independent sharing evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(/website as a candidate inside its page, address, phone, and organization bundle/i);
-    expect(providerProfileSystemInstructions).toMatch(/separate affirmative evidence attaches the exact same value to the requested provider/i);
+    expect(providerProfileSystemInstructions).toMatch(/shared-asset exception uses separate affirmative evidence that attaches the exact same value to the requested provider/i);
     expect(providerProfileSystemInstructions).toMatch(/exact requested NPI, or by exact requested name plus compatible organization or location on a provider-specific page/i);
     expect(providerProfileSystemInstructions).toMatch(/establishes nonexclusive or shared use/i);
     expect(providerProfileSystemInstructions).toMatch(/Same branding, general affiliation, a health-system homepage, or absence of exclusivity is insufficient/i);

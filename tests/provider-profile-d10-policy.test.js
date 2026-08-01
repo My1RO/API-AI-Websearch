@@ -36,7 +36,7 @@ describe("D10 current-default and span-fidelity repair", () => {
 
   it("retains D8 entity safety and current-domain behavior", () => {
     expect(providerProfileSystemInstructions).toMatch(/assigns a candidate, or a bundle that exclusively co-binds it, to another NPI or another provider operation/i);
-    expect(providerProfileSystemInstructions).toMatch(/shared-asset exception.*separate affirmative evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/shared-asset exception uses separate affirmative evidence/i);
     expect(providerProfileSystemInstructions).toMatch(/prefer the qualified first-party domain and omit the unresolved alternate/i);
   });
 });

@@ -17,8 +17,8 @@ describe("D8 concise single-pass synthesis", () => {
 
   it("handles candidate-specific NPI conflicts and shared assets", () => {
     expect(providerProfileSystemInstructions).toMatch(/assigns a candidate, or a bundle that exclusively co-binds it, to another NPI or another provider operation/i);
-    expect(providerProfileSystemInstructions).toMatch(/shared-asset exception.*separate affirmative evidence/i);
-    expect(providerProfileSystemInstructions).toMatch(/incompatible suite or location by itself excludes only a location-scoped contact candidate/i);
+    expect(providerProfileSystemInstructions).toMatch(/shared-asset exception uses separate affirmative evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/suite or location mismatch by itself is not express another-NPI or another-operation evidence/i);
   });
 
   it("keeps undated evidence eligible and orders only qualified facts", () => {

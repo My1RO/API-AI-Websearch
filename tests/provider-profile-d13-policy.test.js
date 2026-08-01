@@ -1,6 +1,11 @@
 const {
   providerProfileSystemInstructions
 } = require("../src/services/prompt-builder.service");
+const {
+  providerProfileStructuredOutputSchema
+} = require("../src/validators/provider-profile.validator");
+
+const profileShape = providerProfileStructuredOutputSchema.shape.profiles.element.shape;
 
 describe("D13 first-party inspection and implicated-website policy", () => {
   it("treats search source metadata as discovery rather than page-body evidence", () => {
@@ -15,21 +20,42 @@ describe("D13 first-party inspection and implicated-website policy", () => {
     );
   });
 
-  it("requires exact-NPI shared-use proof only for an implicated website bundle", () => {
+  it("requires exact-NPI shared-use proof for any expressly implicated candidate", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /inspected website's address, phone, and operation bundle is affirmatively assigned.*another NPI/i
+      /expressly co-binds a candidate or its operational bundle to another NPI or another provider operation/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /omit it unless separate affirmative evidence explicitly attaches that exact domain to the requested NPI and establishes nonexclusive or shared use/i
+      /Omit an implicated candidate unless separate affirmative evidence explicitly attaches the exact same value to the requested NPI and establishes nonexclusive or shared use/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Same name, branding, base-address overlap, general affiliation, or absence of exclusivity is insufficient for this implicated website/i
+      /exact-NPI evidence about a different value is insufficient/i
     );
   });
 
   it("preserves field-local and ordinary shared-asset handling", () => {
-    expect(providerProfileSystemInstructions).toMatch(/For other candidates, the shared-asset exception applies/i);
+    expect(providerProfileSystemInstructions).toMatch(/For an ordinary candidate not expressly co-bound.*do not demand proof that the asset is exclusive/i);
     expect(providerProfileSystemInstructions).toMatch(/Apply this field-locally and preserve unrelated facts/i);
     expect(providerProfileSystemInstructions).toMatch(/Undated supported evidence remains eligible/i);
+  });
+
+  it("treats request location as a stale search seed rather than a current-truth gate", () => {
+    expect(providerProfileSystemInstructions).toMatch(/Requested city, state, and ZIP may be stale/i);
+    expect(providerProfileSystemInstructions).toMatch(/search seeds and disambiguation hints, not current-truth gates/i);
+    expect(providerProfileSystemInstructions).toMatch(/location mismatch alone cannot reject an identity-qualified current or additional first-party professional contact/i);
+  });
+
+  it("uses operational-currentness without inventing a fact date", () => {
+    expect(providerProfileSystemInstructions).toMatch(/Only after a candidate has passed exact-provider identity and other-NPI or other-operation reconciliation/i);
+    expect(providerProfileSystemInstructions).toMatch(/inspected active provider-specific first-party page.*operational-currentness evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/Presumptively select that eligible value over an undated registry or directory alternate/i);
+    expect(providerProfileSystemInstructions).toMatch(/cannot make an ineligible or implicated different-NPI or different-operation candidate eligible and cannot rescue one/i);
+    expect(providerProfileSystemInstructions).toMatch(/keep explicitFactDateSpan null/i);
+  });
+
+  it("requires a website span to establish the domain rather than another field", () => {
+    expect(providerProfileSystemInstructions).toMatch(/factSpan must establish the exact emitted domain or site/i);
+    expect(providerProfileSystemInstructions).toMatch(/never borrow an address-only or phone-only passage as website evidence/i);
+    expect(profileShape.websites.element.shape.citation.description).toMatch(/factSpan must establish the exact emitted domain or site/i);
+    expect(profileShape.websites.element.shape.citation.description).toMatch(/address-only or phone-only passage cannot support a website/i);
   });
 });
