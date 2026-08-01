@@ -1,0 +1,25 @@
+{
+  "provenance": "Development-only abstractions derived from the sealed D33/D34/D35 R8 pilot, fixed gpt-5.6-sol/high judgments, and manual review of the two evaluator-overflow packets. No holdout data, network access, or new model calls were used.",
+  "scenarios": [
+    {
+      "scenarioId": "exact-source-quotation-vs-normalized-output",
+      "developmentSignal": "A selected fact was supported, but its citation span inserted a label or transformed source wording to resemble the normalized output.",
+      "requiredBehavior": "Keep factSpan as an exact contiguous source quotation while allowing the separately emitted value to normalize the supported fact."
+    },
+    {
+      "scenarioId": "field-local-evidence-before-hierarchy",
+      "developmentSignal": "A higher-tier page established identity but did not expose one field, creating a risk that eligible lower-tier fact evidence would be omitted or borrowed.",
+      "requiredBehavior": "Qualify each source for the exact field first; if Q1 lacks that fact, emit eligible exact-provider Q2 or Q3 evidence instead of withholding the field."
+    },
+    {
+      "scenarioId": "first-party-biography-website",
+      "developmentSignal": "A provider-specific first-party biography or team page was omitted because it lacked NPI or contact parity despite strong page-local identity evidence.",
+      "requiredBehavior": "Treat an unambiguous full-name, compatible-credential-or-specialty, compatible-practice-or-location first-party biography as an eligible website absent affirmative former, wrong-provider, or incompatible-operation evidence."
+    },
+    {
+      "scenarioId": "bounded-search-stop",
+      "developmentSignal": "A treatment repeated broad searches after sufficient fact-local evidence, increasing arm-owned source volume without changing the returned profile.",
+      "requiredBehavior": "Stop once identity, selected fact-local support, required first-party inspection, and relevant conflict resolution are complete; do not chase unrelated providers, NPIs, or duplicate queries."
+    }
+  ]
+}
