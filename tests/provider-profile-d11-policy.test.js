@@ -25,21 +25,21 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
     expect(providerProfileSystemInstructions).toMatch(/establishes nonexclusive or shared use/i);
     expect(providerProfileSystemInstructions).toMatch(/Same branding, general affiliation, a health-system homepage, or absence of exclusivity is insufficient/i);
     expect(profileShape.websites.element.shape.value.description).toMatch(/Evaluate the domain field-locally/i);
-    expect(profileShape.websites.element.shape.citation.description).toMatch(/exact requested name plus compatible organization or location/i);
+    expect(profileShape.websites.element.shape.citation.description).toMatch(/providerIdentitySpan must identify the requested provider/i);
   });
 
   it("selects citations only after eligibility from readable fact-supporting pages", () => {
     expect(providerProfileSystemInstructions).toMatch(/After selecting an eligible value, choose its citation independently/i);
-    expect(providerProfileSystemInstructions).toMatch(/highest-priority eligible page whose body or rendered content you actually inspected/i);
+    expect(providerProfileSystemInstructions).toMatch(/highest-priority eligible page whose body or rendered content you actually opened and inspected in this call/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not cite metadata-only, error, snippet-only, title-only, unavailable, or unread evidence/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not replace a more provider-specific fact with a different general value merely because.*source tier is higher/i);
     expect(providerProfileSystemInstructions).toMatch(/Citation choice cannot make an ineligible candidate eligible/i);
-    expect(citationShape.sourceUrl.description).toMatch(/body or rendered content was read/i);
+    expect(citationShape.sourceUrl.description).toMatch(/body or rendered content was opened and inspected in this call/i);
   });
 
   it("applies Q1 then Q2 then Q3 among eligible readable citations", () => {
     expect(providerProfileSystemInstructions).toMatch(/final source-hierarchy tie-breaker.*otherwise-equivalent eligible values, prefer an exact first-party provider or organization page, then an exact-provider government registry including NPPES, then an established exact-provider professional directory/i);
-    expect(providerProfileSystemInstructions).toMatch(/Prefer the highest-priority eligible page whose body or rendered content you actually inspected/i);
+    expect(providerProfileSystemInstructions).toMatch(/Prefer, in order, a same-value inspected first-party provider page, a same-value inspected government exact-provider page, then another readable established exact-provider professional directory/i);
   });
 
   it("retains D9 conflict and fact-date behavior plus D10 span completeness", () => {

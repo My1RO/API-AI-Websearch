@@ -32,12 +32,12 @@ describe("D1 concise direct-citation policy", () => {
     expect(prompt).toContain('"city":"MIAMI","state":"FL","zip":"33129"');
   });
 
-  it("uses broad consulted-page provenance and contains no open-page requirement", () => {
+  it("uses exact opened-page provenance without a second-call audit", () => {
     const { providerProfileSystemInstructions } = loadPolicy();
 
-    expect(providerProfileSystemInstructions).toMatch(/sourceUrl must be that exact fact-supporting page/i);
+    expect(providerProfileSystemInstructions).toMatch(/sourceUrl must be that exact opened fact-supporting page/i);
     expect(providerProfileSystemInstructions).toMatch(/Every emitted fact needs one direct citation tied to one exact consulted public page/i);
-    expect(providerProfileSystemInstructions).not.toMatch(/open_page|opened page|must be opened/i);
+    expect(providerProfileSystemInstructions).toMatch(/opened and inspected in this call/i);
     expect(providerProfileSystemInstructions).not.toMatch(/silently audit every fact|pre-emission audit/i);
   });
 

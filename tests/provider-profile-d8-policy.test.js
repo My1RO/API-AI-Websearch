@@ -37,8 +37,8 @@ describe("D8 concise single-pass synthesis", () => {
   });
 
   it("keeps current-domain imputation narrow and field order explicit", () => {
-    expect(providerProfileSystemInstructions).toMatch(/identity-qualified first-party page may establish operation of its own domain without a publication date/i);
-    expect(providerProfileSystemInstructions).toMatch(/without evidence that both operate concurrently.*prefer the qualified current first-party domain/i);
+    expect(providerProfileSystemInstructions).toMatch(/identity-qualified first-party page may establish operation of its own URL and domain without a publication date/i);
+    expect(providerProfileSystemInstructions).toMatch(/without evidence that both operate concurrently.*prefer the qualified current first-party URL/i);
     for (const field of ["locations", "phoneNumbers", "websites"]) {
       expect(profileShape[field].description).toMatch(/Index zero must be the best eligible default/i);
     }
