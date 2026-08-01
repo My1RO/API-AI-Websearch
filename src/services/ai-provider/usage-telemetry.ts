@@ -1,7 +1,10 @@
 import { env } from "../../config/env";
 
 export type AiProviderAttempt = "initial" | "full_retry" | "identity_retry";
-export type AiProviderRetryReason = "content_filter_full_retry" | "malformed_identity_retry";
+export type AiProviderRetryReason =
+  | "content_filter_full_retry"
+  | "native_refusal_full_retry"
+  | "malformed_identity_retry";
 export type AiProviderAttemptOutcome = "completed" | "incomplete" | "malformed" | "refusal" | "request_error";
 
 interface UnknownRecord {

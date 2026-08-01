@@ -38,7 +38,12 @@ new ProviderProfileResponsesClient()
         locationCount: firstProfile.locations.length,
         phoneCount: firstProfile.phoneNumbers.length,
         ratingCount: firstProfile.ratings.length,
-        sourceCount: firstProfile.sources.length
+        websiteCount: firstProfile.websites.length,
+        citationCount: firstProfile.specialties.length
+          + firstProfile.locations.length
+          + firstProfile.phoneNumbers.length
+          + firstProfile.ratings.length
+          + firstProfile.websites.length
       } : null
     }, null, 2)}\n`);
   })

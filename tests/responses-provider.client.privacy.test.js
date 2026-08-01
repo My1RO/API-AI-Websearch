@@ -6,6 +6,7 @@ const mockOpenAIConstructor = jest.fn().mockImplementation(() => ({
 }));
 const ORIGINAL_ENV = process.env;
 let consoleLogSpy;
+const nativeRefusalFixture = require("./fixtures/azure-native-refusal/contract-example.json");
 const auditedCompletionFilterFixtures = [
   {
     name: "confirmatory-v2 V0/P049",
@@ -682,14 +683,58 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     );
   });
 
-  it("does not semantically retry a native refusal", async () => {
-    mockCreateResponse.mockResolvedValueOnce({
-      status: "completed",
-      output: [{
-        type: "message",
-        content: [{ type: "refusal", refusal: "Unable to comply." }]
-      }]
-    });
+  it("retries a native refusal once with the identical full request", async () => {
+    mockCreateResponse.mockResolvedValueOnce(nativeRefusalFixture);
+    const { ProviderProfileResponsesClient } = loadClient();
+    const client = new ProviderProfileResponsesClient();
+
+    await expect(client.searchProviderProfiles({
+      lineOfCoverage: "Medical",
+      providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
+    })).resolves.toHaveLength(1);
+
+    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+    expect(mockCreateResponse.mock.calls[1][0]).toEqual(mockCreateResponse.mock.calls[0][0]);
+    expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+      { maxRetries: 1 },
+      { maxRetries: 0 }
+    ]);
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "initial",
+        outcome: "refusal",
+        retryReason: "native_refusal_full_retry",
+        totalTokens: 110
+      })
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider usage telemetry",
+      expect.objectContaining({
+        attempt: "full_retry",
+        outcome: "completed",
+        retryReason: "native_refusal_full_retry"
+      })
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider search telemetry",
+      expect.objectContaining({
+        outcome: "completed",
+        attemptCount: 2,
+        fullRetryCount: 1,
+        identityRetryCount: 0,
+        retryReasons: ["native_refusal_full_retry"],
+        initialSdkMaxRetries: 1,
+        semanticRetrySdkMaxRetries: 0,
+        maxHttpAttempts: 3
+      })
+    );
+  });
+
+  it("fails closed after one full retry when a native refusal repeats", async () => {
+    mockCreateResponse
+      .mockResolvedValueOnce(nativeRefusalFixture)
+      .mockResolvedValueOnce(nativeRefusalFixture);
     const { ProviderProfileResponsesClient } = loadClient();
     const client = new ProviderProfileResponsesClient();
 
@@ -698,14 +743,27 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     })).rejects.toThrow("AI provider profile search failed.");
 
-    expect(mockCreateResponse).toHaveBeenCalledTimes(1);
-    expect(mockCreateResponse.mock.calls[0][1]).toEqual({ maxRetries: 1 });
+    expect(mockCreateResponse).toHaveBeenCalledTimes(2);
+    expect(mockCreateResponse.mock.calls.map(call => call[1])).toEqual([
+      { maxRetries: 1 },
+      { maxRetries: 0 }
+    ]);
     expect(consoleLogSpy).toHaveBeenCalledWith(
       "AI provider usage telemetry",
       expect.objectContaining({
-        attempt: "initial",
+        attempt: "full_retry",
         outcome: "refusal",
-        retryReason: null
+        retryReason: "native_refusal_full_retry"
+      })
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "AI provider search telemetry",
+      expect.objectContaining({
+        outcome: "failed",
+        attemptCount: 2,
+        fullRetryCount: 1,
+        retryReasons: ["native_refusal_full_retry"],
+        maxHttpAttempts: 3
       })
     );
   });

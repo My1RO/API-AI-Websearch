@@ -196,6 +196,7 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
         }
 
         const retryAttempt: AiProviderAttempt = error.retryReason === "content_filter_full_retry"
+          || error.retryReason === "native_refusal_full_retry"
           ? "full_retry"
           : "identity_retry";
         const profiles = await this.executeAttempt(input, retryAttempt, error.retryReason, usageRecords);
@@ -262,6 +263,11 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
 
       if (hasNativeRefusal(response)) {
         outcome = "refusal";
+        if (attempt === "initial") {
+          retryReason = "native_refusal_full_retry";
+          throw new RetryableAiProviderResponseError(retryReason);
+        }
+
         throw new AiProviderError();
       }
 
