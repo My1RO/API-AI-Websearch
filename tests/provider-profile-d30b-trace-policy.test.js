@@ -35,8 +35,8 @@ describe("D30B development-trace policy sentinels", () => {
     expect(providerProfileSystemInstructions).toMatch(/first-party direct contact or website beats a conflicting undated lower-tier listing/i);
   });
 
-  it("runs at most one late rating query and keeps complete systems independent", () => {
-    expect(providerProfileSystemInstructions).toMatch(/only after mandatory identity, first-party, contact.*run at most one dedicated exact-provider rating query/i);
-    expect(shape.ratings.description).toMatch(/independent observations and not conflicts merely because their values differ/i);
+  it("does not spend model search budget on ratings", () => {
+    expect(providerProfileSystemInstructions).not.toMatch(/\bratings?\b|\breviews?\b/i);
+    expect(shape).not.toHaveProperty("ratings");
   });
 });

@@ -6,12 +6,12 @@ const {
   providerProfileSystemInstructions
 } = require("../src/services/prompt-builder.service");
 
-const D30B_SCHEMA_FILE_SHA256 = "17c80cad73a22d9bb81a60fdcd9a031b4ccd0ad47df65b7b6136b8daf6320d67";
+const D31B_SCHEMA_FILE_SHA256 = "b759f5448247d3a32f566f5198c4e2e01c373603192500ae75add476e91ca70f";
 
 describe("D11F field-local conflict and two-stage selection policy", () => {
   it("does not use stale suite/location hints as exclusion gates", () => {
     expect(providerProfileSystemInstructions).toMatch(/suite or location mismatch by itself is not express another-NPI or another-operation evidence/i);
-    expect(providerProfileSystemInstructions).toMatch(/cannot implicate a website, specialty, rating, or identity-qualified first-party contact/i);
+    expect(providerProfileSystemInstructions).toMatch(/cannot implicate a website, specialty, or identity-qualified first-party contact/i);
   });
 
   it("still excludes any fact expressly co-bound to another NPI operation", () => {
@@ -26,12 +26,12 @@ describe("D11F field-local conflict and two-stage selection policy", () => {
   });
 
   it("selects a same-value citation independently without revisiting the value", () => {
-    expect(providerProfileSystemInstructions).toMatch(/For each selected non-rating fact, inspect.*same complete value or a faithful formatting equivalent/i);
+    expect(providerProfileSystemInstructions).toMatch(/For each selected fact, inspect.*same complete value or a faithful formatting equivalent/i);
     expect(providerProfileSystemInstructions).toMatch(/This pass changes only the citation, never the selected value/i);
   });
 
-  it("pins the D30B field-specific structured-output policy", () => {
+  it("pins the D31B field-specific structured-output policy", () => {
     const bytes = fs.readFileSync(path.join(__dirname, "../src/validators/provider-profile.validator.ts"));
-    expect(crypto.createHash("sha256").update(bytes).digest("hex")).toBe(D30B_SCHEMA_FILE_SHA256);
+    expect(crypto.createHash("sha256").update(bytes).digest("hex")).toBe(D31B_SCHEMA_FILE_SHA256);
   });
 });

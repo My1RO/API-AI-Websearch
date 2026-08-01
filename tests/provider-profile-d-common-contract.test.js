@@ -24,7 +24,6 @@ const profile = (overrides = {}) => ({
   specialties: [],
   locations: [],
   phoneNumbers: [{ value: "Office: 617-444-0123", citation: citation("Office: 617-444-0123") }],
-  ratings: [],
   websites: [],
   ...overrides
 });

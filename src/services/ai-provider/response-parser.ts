@@ -31,7 +31,6 @@ const citationUrlsFromProfiles = (
   ...profile.specialties,
   ...profile.locations,
   ...profile.phoneNumbers,
-  ...profile.ratings,
   ...profile.websites
 ].map((fact) => fact.citation.sourceUrl));
 

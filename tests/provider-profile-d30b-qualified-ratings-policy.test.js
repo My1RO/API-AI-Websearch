@@ -7,18 +7,11 @@ const {
 } = require("../src/validators/provider-profile.validator");
 
 const profileShape = providerProfileStructuredOutputSchema.shape.profiles.element.shape;
-const ratingShape = profileShape.ratings.element.shape;
 
-describe("D30B qualified independent ratings", () => {
-  it("requires complete same-page numeric rating evidence", () => {
-    expect(ratingShape.scale.isNullable()).toBe(false);
-    expect(ratingShape.citation.description).toMatch(/numeric rating value and its exact numeric maximum scale from this same page/i);
-    expect(providerProfileSystemInstructions).toMatch(/Omit the rating when either number is unavailable or uncertain/i);
-  });
-
-  it("does not turn cross-site numeric differences into conflicts", () => {
-    expect(providerProfileSystemInstructions).toMatch(/independent observations, not conflicting values merely because their numbers differ/i);
-    expect(profileShape.ratings.description).toMatch(/qualify and cite each item independently/i);
+describe("D31B supersedes D30B model-generated ratings", () => {
+  it("removes ratings from the strict model contract and prompt", () => {
+    expect(profileShape).not.toHaveProperty("ratings");
+    expect(providerProfileSystemInstructions).not.toMatch(/\bratings?\b|\breviews?\b/i);
   });
 
   it("keeps the public parser backward-compatible with nullable historical scale", () => {

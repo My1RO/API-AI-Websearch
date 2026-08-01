@@ -111,11 +111,6 @@ const citedProfileResponse = profiles => {
         ].filter(Boolean).join(" "))
       })),
       phoneNumbers: (profile.phoneNumbers || []).map(sourcedValue),
-      ratings: (profile.ratings || []).map(rating => ({
-        value: rating.value,
-        scale: rating.scale ?? null,
-        citation: citation(rating.sourceId, rating.value)
-      })),
       websites: (profile.websites || []).map(sourcedValue)
     };
   });
@@ -124,7 +119,6 @@ const citedProfileResponse = profiles => {
     ...profile.specialties,
     ...profile.locations,
     ...profile.phoneNumbers,
-    ...profile.ratings,
     ...profile.websites
   ].map(fact => fact.citation.sourceUrl)))];
   return {
@@ -1037,13 +1031,13 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles[0].locations).toHaveLength(1);
   });
 
-  it("does not host-reject a rating because its scale is absent from its fact span", async () => {
+  it("does not include legacy rating input in the model-shaped response", async () => {
     const response = citedProfileResponse([{
       providerId: "provider-123",
       providerName: "Public Provider",
       specialties: [],
       locations: [],
-      phoneNumbers: [],
+      phoneNumbers: [{ value: "216-444-2200", sourceId: "src-1" }],
       ratings: [{ value: "4.8", scale: "5", sourceId: "src-1" }],
       websites: [],
       sources: [{
@@ -1052,7 +1046,6 @@ describe("Azure OpenAI Responses client privacy contract", () => {
         url: "https://ratings.example.org/provider"
       }]
     }]);
-    response.output_parsed.profiles[0].ratings[0].citation.factSpan = "Provider rating: 4.8";
     mockCreateResponse.mockResolvedValue(response);
     const { ProviderProfileResponsesClient } = loadClient();
 
@@ -1062,6 +1055,6 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     });
 
     expect(profiles).toHaveLength(1);
-    expect(profiles[0].ratings).toHaveLength(1);
+    expect(profiles[0].ratings).toEqual([]);
   });
 });

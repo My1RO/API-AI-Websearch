@@ -44,10 +44,13 @@ describe("D17 field-local conflicts and current first-party precedence", () => {
 
   it("keeps the Type-2 same-base safeguard field-local", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /treat the conflicting address, suite, and phone field candidates as unresolved organizational-identity conflicts/i
+      /treat the conflicting address and suite candidates as unresolved organizational-identity conflicts/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Emit a conflicting suite, subpart, address, or phone only when separate affirmative evidence/i
+      /Emit a conflicting suite, subpart, or address only when separate affirmative evidence/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /different undated registry or directory phone alone does not establish another operation and must not suppress the Q1 phone/i
     );
   });
 

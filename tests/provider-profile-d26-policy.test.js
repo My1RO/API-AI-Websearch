@@ -16,10 +16,9 @@ describe("D26 trace-corrected production prompt contract", () => {
     expect(fixture.provenance).toMatch(/no model calls or holdout data/i);
   });
 
-  it("allows one bounded rating query only after mandatory provider work", () => {
-    expect(providerProfileSystemInstructions).toMatch(/only after mandatory identity, first-party, contact.*run at most one dedicated exact-provider rating query/i);
+  it("keeps mandatory first-party and conflict work", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /After exact-NPI identity, do not answer until this action order is complete: FIRST obtain readable content.*first-party page.*SECOND inspect.*alternate-NPI evidence.*THIRD.*rating page/i
+      /After exact-NPI identity, do not answer until this action order is complete: FIRST obtain readable content.*first-party page.*SECOND inspect.*alternate-NPI evidence/i
     );
   });
 

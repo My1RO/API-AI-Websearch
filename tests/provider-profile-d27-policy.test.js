@@ -11,14 +11,13 @@ const websiteArray = profileShape.websites;
 const websiteShape = websiteArray.element.shape;
 
 describe("D27 field-local completion and same-value citation contract", () => {
-  it("completes mandatory evidence collection before a bounded rating query", () => {
+  it("completes mandatory evidence collection in first-party then conflict order", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /do not answer until this action order is complete: FIRST obtain readable content.*first-party.*SECOND inspect.*alternate-NPI.*THIRD.*rating/i
+      /do not answer until this action order is complete: FIRST obtain readable content.*first-party.*SECOND inspect.*alternate-NPI/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /if that other-NPI evidence cannot be inspected, omit only the website and preserve independently qualified facts/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/run at most one dedicated exact-provider rating query/i);
   });
 
   it("requires the best same-value citation without changing the selected value", () => {

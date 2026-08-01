@@ -22,16 +22,22 @@ describe("D15 Entity Type 2 same-base organizational safeguard", () => {
       /exact-NPI evidence identifies the requested NPI as an Entity Type 2 organization/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /same base street but conflict on an added, missing, or different suite or organizational subpart, or conflict on phone/i
+      /same base street but conflict on an added, missing, or different suite or organizational subpart/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /treat the conflicting address, suite, and phone field candidates as unresolved organizational-identity conflicts/i
+      /treat the conflicting address and suite candidates as unresolved organizational-identity conflicts/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /First-party name, branding, apparent currentness, and base-street overlap cannot override those field conflicts/i
+      /First-party name, branding, apparent currentness, and base-street overlap cannot override those suite or subpart conflicts/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Emit a conflicting suite, subpart, address, or phone only when separate affirmative evidence either attaches that exact same value to the requested NPI or.*establishes shared or concurrent use/i
+      /Emit a conflicting suite, subpart, or address only when separate affirmative evidence either attaches that exact same value to the requested NPI or.*establishes shared or concurrent use/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /exact legal, DBA, or alias name and complete professional location.*co-binds that same exact name and location.*professional voice phone/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /different undated registry or directory phone alone does not establish another operation and must not suppress the Q1 phone/i
     );
   });
 
@@ -82,7 +88,7 @@ describe("D15 Entity Type 2 same-base organizational safeguard", () => {
 
   it("repeats the narrow Entity Type 2 safeguard in the affected field schemas", () => {
     expect(profileShape.phoneNumbers.element.shape.value.description).toMatch(
-      /Entity Type 2 organization.*same-name first-party bundle at the same base street.*conflicts on phone or organizational subpart/i
+      /Entity Type 2 organization.*exact legal, DBA, or alias name and complete professional location.*co-binds that same exact name and location.*professional voice phone/i
     );
     expect(profileShape.locations.element.shape.addressLine2.description).toMatch(
       /Entity Type 2 organization.*same-name first-party bundle at the same base street.*conflicts with exact-NPI evidence/i

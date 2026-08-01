@@ -31,7 +31,6 @@ describe("D18 readable-page and item-local citation contract", () => {
     expect(profileShape.specialties.element.shape.citation.description).toMatch(/specialty wording, credential.*Never use a different fact item's source or span/i);
     expect(profileShape.phoneNumbers.element.shape.citation.description).toMatch(/all digits.*professional voice contact.*Never use another phone's, address's, or website's evidence/i);
     expect(profileShape.locations.element.shape.citation.description).toMatch(/every non-null material serialized component.*professional location.*Never borrow an address component from another page/i);
-    expect(profileShape.ratings.element.shape.citation.description).toMatch(/exact numeric rating value.*Never use another provider's rating or another fact item's evidence/i);
   });
 
   it("emits the exact consulted page URL rather than an unproved root generalization", () => {
