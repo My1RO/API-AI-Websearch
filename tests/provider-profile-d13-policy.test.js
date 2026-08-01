@@ -10,10 +10,10 @@ const profileShape = providerProfileStructuredOutputSchema.shape.profiles.elemen
 describe("D13 first-party inspection and implicated-website policy", () => {
   it("treats search source metadata as discovery rather than page-body evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /URL in search-result lists or source metadata is a discovery lead, not proof that you inspected the page body/i
+      /bare result URL, title, snippet, source listing, or exact-NPI search metadata does not/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /inspect that exact page's body before choosing among competing websites, locations, or phone bundles/i
+      /plausible first-party provider.*inspect that exact provider, location, or contact page before answering/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /multiple plausible current and legacy domains.*inspect the likely current first-party domain before choosing or omitting a website/i
@@ -52,10 +52,10 @@ describe("D13 first-party inspection and implicated-website policy", () => {
     expect(providerProfileSystemInstructions).toMatch(/keep explicitFactDateSpan null/i);
   });
 
-  it("requires a website span to establish the domain rather than another field", () => {
-    expect(providerProfileSystemInstructions).toMatch(/factSpan must literally copy the full emitted URL/i);
-    expect(providerProfileSystemInstructions).toMatch(/borrow an address-only or phone-only passage as website evidence/i);
-    expect(profileShape.websites.element.shape.citation.description).toMatch(/factSpan must literally copy the full emitted URL/i);
+  it("uses sourceUrl as direct URL evidence while requiring page-local operation evidence", () => {
+    expect(providerProfileSystemInstructions).toMatch(/sourceUrl is the direct URL evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/page-local text that establishes the exact provider or compatible organization operates that page or site/i);
+    expect(profileShape.websites.element.shape.citation.description).toMatch(/sourceUrl itself is the website URL evidence/i);
     expect(profileShape.websites.element.shape.citation.description).toMatch(/address-only or phone-only passage cannot support a website/i);
   });
 });

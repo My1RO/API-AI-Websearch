@@ -14,7 +14,7 @@ describe("D18 readable-page and item-local citation contract", () => {
       /same-value inspected first-party provider page.*same-value inspected government exact-provider page.*readable established exact-provider professional directory/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /bare URL, title, or snippet is only a discovery lead.*readable page content returned with search remains eligible evidence/i
+      /Readable page content returned with search counts.*bare result URL, title, snippet, source listing.*does not/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /NPIProfile.*rate-limit, access-challenge, error, or non-provider body.*unread discovery lead only/i
@@ -34,16 +34,16 @@ describe("D18 readable-page and item-local citation contract", () => {
     expect(profileShape.ratings.element.shape.citation.description).toMatch(/exact rating value.*Never use another provider's rating or another fact item's evidence/i);
   });
 
-  it("emits the inspected provider URL rather than an unproved root generalization", () => {
+  it("emits the exact consulted page URL rather than an unproved root generalization", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /Emit the exact URL of the inspected provider, practice, clinic, facility, or hospital page.*do not generalize it to an uninspected health-system root/i
+      /website value must be the exact URL of the consulted readable provider.*Never construct or generalize an inspected subpage into an uninspected root/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/canonical URL, Open Graph URL, or JSON-LD/i);
+    expect(providerProfileSystemInstructions).toMatch(/sourceUrl is the direct URL evidence/i);
     expect(profileShape.websites.element.shape.value.description).toMatch(
-      /exact URL of the inspected current provider.*page.*never generalize.*uninspected health-system root/i
+      /exact URL of the consulted readable provider.*page.*must equal this item's citation\.sourceUrl/i
     );
     expect(profileShape.websites.element.shape.citation.description).toMatch(
-      /factSpan must literally copy the full emitted URL.*canonical URL, Open Graph URL, or JSON-LD.*Title-only evidence is insufficient/i
+      /sourceUrl itself is the website URL evidence.*factSpan need not repeat the URL.*Title-only evidence is insufficient/i
     );
   });
 });

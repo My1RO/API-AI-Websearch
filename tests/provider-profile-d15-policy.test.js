@@ -10,13 +10,13 @@ const profileShape = providerProfileStructuredOutputSchema.shape.profiles.elemen
 describe("D15 Entity Type 2 same-base organizational safeguard", () => {
   it("rejects a P039-style same-base conflicting organizational subpart bundle", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /requested provider may be an organization.*first inspect at least one readable exact-NPI registry or exact-NPI profile page/i
+      /requested provider may be an organization.*determine whether that evidence identifies the requested NPI as Entity Type 2/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Do not count exact-NPI search metadata as that inspection/i
+      /exact-NPI search metadata does not/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /If no such exact-NPI page can be inspected.*do not use a same-base first-party bundle that conflicts/i
+      /If no readable exact-NPI page can be inspected.*do not use a same-base first-party bundle that conflicts/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /exact-NPI evidence identifies the requested NPI as an Entity Type 2 organization/i

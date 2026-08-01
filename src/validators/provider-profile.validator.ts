@@ -84,6 +84,18 @@ const structuredCitationSchema = z.object({
   )
 }).strict();
 
+const structuredWebsiteCitationSchema = structuredCitationSchema.extend({
+  sourceUrl: z.string().describe(
+    "The exact URL of this consulted readable provider, practice, clinic, facility, or hospital page. It is the website value's direct URL evidence and must exactly equal the emitted website value. Never an inferred or uninspected root, a search-results page, a bare snippet, metadata-only result, or an unread page."
+  ),
+  providerIdentitySpan: z.string().describe(
+    "A short contiguous page-local passage, copied verbatim whenever possible, that identifies the exact requested provider or a compatible organization as operating this page or site after different-NPI and operational-bundle reconciliation. Use exact NPI when shown; otherwise use exact provider name plus compatible disambiguating organization or location."
+  ),
+  factSpan: z.string().describe(
+    "A short contiguous page-local passage, copied verbatim whenever possible, that establishes the exact requested provider or compatible organization operates this page or site. The cited sourceUrl itself is the URL evidence, so this span need not repeat the URL. Never borrow another item's evidence or use text that only supports an address or phone without establishing operation of the page or site."
+  )
+}).strict();
+
 const structuredSourcedValueSchema = z.object({
   value: z.string().describe("A professional specialty for the exact requested provider, exactly as supported by this item's own cited page."),
   citation: structuredCitationSchema.describe("Evidence from this item's exact consulted readable page. providerIdentitySpan must identify the requested provider; factSpan must contain the complete emitted specialty value or a faithful formatting equivalent and bind it to that provider. Never use a different fact item's source or span.")
@@ -124,9 +136,9 @@ const structuredProviderProfileSchema = z.object({
   ),
   ratings: z.array(structuredRatingSchema).describe("Exact-provider ratings only. Every emitted item must have a directly supported numeric value from one consulted readable exact-provider rating page. Use the directly supported numeric maximum scale when present on that page; otherwise set scale to null and never infer it. Use an empty array when the rating value is unavailable or uncertain."),
   websites: z.array(z.object({
-    value: z.string().describe("The exact URL of the inspected current provider, practice, clinic, facility, or hospital page for the exact requested entity whose readable content was returned in this call; never generalize an inspected provider page to an uninspected health-system root. Evaluate the domain field-locally: an address, suite, or phone conflict alone does not implicate it. Readable exact-NPI evidence confirming the organization's legal, DBA, or alias name plus readable first-party content that co-binds that exact name to a complete compatible professional street address with city, state, and ZIP may attach the current domain even when that page omits the NPI. Omit the domain when affirmative readable evidence binds it to a conflicting organizational subpart, different NPI, or different provider operation. This domain rule never validates an address or phone. Explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence may establish that attachment. Never an unresolved, different-NPI, or legacy alternate."),
-    citation: structuredCitationSchema.describe(
-      "Evidence from this website item's exact consulted readable provider or organization page whose body or rendered content establishes the requested provider's ownership or operation of the exact emitted URL after field-local same-name different-NPI reconciliation. providerIdentitySpan must identify the requested provider. factSpan must literally copy the full emitted URL from this same page's visible rendered text, canonical URL, Open Graph URL, or JSON-LD; never construct, normalize, shorten, or paraphrase the URL. Title-only evidence is insufficient, and an address-only or phone-only passage cannot support a website. General branding, affiliation, an uninspected health-system homepage, or another fact item's evidence does not support this website."
+    value: z.string().describe("The exact URL of the consulted readable provider, practice, clinic, facility, or hospital page operated by the exact requested provider or compatible organization. This value must equal this item's citation.sourceUrl. Evaluate the domain field-locally: an address, suite, or phone conflict alone does not implicate it. Readable exact-NPI evidence confirming the organization's legal, DBA, or alias name plus readable first-party content that co-binds that exact name to a complete compatible professional street address with city, state, and ZIP may attach a current domain even when that page omits the NPI. Explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence may establish that attachment. Omit the domain when affirmative readable evidence binds it to a conflicting organizational subpart, different NPI, or different provider operation. This domain rule never validates an address or phone. Never an inferred or uninspected root, directory profile, or page or domain implicated in an unresolved different-NPI or different-operation bundle."),
+    citation: structuredWebsiteCitationSchema.describe(
+      "Evidence from this exact consulted readable page. sourceUrl itself is the website URL evidence. providerIdentitySpan must identify the requested provider, and providerIdentitySpan and factSpan must contain page-local text establishing that the exact requested provider or compatible organization operates the page or site; factSpan need not repeat the URL. Title-only evidence is insufficient, and an address-only or phone-only passage cannot support a website. Never borrow another item's evidence."
     )
   }).strict()).describe(
     "Identity-qualified current websites ordered for display. Index zero must be the best eligible default after conflict resolution and source hierarchy. Additional domains require affirmative evidence of concurrent operation, not merely separate listings."

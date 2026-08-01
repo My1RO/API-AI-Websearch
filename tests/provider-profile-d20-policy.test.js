@@ -12,29 +12,29 @@ const websiteShape = profileShape.websites.element.shape;
 describe("D20 completion and citation repair", () => {
   it("uses remaining search budget to inspect plausible first-party and rating pages before omission", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /Before omitting a website or rating, or choosing a lower-tier or different-value source instead, use any remaining search budget to open and read a surfaced plausible exact-provider first-party or rating page/i
+      /Before omitting a website or rating, or choosing a lower-tier or different-value source instead, inspect a surfaced plausible exact-provider first-party or rating page/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/bare URL, title, or snippet is only a discovery lead/i);
-    expect(providerProfileSystemInstructions).toMatch(/readable page content returned with search remains eligible evidence without a separate open-page action/i);
+    expect(providerProfileSystemInstructions).toMatch(/bare result URL, title, snippet, source listing.*does not/i);
+    expect(providerProfileSystemInstructions).toMatch(/Readable page content returned with search counts/i);
     expect(providerProfileSystemInstructions).toMatch(/one consulted readable exact-provider rating page directly provides the exact numeric rating value/i);
   });
 
   it("requires the emitted website and citation to use the exact opened page URL", () => {
-    expect(providerProfileSystemInstructions).toMatch(/Emit the exact URL of the inspected provider.*page/i);
-    expect(providerProfileSystemInstructions).toMatch(/do not generalize it to an uninspected health-system root/i);
-    expect(websiteShape.value.description).toMatch(/exact URL of the inspected current provider.*readable content was returned in this call/i);
-    expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/readable body or rendered content was returned and inspected in this call/i);
-    expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/whether that readable content was supplied with search or by opening the page/i);
+    expect(providerProfileSystemInstructions).toMatch(/website value must be the exact URL of the consulted readable provider.*page/i);
+    expect(providerProfileSystemInstructions).toMatch(/Never construct or generalize an inspected subpage into an uninspected root/i);
+    expect(websiteShape.value.description).toMatch(/exact URL of the consulted readable provider.*page/i);
+    expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/exact URL of this consulted readable provider.*page/i);
+    expect(websiteShape.citation.shape.sourceUrl.description).toMatch(/must exactly equal the emitted website value/i);
   });
 
-  it("requires a literal website URL span from page-native metadata or rendered text", () => {
+  it("uses the exact cited page URL as direct website evidence", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /factSpan must literally copy the full emitted URL.*visible rendered text, canonical URL, Open Graph URL, or JSON-LD/i
+      /website value must be the exact URL.*citation\.sourceUrl must be that same exact URL/i
     );
     expect(websiteShape.citation.description).toMatch(
-      /factSpan must literally copy the full emitted URL.*visible rendered text, canonical URL, Open Graph URL, or JSON-LD/i
+      /sourceUrl itself is the website URL evidence/i
     );
-    expect(websiteShape.citation.description).toMatch(/never construct, normalize, shorten, or paraphrase the URL/i);
+    expect(websiteShape.citation.shape.factSpan.description).toMatch(/span need not repeat the URL/i);
   });
 
   it("restores nullable rating scale without inference or review-count substitution", () => {
