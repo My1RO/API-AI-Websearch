@@ -18,9 +18,9 @@ describe("D26 trace-corrected production prompt contract", () => {
 
   it("removes fallback rating search while retaining surfaced ratings", () => {
     expect(providerProfileSystemInstructions).toMatch(/Ratings remain eligible only when a numeric lead surfaces/i);
-    expect(providerProfileSystemInstructions).toMatch(/do not run a dedicated rating or reviews query/i);
+    expect(providerProfileSystemInstructions).toMatch(/(?:do not|never) run a dedicated rating or reviews query/i);
     expect(providerProfileSystemInstructions).toMatch(
-      /After exact-NPI identity, use this action order: first inspect.*first-party page; next inspect.*alternate-NPI evidence.*only then inspect.*rating page that already surfaced/i
+      /After exact-NPI identity, do not answer until this action order is complete: FIRST obtain readable content.*first-party page.*SECOND inspect.*alternate-NPI evidence.*THIRD.*rating page/i
     );
     expect(providerProfileSystemInstructions).not.toMatch(
       /run one exact-provider name plus NPI rating or reviews query/i
@@ -31,9 +31,9 @@ describe("D26 trace-corrected production prompt contract", () => {
     const caseFixture = fixture.cases.find(({ caseId }) => caseId === "P035");
     expect(caseFixture.registryLabel).toBe("Secondary Practice Location");
     expect(providerProfileSystemInstructions).toMatch(
-      /Do not inspect a redundant registry or directory while required first-party or relevant alternate-NPI evidence remains uninspected/i
+      /(?:Do not|Never) inspect a redundant registry or directory while required first-party or relevant alternate-NPI evidence remains uninspected/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/first inspect a surfaced plausible exact-provider first-party page/i);
+    expect(providerProfileSystemInstructions).toMatch(/FIRST obtain readable content for the best surfaced plausible exact-provider first-party page/i);
   });
 
   it("does not infer concurrent conflicting bundles from a secondary-location registry label", () => {
@@ -78,10 +78,10 @@ describe("D26 trace-corrected production prompt contract", () => {
 
   it("performs one field-local pre-return audit", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /Before returning, audit once that website uncertainty was resolved field-locally/i
+      /Before returning, perform exactly one field-local output-completion pass/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /every pair of competing address or phone values has affirmative evidence of concurrent operation/i
+      /competing address or phone values lack affirmative evidence of concurrent operation, keep at most the one best eligible value/i
     );
   });
 });

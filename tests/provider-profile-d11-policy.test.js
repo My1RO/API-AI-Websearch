@@ -30,7 +30,7 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
 
   it("selects citations only after eligibility from readable fact-supporting pages", () => {
     expect(providerProfileSystemInstructions).toMatch(/After selecting an eligible value, choose its citation independently/i);
-    expect(providerProfileSystemInstructions).toMatch(/highest-priority eligible page whose readable body or rendered content was returned and inspected in this call/i);
+    expect(providerProfileSystemInstructions).toMatch(/MUST cite the highest-priority eligible inspected page that supports the same selected value/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not cite metadata-only, error, snippet-only, title-only, unavailable, or unread evidence/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not replace a more provider-specific fact with a different general value merely because.*source tier is higher/i);
     expect(providerProfileSystemInstructions).toMatch(/Citation choice cannot make an ineligible candidate eligible/i);
@@ -39,7 +39,7 @@ describe("D11 bundle reconciliation and readable citation selection", () => {
 
   it("applies Q1 then Q2 then Q3 among eligible readable citations", () => {
     expect(providerProfileSystemInstructions).toMatch(/final source-hierarchy tie-breaker.*otherwise-equivalent eligible values, prefer an exact first-party provider or organization page, then an exact-provider government registry including NPPES, then an established exact-provider professional directory/i);
-    expect(providerProfileSystemInstructions).toMatch(/Prefer, in order, a same-value inspected first-party provider page, a same-value inspected government exact-provider page, then another readable established exact-provider professional directory/i);
+    expect(providerProfileSystemInstructions).toMatch(/first an exact-provider first-party page, otherwise an exact-provider government page, otherwise a readable established exact-provider professional directory/i);
   });
 
   it("retains D9 conflict and fact-date behavior plus D10 span completeness", () => {

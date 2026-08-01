@@ -37,7 +37,7 @@ describe("D1 concise direct-citation policy", () => {
 
     expect(providerProfileSystemInstructions).toMatch(/sourceUrl must be the exact URL associated with that readable fact-supporting page content/i);
     expect(providerProfileSystemInstructions).toMatch(/Every emitted fact needs one direct citation tied to one exact consulted public page/i);
-    expect(providerProfileSystemInstructions).toMatch(/readable body or rendered content was returned and inspected in this call/i);
+    expect(providerProfileSystemInstructions).toMatch(/readable body or rendered content must have been returned and inspected in this call/i);
     expect(providerProfileSystemInstructions).not.toMatch(/silently audit every fact|pre-emission audit/i);
   });
 

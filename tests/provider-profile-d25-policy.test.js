@@ -10,10 +10,10 @@ const websiteShape = providerProfileStructuredOutputSchema.shape.profiles.elemen
 describe("D25 same-name different-NPI website conflict resolution", () => {
   it("prioritizes a surfaced first-party page over redundant registry inspection", () => {
     expect(providerProfileSystemInstructions).toMatch(
-      /first inspect a surfaced plausible exact-provider first-party page/i
+      /FIRST obtain readable content for the best surfaced plausible exact-provider first-party page/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /Do not inspect a redundant registry or directory while required first-party or relevant alternate-NPI evidence remains uninspected/i
+      /(?:Do not|Never) inspect a redundant registry or directory while required first-party or relevant alternate-NPI evidence remains uninspected/i
     );
   });
 
