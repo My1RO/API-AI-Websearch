@@ -70,7 +70,7 @@ export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
   sourceUrl: z.string().describe(
-    "The exact consulted public http or https page whose body or rendered content was read and directly supports this same fact for the requested provider. Never a search-results page, snippet-only result, metadata-only or unread page, or different corroborating page when readable support was consulted."
+    "The exact consulted public http or https page whose body or rendered content was opened and inspected in this call and directly supports this same fact for the requested provider. A search result or tool action without readable opened page content is not inspected evidence. Never a search-results page, snippet-only result, metadata-only, rate-limited, access-challenge, error, or unread page, or a different corroborating page when readable same-value support was inspected."
   ),
   sourceTitle: z.string().nullable().describe("The title of the cited page, or null when unavailable."),
   providerIdentitySpan: z.string().describe(
@@ -85,15 +85,15 @@ const structuredCitationSchema = z.object({
 }).strict();
 
 const structuredSourcedValueSchema = z.object({
-  value: z.string().describe("The public professional fact exactly as supported by the cited source."),
-  citation: structuredCitationSchema.describe("Evidence from the exact consulted page whose factSpan contains the complete emitted specialty value and supports only this fact.")
+  value: z.string().describe("A professional specialty for the exact requested provider, exactly as supported by this item's own cited page."),
+  citation: structuredCitationSchema.describe("Evidence from this item's exact opened and inspected page. providerIdentitySpan must identify the requested provider; factSpan must contain the complete emitted specialty value or a faithful formatting equivalent and bind it to that provider. Never use a different fact item's source or span.")
 }).strict();
 
 const structuredPhoneSchema = z.object({
   value: z.string().describe(
     "A professional voice phone number for the exact provider. For an Entity Type 1 individual, an exact-NPI identity-qualified active first-party provider page directly presenting the current professional voice phone takes precedence over a bare conflicting registry or directory listing unless affirmative contrary evidence establishes that it is former, another provider's, or nonprofessional. For an Entity Type 2 organization, never take a phone from a same-name first-party bundle at the same base street when exact-NPI evidence conflicts on phone or organizational subpart, unless affirmative evidence attaches this exact phone to the requested NPI or establishes shared or concurrent use for the requested organization. Never a fax, mobile, cell, personal, home, or uncertain-purpose number."
   ),
-  citation: structuredCitationSchema.describe("Evidence from the exact consulted page whose factSpan contains all digits of this emitted phone, allowing formatting equivalents, and establishes it as a professional voice contact.")
+  citation: structuredCitationSchema.describe("Evidence from this phone item's exact opened and inspected page. providerIdentitySpan must identify the requested provider; factSpan must contain all digits of this emitted phone, allowing formatting equivalents, and establish it as a professional voice contact. Never use another phone's, address's, or website's evidence.")
 }).strict();
 
 const structuredLocationSchema = z.object({
@@ -102,13 +102,13 @@ const structuredLocationSchema = z.object({
   city: z.string().nullable().describe("City for the verified professional location, or null."),
   state: z.string().nullable().describe("State for the verified professional location, or null."),
   zip: z.string().nullable().describe("ZIP code for the verified professional location, or null."),
-  citation: structuredCitationSchema.describe("Evidence from the exact consulted page whose factSpan contains every non-null material component of this emitted address, allowing postal and formatting equivalents, and establishes this professional location.")
+  citation: structuredCitationSchema.describe("Evidence from this location item's exact opened and inspected page. providerIdentitySpan must identify the requested provider; factSpan must contain every non-null material component of this emitted address, allowing postal and formatting equivalents, and establish it as a professional location. Never use another location's, phone's, or website's evidence.")
 }).strict();
 
 const structuredRatingSchema = z.object({
   value: z.string().describe("The numeric rating supported by the exact provider page on the cited rating source."),
   scale: z.string().nullable().describe("The numeric maximum rating scale, or null when unavailable."),
-  citation: structuredCitationSchema.describe("Evidence from the exact consulted provider-rating page whose factSpan contains this exact rating value and its scale when non-null.")
+  citation: structuredCitationSchema.describe("Evidence from this rating item's exact opened and inspected exact-provider rating page. providerIdentitySpan must identify the requested provider; factSpan must contain this exact rating value and its scale when non-null. Never use another provider's rating or another fact item's evidence.")
 }).strict();
 
 const structuredProviderProfileSchema = z.object({
@@ -124,9 +124,9 @@ const structuredProviderProfileSchema = z.object({
   ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(z.object({
-    value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity. Evaluate the domain field-locally: an address, suite, or phone conflict alone does not implicate it. Omit the domain only when readable evidence binds that exact domain to a conflicting organizational subpart, different NPI, or different provider operation, unless affirmative evidence attaches that domain to the requested provider or compatible organization. Explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence may establish that attachment. Never an unresolved, different-NPI, or legacy alternate."),
+    value: z.string().describe("The exact inspected current provider, practice, clinic, facility, or hospital page URL for the exact requested entity; never generalize an inspected provider page to an uninspected health-system root. Evaluate the domain field-locally: an address, suite, or phone conflict alone does not implicate it. Omit the domain only when readable evidence binds that exact domain to a conflicting organizational subpart, different NPI, or different provider operation, unless affirmative evidence attaches that domain to the requested provider or compatible organization. Explicit first-party rebranding, acquisition, ownership-continuity, or redirect evidence may establish that attachment. Never an unresolved, different-NPI, or legacy alternate."),
     citation: structuredCitationSchema.describe(
-      "Evidence from one inspected readable page whose body or rendered content establishes the requested provider's organizational ownership or operation of this exact website after field-local same-name different-NPI bundle reconciliation. Its factSpan must establish the exact emitted domain or site through visible page text, a canonical URL, or JSON-LD from this cited page; an address-only or phone-only passage cannot support a website. A provider-specific page may attach the domain by exact requested NPI, or by exact requested name plus compatible organization or location. General branding, affiliation, a health-system homepage, or absence of affirmative attachment alone does not support a website."
+      "Evidence from this website item's exact opened and inspected readable provider or organization page whose body or rendered content establishes the requested provider's ownership or operation of the exact emitted URL after field-local same-name different-NPI reconciliation. providerIdentitySpan must identify the requested provider. factSpan must establish the exact emitted domain or site, including the full emitted URL, through visible page text, this page's canonical URL, Open Graph URL, or JSON-LD; title-only evidence is insufficient, and an address-only or phone-only passage cannot support a website. General branding, affiliation, an uninspected health-system homepage, or another fact item's evidence does not support this website."
     )
   }).strict()).describe(
     "Identity-qualified current websites ordered for display. Index zero must be the best eligible default after conflict resolution and source hierarchy. Additional domains require affirmative evidence of concurrent operation, not merely separate listings."
