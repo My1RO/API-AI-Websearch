@@ -24,11 +24,6 @@ const enumValue = <T extends string>(value: string | undefined, allowedValues: r
   return allowedValues.includes(normalizedValue as T) ? normalizedValue as T : defaultValue;
 };
 
-const optionalEnumValue = <T extends string>(value: string | undefined, allowedValues: readonly T[]): T | undefined => {
-  const normalizedValue = (value || "").toLowerCase();
-  return allowedValues.includes(normalizedValue as T) ? normalizedValue as T : undefined;
-};
-
 const optionalNonNegativeNumberValue = (value: string | undefined): number | undefined => {
   if (value === undefined || value.trim() === "") {
     return undefined;
@@ -66,7 +61,7 @@ export const env = {
   aiWebSearchToolChoice: enumValue(process.env.AI_WEBSEARCH_TOOL_CHOICE, searchToolChoices, "required"),
   aiWebSearchMaxToolCalls: boundedNumberValue(process.env.AI_WEBSEARCH_MAX_TOOL_CALLS, 8, 20),
   aiWebSearchParallelToolCalls: booleanValue(process.env.AI_WEBSEARCH_PARALLEL_TOOL_CALLS, true),
-  aiReasoningEffort: optionalEnumValue(process.env.AI_REASONING_EFFORT || DEFAULT_AI_REASONING_EFFORT, reasoningEfforts),
+  aiReasoningEffort: enumValue(process.env.AI_REASONING_EFFORT, reasoningEfforts, DEFAULT_AI_REASONING_EFFORT),
   aiWebSearchAllowedDomains: csvValues(process.env.AI_WEBSEARCH_ALLOWED_DOMAINS, 100),
   aiWebSearchBlockedDomains: csvValues(process.env.AI_WEBSEARCH_BLOCKED_DOMAINS, 100),
   aiCostRates: {

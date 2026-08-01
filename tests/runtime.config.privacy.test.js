@@ -166,6 +166,12 @@ describe("Azure-only AI runtime fail-closed configuration", () => {
     expect(env.aiReasoningEffort).toBe("high");
   });
 
+  it("defaults an invalid reasoning override deterministically to low", () => {
+    const { env } = loadEnvWithEnv({ AI_REASONING_EFFORT: "unsupported" });
+
+    expect(env.aiReasoningEffort).toBe("low");
+  });
+
   it("documents non-secret local defaults without embedding Azure credentials", () => {
     const envTemplate = fs.readFileSync(path.join(__dirname, "../.env.dist"), "utf8");
 
