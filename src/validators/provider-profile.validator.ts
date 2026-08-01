@@ -91,14 +91,14 @@ const structuredSourcedValueSchema = z.object({
 
 const structuredPhoneSchema = z.object({
   value: z.string().describe(
-    "A professional voice phone number for the exact provider. Never a fax, mobile, cell, personal, home, or uncertain-purpose number."
+    "A professional voice phone number for the exact provider. For an Entity Type 2 organization, never take a phone from a same-name first-party bundle at the same base street when exact-NPI evidence conflicts on phone or organizational subpart, unless affirmative evidence attaches this exact phone to the requested NPI or establishes shared or concurrent use for the requested organization. Never a fax, mobile, cell, personal, home, or uncertain-purpose number."
   ),
   citation: structuredCitationSchema.describe("Evidence from the exact consulted page whose factSpan contains all digits of this emitted phone, allowing formatting equivalents, and establishes it as a professional voice contact.")
 }).strict();
 
 const structuredLocationSchema = z.object({
-  addressLine1: z.string().describe("Street line for a verified professional practice, clinic, facility, hospital, or office location for the exact provider."),
-  addressLine2: z.string().nullable().describe("Professional suite or secondary address line, or null."),
+  addressLine1: z.string().describe("Street line for a verified professional practice, clinic, facility, hospital, or office location for the exact provider. A place, facility, campus, or school name without a complete civic or postal address is not an address record. A distinct-address additional office remains eligible under ordinary identity and conflict rules."),
+  addressLine2: z.string().nullable().describe("Professional suite or secondary address line, or null. For an Entity Type 2 organization, omit a suite or organizational subpart from a same-name first-party bundle at the same base street when it conflicts with exact-NPI evidence, unless affirmative evidence attaches that exact value to the requested NPI or establishes shared or concurrent use for the requested organization."),
   city: z.string().nullable().describe("City for the verified professional location, or null."),
   state: z.string().nullable().describe("State for the verified professional location, or null."),
   zip: z.string().nullable().describe("ZIP code for the verified professional location, or null."),
@@ -117,14 +117,14 @@ const structuredProviderProfileSchema = z.object({
   providerName: z.string().describe("The requested provider or entity name attached to the requested NPI, not merely a same-name organization."),
   specialties: z.array(structuredSourcedValueSchema),
   locations: z.array(structuredLocationSchema).describe(
-    "Verified professional practice, office, clinic, facility, or hospital locations for the exact provider only, ordered for display. Index zero must be the best eligible default after evidence qualification, conflict resolution, fact-applicable recency, and source hierarchy. Emit more than one competing location only when consulted evidence affirmatively establishes concurrent compatibility; otherwise emit at most the one best eligible location. Never residential, people-search, or uncertain-purpose addresses."
+    "Verified professional practice, office, clinic, facility, or hospital locations for the exact provider only, ordered for display. For an Entity Type 2 organization, one inspected provider-specific first-party page that directly co-binds the exact organization to a complete distinct-base-address professional office and its professional voice phone, with no conflicting-NPI or conflicting-operation evidence, may establish a compatible additional office. A place, facility, campus, or school name without a complete civic or postal address is not an address record. Index zero must be the best eligible default after evidence qualification, conflict resolution, fact-applicable recency, and source hierarchy. Emit more than one competing location only when consulted evidence affirmatively establishes concurrent compatibility; otherwise emit at most the one best eligible location. Never residential, people-search, or uncertain-purpose addresses."
   ),
   phoneNumbers: z.array(structuredPhoneSchema).describe(
     "Verified professional voice contacts for the exact provider only, ordered for display. Index zero must be the best eligible default after evidence qualification, conflict resolution, fact-applicable recency, and source hierarchy. Emit more than one competing phone only when consulted evidence affirmatively establishes concurrent compatibility; otherwise emit at most the one best eligible phone. Never fax, mobile, cell, personal, home, or uncertain-purpose numbers."
   ),
   ratings: z.array(structuredRatingSchema),
   websites: z.array(z.object({
-    value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity, reconciled as a candidate within its page, address, phone, and organization bundle; never an unresolved, different-NPI, or legacy alternate."),
+    value: z.string().describe("A current provider, practice, clinic, facility, hospital, or health-system website URL for the exact requested entity, reconciled as a candidate within its page, address, phone, and organization bundle. For an Entity Type 2 organization, omit a domain from a same-name first-party bundle at the same base street when exact-NPI evidence conflicts on phone or organizational subpart, unless affirmative evidence attaches that exact domain to the requested NPI or establishes shared or concurrent use for the requested organization. Never an unresolved, different-NPI, or legacy alternate."),
     citation: structuredCitationSchema.describe(
       "Evidence from one inspected readable page whose body or rendered content establishes the requested provider's organizational ownership or operation of this exact website after field-local same-name different-NPI bundle reconciliation. Its factSpan must establish the exact emitted domain or site through visible page text, a canonical URL, or JSON-LD from this cited page; an address-only or phone-only passage cannot support a website. A provider-specific page may attach the domain by exact requested NPI, or by exact requested name plus compatible organization or location. General branding, affiliation, a health-system homepage, or absence of affirmative attachment alone does not support a website."
     )
