@@ -1,5 +1,5 @@
 {
-  "provenance": "Development-only policy sentinels derived from canonical P024 and P001 traces. No holdout data and no new model calls.",
+  "provenance": "Development-only policy sentinels derived from canonical P024, P001, and P050 traces. No holdout data and no new model calls.",
   "cases": [
     {
       "caseId": "P024",
@@ -10,6 +10,11 @@
       "caseId": "P001",
       "risk": "a shortened common name can attach another professional's contact facts to the requested provider",
       "policy": "treat the shortened name as insufficient by itself, but permit page-level reconciliation through multiple compatible provider-specific biographical identifiers with no conflicting-provider evidence"
+    },
+    {
+      "caseId": "P050",
+      "risk": "a supported first-party website URL can be paired with a fabricated descriptive fact span",
+      "policy": "use sourceUrl as the URL evidence and copy the shortest exact provider or organization heading or name passage, reusing the identity span when appropriate"
     }
   ]
 }

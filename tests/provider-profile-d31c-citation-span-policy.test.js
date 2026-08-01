@@ -63,7 +63,7 @@ describe("D33 balanced citation-span discipline", () => {
 
   it("allows shortened common names only after multi-identifier page-level reconciliation", () => {
     expect(traceFixture.provenance).toMatch(/Development-only.*No holdout data and no new model calls/i);
-    expect(traceFixture.cases.map(({ caseId }) => caseId)).toEqual(["P024", "P001"]);
+    expect(traceFixture.cases.map(({ caseId }) => caseId)).toEqual(["P024", "P001", "P050"]);
     for (const citation of [specialtyCitation, websiteCitation]) {
       expect(citation.shape.providerIdentitySpan.description).toMatch(
         /ordinarily contain either the exact requested NPI, or the exact requested professional name plus a compatible disambiguating organization or location/i
@@ -77,6 +77,18 @@ describe("D33 balanced citation-span discipline", () => {
     }
     expect(traceFixture.cases.find(({ caseId }) => caseId === "P001").policy).toMatch(
       /insufficient by itself.*page-level reconciliation.*multiple compatible provider-specific biographical identifiers.*no conflicting-provider evidence/i
+    );
+  });
+
+  it("uses the page heading or name as website fact evidence without synthesizing description text", () => {
+    expect(traceFixture.cases.find(({ caseId }) => caseId === "P050").policy).toMatch(
+      /sourceUrl as the URL evidence.*shortest exact provider or organization heading or name passage.*reusing the identity span/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /Because sourceUrl itself is the URL evidence, website factSpan must copy the shortest exact provider or organization heading or name passage.*providerIdentitySpan and factSpan may reuse the same exact contiguous text.*Never synthesize marketing or description text/i
+    );
+    expect(websiteCitation.shape.factSpan.description).toMatch(
+      /cited sourceUrl itself is the URL evidence.*shortest exact provider or organization heading or name passage.*providerIdentitySpan and factSpan may reuse the same exact contiguous text.*Never synthesize marketing or description text/i
     );
   });
 
