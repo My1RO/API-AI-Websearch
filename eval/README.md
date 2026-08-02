@@ -1,60 +1,68 @@
-# Provider profile accuracy evaluation
+# Provider-profile evaluation
 
-This evaluation exercises the provider-profile API that is already deployed behind `--api-base`. It has no model selector and must not change `AI_MODEL` or call an AI client directly.
+This directory documents the completed provider-profile web-search validation
+and the current production-shaped contract. It is no longer a proposed-study
+scaffold.
 
-## Cohorts
+## Current documents
 
-No real provider cohort has been obtained or run yet. The committed example is deliberately synthetic; the cohort sizes below are proposed study-design targets, not a description of existing data.
+- [CMS response](CMS_PROVIDER_AI_RESPONSE.md) answers the CMS questions and
+  includes the literal evaluated production prompt and strict output schema.
+- [Validation report](CMS_PROVIDER_AI_VALIDATION_REPORT.md) records the study
+  design, categorical results, development-to-holdout comparison, cost,
+  latency, limitations, and credential-safe API reproductions.
+- [Production runbook](../deploy/PRODUCTION_RUNBOOK.md) covers deployment,
+  health checks, monitoring, and rollback. Passing the local evaluation does
+  not by itself prove that external production cutover is complete.
 
-1. Export candidates from the existing plan provider-search flow. Preserve only provider ID/NPI, name, specialty/taxonomy, and business location; do not include consumer, quote, application, or member data.
-2. Use a pilot only to calibrate the workflow and estimate variance/paired disagreement. Then calculate and freeze a separately powered certification cohort. Stratify by individual/facility, region, urban/rural, specialty group, multi-location, common-name ambiguity, recent changes, sparse web presence, known source conflicts, and public rating-directory presence. The earlier 60/400 counts are planning examples, not statistically justified commitments.
-3. Assign random case IDs. Store the locked cohort and evidence only under `eval-private/`, which Git ignores.
+## Current status
 
-## Independent truth collection
+The study exercised 40 distinct production-shaped configurations with live
+pilot requests. Four advanced to complete 60-provider development evaluations,
+the final two received a paired comparison under one fixed evaluator, and one
+configuration was frozen before a separate disjoint 60-provider holdout.
 
-- Two reviewers independently collect timestamped evidence. The reviewer view must not include the AI result.
-- Identity and the paired government baseline use the existing provider-search response plus NPPES/CMS evidence.
-- Phone, address, and official website truth requires the provider, practice, facility, or health-system site. An approved professional directory may corroborate but must not convert a residential address or personal mobile number into a display-safe fact.
-- A public rating is valid only for the exact provider profile on the cited public rating directory, with score, scale, review count when available, and capture time. No directory receives special status, and ratings must not be transferred between sites.
-- Use one or more evaluation LLMs configured with materially higher reasoning effort than production to assess whether each candidate fact is supported, current, professionally appropriate, and matched to the correct provider. Give the judges the candidate fact and evidence from all available source classes; do not declare a government/directory source correct merely because another source differs from it.
-- Calibrate LLM judges on a human-reviewed pilot, require structured rationales and source-by-source assessments, measure inter-judge agreement, and send judge disagreements or low-confidence cases to human adjudication. The production model must never judge its own output.
-- Record only provider-level evidence. No member, consumer, quote, application, policy, or session data belongs in the evaluation. If the test deliberately includes a known personal provider contact as a leakage sentinel, the current harness can retain only its HMAC rather than copying that contact into fixtures; this is defense in depth for provider personal data, not protection of member data.
-- Web search may locate candidate evidence, but the web-search system under test cannot certify its own answer.
+The frozen configuration returned 60/60 parsed holdout profiles. After additive
+trace review, no major safety violation was confirmed among 59 evaluable cases;
+one evaluator packet was an honest no-call context overflow. The reports retain
+the remaining citation, availability, recency, and minor formatting
+limitations. They do not claim national representativeness, perfect accuracy,
+or superiority over CMS, NPPES, or plan-directory APIs.
 
-## Runs and metrics
+Production uses one Azure OpenAI Responses call per semantic attempt with
+`gpt-5.6-terra`, reasoning `low`, required native web search, and SDK-native
+strict Zod Structured Outputs. Evaluation uses a fixed `gpt-5.6-sol`, reasoning
+`high` categorical judge over only the pages returned by the evaluated arm.
+There is no production host webpage fetch and no second adjudication call.
 
-The current harness is a scaffold. It validates/runs cases and calculates basic field scores, citation presence, repeatability, and CMS-address disagreement, but it does not yet collect independent web evidence, run LLM judges or human adjudication, compare government phone/site/rating truth, import request cost/search-call telemetry, apply population weights, or perform provider-clustered inference. The rest of this section is the target certification analysis to implement before a CMS-grade run.
+`lineOfCoverage: "Medical"` remains in the public request envelope for
+compatibility with the medical insurance-product workflow. It is not a
+provider-entity filter: NPI Type 1 practitioners and NPI Type 2 groups, clinics,
+hospitals, and facilities remain supported, and the value is not copied into
+the model prompt.
 
-Run every locked case three times through the current environment. Treat the provider, not each repeat, as the independent sampling unit; use repeats to estimate nondeterminism and analyze accuracy with provider-clustered or provider-aggregated methods. Score field coverage, emitted precision, gold recall, end-to-end top-one accuracy (missing is incorrect), citation presence, wrong-provider rate, CMS-address agreement/conflict, latency, failure rate, unsafe-personal disclosure, and repeat Jaccard/top-one agreement. Report Wilson 95% intervals for simple provider-level proportions and a paired interval/test (for example, McNemar-based analysis) for AI-versus-directory comparisons. Report weighted overall and stratum results, correct for multiple field/stratum comparisons, and perform the final sample-size calculation from preregistered margins/effects plus pilot-estimated prevalence, paired discordance, clustering, and expected exclusions.
+## Reproducing the public service path
 
-`cmsAddressConflict` is an offline evaluation flag only. It records whether the first returned AI address differs from the locked plan-directory/CMS baseline so later analysis can quantify the issue. It does not suppress, replace, reorder, or otherwise change runtime AI output. Any production reconciliation behavior requires separate product, compliance, and CMS approval.
-
-A conflict flag is not a correctness verdict. The directory value, AI value, both values, or neither value may be current. Accuracy scoring must consider the underlying evidence, recency, source independence, and the higher-reasoning judge/human adjudication result.
-
-Citation presence means that a displayed fact points to a source object with a citation-backed URL. It does **not** prove that the cited page supports that specific field; field support remains a human-adjudicated certification measure.
-
-Release thresholds must be approved before looking at certification results. Personal-contact leakage and wrong-provider critical errors should have a zero-tolerance release gate. Accuracy thresholds for each field, required coverage, acceptable failure/latency, and conflict behavior require product, compliance, and CMS approval.
-
-## Commands
+The checked-in example cases are synthetic and remain suitable for harness
+validation. Real development and holdout batteries, raw responses, returned
+webpage snapshots, judge traces, and review TSVs are retained in the parent
+EDE evidence archive; they are not runtime fixtures for this service.
 
 ```sh
-npm run eval:provider -- validate --cases eval-private/locked-cases.jsonl
-
-PROVIDER_EVAL_LIVE=true \
-PROVIDER_EVAL_HMAC_KEY='managed-secret' \
-npm run eval:provider -- run \
-  --api-base http://api-ai-websearch:3065/v1/ai \
-  --cases eval-private/locked-cases.jsonl \
-  --repeats 3 \
-  --out eval-private/runs
-
-find eval-private/runs -name '*.json' -print | sort > eval-private/observation-manifest.txt
-
-PROVIDER_EVAL_HMAC_KEY='managed-secret' \
-npm run eval:provider -- score \
-  --cases eval-private/locked-cases.jsonl \
-  --observations eval-private/observation-manifest.txt \
-  --out eval-results/certification
+npm run build
+npm test
+npm run eval:provider -- validate --cases eval/provider-profile-cases.example.jsonl
 ```
 
-For a direct API-AI run, set `PROVIDER_EVAL_SUBDOMAIN`; the runner sends it as `Lifecycle-Subdomain` and sends no user identifier. For a Public-API run, set `PROVIDER_EVAL_AUTHORIZATION` and `PROVIDER_EVAL_ORIGIN`; Public-API authenticates the request, derives the coarse user class from OAuth, and derives the current tenancy subdomain from Origin. Keep secrets and evidence outside committed artifacts. The production organization-to-user binding and approved evaluation service identity still require an explicit security review.
+The live runner calls the deployed provider-profile API and must not override
+the production model or bypass the normal parser, retry, provenance, and
+sanitizer path. Keep credentials and any private evaluation inputs outside the
+repository.
+
+## Historical material
+
+Earlier planning text, candidate-specific protocols, aborted launches,
+errata, intermediate reports, and categorical result tables are preserved in
+the parent EDE provider-evaluation archive. They are historical evidence, not
+current release instructions. The two documents under **Current documents**
+are the authoritative CMS-facing account of the completed study.
