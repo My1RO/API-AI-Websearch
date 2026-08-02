@@ -1,5 +1,11 @@
-node_modules
-build
-coverage
-.env
-npm-debug.log*
+**
+!Dockerfile
+!Dockerfile.dev
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.scripts.json
+!src
+!src/**
+!scripts
+!scripts/**

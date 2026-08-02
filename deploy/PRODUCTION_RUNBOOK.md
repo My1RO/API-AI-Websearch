@@ -69,6 +69,25 @@ Before rendering or deploying it, reject a mutable image reference:
 printf '%s\n' "$API_AI_WEBSEARCH_IMAGE" \
   | grep -Eq '@sha256:[0-9a-f]{64}$' \
   || { echo 'API_AI_WEBSEARCH_IMAGE must end in @sha256:<64 lowercase hex characters>' >&2; exit 1; }
+
+node <<'NODE'
+const rateNames = [
+  "AI_COST_INPUT_USD_PER_MILLION",
+  "AI_COST_CACHED_INPUT_USD_PER_MILLION",
+  "AI_COST_OUTPUT_USD_PER_MILLION",
+  "AI_COST_CACHE_WRITE_USD_PER_MILLION",
+  "AI_COST_WEB_SEARCH_USD_PER_THOUSAND"
+];
+for (const name of rateNames) {
+  const value = process.env[name];
+  if (!value?.trim() || !Number.isFinite(Number(value)) || Number(value) < 0) {
+    throw new Error(`${name} must be a finite nonnegative number`);
+  }
+}
+if (!process.env.AI_COST_PRICING_VERSION?.trim()) {
+  throw new Error("AI_COST_PRICING_VERSION is required");
+}
+NODE
 ```
 
 ## Pre-cutover smoke
@@ -81,6 +100,8 @@ printf '%s\n' "$API_AI_WEBSEARCH_IMAGE" \
    request, raw Azure response, parsed output, native tool trace, retry counts,
    latency, token/search usage, and cost estimate. Confirm no plan/network
    fields were placed on the Azure request and no production host fetch ran.
+   Fail the smoke unless cost telemetry has `estimated: true`, a finite
+   nonnegative `totalUsd`, and the expected pricing-version label.
 5. Confirm feedback writes and phone-call aggregation against a test tenant;
    do not use live member data.
 6. Admit traffic gradually and watch the gates below.
