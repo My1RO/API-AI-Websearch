@@ -136,6 +136,41 @@ converted into success. The result does not establish complete internet
 coverage, perfect citation fidelity, national performance, or superiority over
 government/provider-directory APIs.
 
+### Development-to-holdout regression check
+
+Lucie compared the frozen 60-provider D36 development result with the disjoint
+60-provider holdout. There was no release-material regression:
+
+- parsed profiles and profiles containing a phone, address, or website remained
+  60/60;
+- confirmed major-safety violations remained zero (58 paired-eligible
+  development cases; 59 evaluable holdout cases);
+- readable direct-citation precision was effectively identical: 128/129
+  (99.2%) in development and 125/126 (99.2%) in holdout;
+- own-citation unreadability was also similar: 89/218 assessments across 35/60
+  development cases versus 92/218 across 34/59 evaluable holdout cases;
+- lower-tier source selections decreased from 26 to 23 fields, and non-rating
+  inappropriate withholding decreased from 14 to nine fields;
+- mean production cost decreased 1.1%, from `$0.0847505` to `$0.0838086` per
+  provider; and
+- median and p95 Azure latency increased from `8.859 s`/`13.190 s` to
+  `9.542 s`/`13.881 s`, while the development run's `309.402 s` transport tail
+  did not recur (holdout maximum `14.613 s`).
+
+The holdout did expose three adverse differences that remain disclosed: one
+minor unsupported `/` address component, one evaluator context-overflow case,
+and whole-packet unreadability in six provider cases rather than two. An
+exploratory provider-unit Fisher comparison of the latter was `p=0.163`; it did
+not establish a cohort regression. Both raw holdout contradictions were traced
+to evaluator overreach against frozen exact-NPI evidence, not confirmed unsafe
+or wrong-provider output.
+
+This was not a preregistered confirmatory noninferiority test, and the
+exploratory comparisons were not adjusted for multiple testing. Lucie therefore
+states that no statistically established or operationally material regression
+was observed—not that development and holdout performance are proven
+equivalent. No prompt was retuned after the holdout was opened.
+
 ## Feedback governance
 
 The service stores organization-scoped daily aggregate counts by broad
