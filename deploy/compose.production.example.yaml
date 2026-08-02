@@ -1,0 +1,42 @@
+services:
+  api-ai-websearch:
+    image: ${API_AI_WEBSEARCH_IMAGE:?Set an immutable image reference, preferably by digest}
+    init: true
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    stop_grace_period: 30s
+    environment:
+      NODE_ENV: production
+      PORT: 3065
+      AI_FEATURE_ENABLED: "true"
+      AI_WEBSEARCH_COMPLIANCE_CONFIRMED: "true"
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:?Set the approved Azure endpoint}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:?Inject from the approved secret store}
+      AZURE_OPENAI_DEPLOYMENT: gpt-5.6-terra
+      AI_REASONING_EFFORT: low
+      AI_WEBSEARCH_TOOL_CHOICE: required
+      AI_WEBSEARCH_MAX_TOOL_CALLS: "8"
+      AI_WEBSEARCH_PARALLEL_TOOL_CALLS: "true"
+      AI_WEBSEARCH_ALLOWED_DOMAINS: ""
+      AI_WEBSEARCH_BLOCKED_DOMAINS: ""
+      REDIS_URL: ${REDIS_URL:?Set the production Redis URL}
+      MYSQL_HOST: ${MYSQL_HOST:?Set the production MySQL host}
+      MYSQL_PORT: ${MYSQL_PORT:-3306}
+      MYSQL_USER: ${MYSQL_USER:?Set the production MySQL user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Inject from the approved secret store}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-api_ai_websearch}
+      PROVIDER_PROFILE_SEARCH_CONCURRENCY: ${PROVIDER_PROFILE_SEARCH_CONCURRENCY:-2}
+      AI_COST_INPUT_USD_PER_MILLION: ${AI_COST_INPUT_USD_PER_MILLION:?Set the approved input-token rate}
+      AI_COST_CACHED_INPUT_USD_PER_MILLION: ${AI_COST_CACHED_INPUT_USD_PER_MILLION:?Set the approved cached-input rate}
+      AI_COST_OUTPUT_USD_PER_MILLION: ${AI_COST_OUTPUT_USD_PER_MILLION:?Set the approved output-token rate}
+      AI_COST_CACHE_WRITE_USD_PER_MILLION: ${AI_COST_CACHE_WRITE_USD_PER_MILLION:?Set the approved cache-write rate}
+      AI_COST_WEB_SEARCH_USD_PER_THOUSAND: ${AI_COST_WEB_SEARCH_USD_PER_THOUSAND:?Set the approved web-search rate}
+      AI_COST_PRICING_VERSION: ${AI_COST_PRICING_VERSION:?Set the approved price-card version}
+    expose:
+      - "3065"
