@@ -40,7 +40,7 @@ const response = (provenanceItem, profileValue = profile()) => ({
   ].filter(Boolean)
 });
 
-describe("common D-series production contract", () => {
+describe("current provider-profile parser and sanitizer contract", () => {
   let consoleLogSpy;
 
   beforeEach(() => {

@@ -1,26 +1,36 @@
 # Provider-profile validation and CMS response evidence
 
-Status date: 2026-08-01 (America/New_York)
+Status date: 2026-08-02 (America/New_York)
 
 ## Executive decision
 
-Lucie should ship the frozen selected provider-profile configuration, subject
-to ordinary deployment, security, monitoring, and rollback controls. It passed
-the preregistered stopping rule: after additive review of every raw critical
-label, **zero major safety violations were confirmed among 59 evaluable cases
-in the disjoint 60-provider holdout**. One case was not judged because its
-complete evidence packet exceeded the evaluator's direct-input ceiling; no
-content was truncated and no extraction-model fallback was used.
+Lucie should ship the selected short provider-profile contract, subject to
+ordinary deployment, security, monitoring, and rollback controls. It is
+11,196 static bytes, **87.1% smaller** than its 86,769-byte working predecessor,
+and passed every frozen paired development non-inferiority, safety, parser,
+fidelity-count, and evidence-availability gate.
 
-This decision followed a broad candidate funnel: **40 distinct
-production-shaped configurations were tested with live pilot requests, four
-advanced to complete 60-provider development evaluations, and the selected
-configuration was then frozen and tested on a separate 60-provider holdout.**
+The longer predecessor had already passed the source-quality stopping rule:
+after additive review of every raw critical label, **zero major safety
+violations were confirmed among 59 evaluable cases in its disjoint 60-provider
+holdout**. One case was not judged because its complete evidence packet
+exceeded the evaluator's direct-input ceiling; no content was truncated and no
+extraction-model fallback was used. The later minimization used only the frozen
+development battery. The short contract did not receive a new holdout run.
+
+This decision followed two controlled funnels. The source-quality study tested
+**40 distinct production-shaped configurations** with live pilot requests,
+advanced four to complete 60-provider development evaluations, and froze its
+winner before a separate 60-provider holdout. The later minimization piloted
+seven shorter contracts on development cases and ran complete paired
+60-provider comparisons for the two shortest survivors.
 
 The companion [CMS response](CMS_PROVIDER_AI_RESPONSE.md) includes the literal
-evaluated production prompt and strict output schema as Appendices A and B.
+selected production prompt and exact strict output schema as Appendices A and
+B. The [minimization report](PROVIDER_PROMPT_MINIMIZATION_REPORT.md) gives the
+frozen paired protocol and complete short-contract result.
 
-This is not a perfect-accuracy claim. The holdout found one confirmed minor
+This is not a perfect-accuracy claim. The predecessor holdout found one confirmed minor
 address-format defect, nine claims whose exact evidence remained unavailable,
 imperfect source-hierarchy adherence, and citation-span defects. Performance
 has plateaued around citation availability, quotation fidelity, and a few hard
@@ -29,15 +39,16 @@ overfit the validation set. The stopping rule therefore sends lesser defects
 to post-release monitoring and permits a new version only for a confirmed
 major-safety defect or a separately scoped material improvement.
 
-The evaluated configuration was frozen before opening the holdout. Its build
-passed, with 267 tests passing and four skipped across 41 passing suites and
-one skipped suite. It has been packaged and smoke-tested locally but has not
-completed target-environment deployment and verification. This report therefore
-does not claim production cutover completion.
+The predecessor was frozen before opening the holdout, and no holdout material
+was opened during later minimization. The selected short release has been
+packaged and locally verified but has not completed target-environment
+deployment and verification. This report therefore does not claim production
+cutover completion.
 
 ## What is being shipped
 
-The selected configuration uses the Azure OpenAI Responses API with:
+The selected 11,196-byte short contract uses the Azure OpenAI Responses API
+with:
 
 - deployment `gpt-5.6-terra`;
 - reasoning effort `low`;
@@ -57,11 +68,18 @@ The selected configuration uses the Azure OpenAI Responses API with:
 - direct per-fact evidence: `sourceUrl`, nullable `sourceTitle`,
   `providerIdentitySpan`, `factSpan`, and nullable `explicitFactDateSpan`.
 
+Schema descriptions were removed after controlled development evaluation
+showed that the lean system policy plus strict field names and types preserved
+performance. Requirements are stated once rather than duplicated between the
+prompt and schema.
+
 The profile endpoint is currently invoked from the medical-plan workflow, so
 its public request envelope retains `lineOfCoverage: "Medical"` for API
 compatibility. `Medical` identifies the insurance product line only. It is
-orthogonal to provider entity type, is not used to exclude facilities, and is
-not copied into the model prompt. The service supports NPI Type 1 individual
+orthogonal to provider entity type, is not used to exclude facilities, and the
+request field is not serialized into provider objects or returned by the model.
+The prompt's independent phrase “Medical providers” scopes the healthcare-
+search domain; it does not narrow entity type. The service supports NPI Type 1 individual
 practitioners and NPI Type 2 entities, including group practices, clinics,
 hospitals, and other facilities. Network status remains the exclusive
 responsibility of CMS and plan-directory APIs.
@@ -136,7 +154,7 @@ battery.** The final two non-dominated configurations then received a paired
 60-provider comparison under the same fixed evaluator. The winner was selected
 and frozen before the separate 60-provider holdout was opened.
 
-The selected configuration's unique change over its final comparator was
+The source-quality predecessor's unique change over its final comparator was
 deliberately narrow and prompt/schema-only:
 
 - require exact, page-local source quotations for identity and each fact;
@@ -152,9 +170,9 @@ The parser, provenance treatment, retry behavior, and narrow deterministic
 sanitizer were unchanged from the final comparator. In the paired development
 comparison, both finalists had zero validated major-safety failures and no
 profile/all-contact loss. Fifty-eight providers were paired evaluable. The
-selected configuration won at the first unequal safety-first criterion: the
+source-quality predecessor won at the first unequal safety-first criterion: the
 comparator emitted one readable materially unsupported address component,
-while the selected configuration emitted none. The selected configuration had
+while the predecessor emitted none. The predecessor had
 one later partial own-citation detail that the comparator did not; the
 preregistered lexicographic rule did not allow that later tradeoff to override
 the earlier material-support result. These differences do not establish
@@ -164,7 +182,60 @@ The two-configuration development production run cost an estimated `$10.2757645`
 118 paid Sol/high judge calls cost `$83.879661`. Evaluation cost is not
 production unit cost.
 
-### Sealed holdout
+### Development-only prompt minimization
+
+After the holdout was sealed, Lucie minimized the complete prompt contract
+using only the same frozen 60-provider development battery. Static measurement
+included the joined system instructions, fixed user scaffolding, and exact
+strict JSON schema generated from Zod; dynamic provider values were excluded
+and held identical between arms. This follows OpenAI's GPT-5.6 guidance to
+start from a working prompt, remove one coherent group at a time, state each
+instruction once, and rerun representative evaluations.
+
+Seven shorter contracts were piloted on difficult development cases. The two
+shortest survivors received complete paired 60-provider production runs and
+the same corrected Sol/high categorical evaluator. The selected shared
+sourced-value schema was the shortest passing candidate:
+
+| Endpoint | Working predecessor | Short contract | Difference | Lower 95% bound |
+| --- | ---: | ---: | ---: | ---: |
+| Static contract bytes | 86,769 | 11,196 | -87.1% | — |
+| Profile with eligible contact | 98.33% | 98.33% | 0.00 pp | 0.00 pp |
+| Exact whole-packet material support | 99.38% | 99.38% | +0.004 pp | -1.82 pp |
+| Exact own-citation support | 99.36% | 98.05% | -1.31 pp | -4.64 pp |
+| Exact provider identity | 100% | 100% | 0.00 pp | 0.00 pp |
+
+All four paired endpoints cleared the frozen -5 percentage-point margin. Both
+arms returned 60/60 parsed profiles. The short arm introduced zero new wrong-
+provider/NPI attachments, unsupported material facts, unsafe personal or
+residential contacts, or material contradictions. Net affected-case changes
+were -2 for withholding, -4 for lower-tier selection, +2 for span defects, and
+-6 for unreadability, all inside the +3 maximum.
+
+The shorter arm used 1,083,269 input tokens versus 1,922,354 (-43.7%), 41,728
+versus 47,357 output tokens, and 149 versus 144 web searches. Estimated
+production cost was `$4.6159965` versus `$5.041616` (-8.4%). Short-arm
+mean/median/p95/max cost was `$0.07693`/`$0.06909`/`$0.11682`/`$0.17099`;
+latency was 14.67/8.55/16.31/309.75 seconds.
+
+One source initially marked unreadable was an evaluator transport defect. The
+direct fetch received an ALB 403, but the uniform rate-limited reader fallback
+retrieved the exact returned first-party page and confirmed the specialty,
+phone, and address. The only remaining defect on that case was a minor
+unsupported slash in `addressLine2`. The corrected protocol had zero reader-
+fallback failures for emitted citations and was applied identically to both
+arms. An earlier compiler also applied set difference instead of the frozen
+net affected-case rule; the corrected compiler preserves novel/resolved lists
+for audit while applying the literal net count.
+
+The next-shortest coherent candidate, 12,469 bytes, failed only the withholding
+gate (+5 cases versus a +3 limit). The selected 11,196-byte contract passed,
+and remaining deletions were below the frozen 5% plateau threshold with no
+repeated policy block left. The iteration therefore stopped. No holdout
+request, result, trace, source, or case-specific fact was opened or used. The
+prior holdout directly validates only the longer predecessor.
+
+### Sealed holdout of the longer predecessor
 
 The holdout repeated the original construction procedure with an independent
 seed and excluded every development provider before sampling. It contains 60
@@ -185,10 +256,10 @@ This is a probability sample conditional on the six-market, text-query-based
 frame and sampled plans. It is not nationally representative; inclusion
 probabilities relative to the complete national provider universe are unknown.
 
-### Fixed evaluation
+### Fixed evaluation of the longer predecessor
 
 Production ran the frozen requests once. Evaluation then fetched only the URLs
-returned by the selected configuration; it did not use a union packet or credit
+returned by the predecessor configuration; it did not use a union packet or credit
 the configuration with a page it had not returned. Fetching was deterministic,
 parallel, evaluation-only, and absent from production.
 
@@ -200,7 +271,7 @@ that Sol `low` and `medium` were not equivalent to `high`: both reproduced the
 critical findings but introduced evidence-sufficiency, recency, and CMS-role
 differences. High reasoning therefore remained fixed for the official judge.
 
-## Holdout production results
+## Longer-predecessor holdout production results
 
 | Outcome | Result |
 | --- | ---: |
@@ -271,7 +342,7 @@ is wrong.
 ### Source hierarchy by field
 
 Counts are across 59 evaluable cases and apply only to sources found by the
-selected configuration, not to the entire internet.
+predecessor configuration, not to the entire internet.
 
 | Field | Highest eligible tier | Lower tier | Appropriate conflict withholding | Inappropriate withholding | Indeterminate | N/A |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -493,7 +564,7 @@ identity anchors; specialty and location are stale-capable cross-checks.
 Every emitted specialty, address, phone, and website must identify the exact
 provider and include a direct page URL plus separate identity and fact spans.
 Source priority follows, rather than precedes, evidence qualification. Ratings,
-including Zocdoc ratings, are not shipped. In the holdout, 206 of 218
+including Zocdoc ratings, are not shipped. In the longer predecessor's holdout, 206 of 218
 evaluable claims had exact whole-packet support, one was partial, nine were
 unreadable, and two raw contradictions were rejected after documented trace
 review. For 126 claims, the own cited page was host-readable; 125 exactly
@@ -507,16 +578,20 @@ after identity, conflict, safety, location, and fact-specific-recency checks.
 Among otherwise equivalent eligible sources it prefers a first-party provider,
 practice, or facility page; then government evidence; then a professional
 directory. Element zero is displayed first; later values require “Show more.”
-The holdout shows this hierarchy is useful but imperfect and should not be
+The predecessor holdout and short-contract development comparison show this
+hierarchy is useful but imperfect and should not be
 represented as deterministic or infallible.
 
 ### Comparative accuracy statement
 
 Lucie completed a development comparison and an outcome-blind disjoint
-holdout. The study supports the selected configuration as shippable under the stated
-stopping rule. It does **not** show that AI provider contact data are more
-accurate than CMS, NPPES, or plan-directory APIs, does not establish national
-performance, and was not a blinded independent human-adjudication study.
+holdout. The holdout study supports the longer predecessor under its stated
+stopping rule; the paired development study supports the short contract as
+non-inferior within its frozen margins. Together they support shipping the
+short contract with the disclosed validation boundary. These studies do
+**not** show that AI provider contact data are more accurate than CMS, NPPES,
+or plan-directory APIs, do not establish national performance, and were not a
+blinded independent human-adjudication study.
 
 ## Reproducibility package
 
@@ -524,7 +599,10 @@ The retained evidence package contains the sealed cohort and overlap proof,
 exact production requests and raw Azure responses, production summaries, raw
 case/claim/candidate/source/policy TSVs, deterministic webpage snapshots, fixed
 judge requests and responses, compiled validation results, the additive manual
-trace audit, and credential-safe API reproductions. The production and case
+trace audit, and credential-safe API reproductions. The separate minimization
+package retains both full development arms, all returned-source snapshots,
+corrected judge artifacts, claim-level TSVs, paired-bootstrap outputs, compiler
+errata, candidate ledgers, and production cost/latency summaries. The production and case
 TSVs each contain 60 data rows; the claim and candidate TSVs each contain 221;
 and the source TSV contains 1,583. All were validated as UTF-8, tab-delimited,
 fixed-column records without embedded carriage returns or NUL bytes.
@@ -534,8 +612,10 @@ for auditability but are intentionally omitted from this outward-facing report.
 
 ## Release packaging and remaining cutover work
 
-After the sealed evaluation, Lucie added a packaging-only production image and
-deployment contract without changing the evaluated treatment. The image uses a
+After the sealed predecessor evaluation, Lucie added a production image and
+deployment contract. The prompt/schema were later shortened only through the
+separately evaluated development protocol described above; parser, sanitizer,
+Azure client, retry policy, and runtime defaults remained unchanged. The image uses a
 digest-pinned Node base, locked install, compiled start, non-root user,
 read-only-compatible filesystem, and Redis/AI-configuration healthcheck. A
 local dedicated-Redis smoke passed health, non-root/read-only checks, and the
@@ -544,8 +624,8 @@ smoke evidence and frozen dependency-scan disclosure.
 
 External cutover still requires Lucie to:
 
-1. Publish and review the exact evaluated source and its
-   packaging/documentation-only descendant without altering the treatment.
+1. Publish and review the exact selected short-contract source and its
+   documentation-only release descendant without altering the treatment.
 2. Build in approved CI, push an immutable registry digest, and bind it to the
    evaluated source and release build.
 3. Attest the actual endpoint, secret source, Terra/low lock, approved price
@@ -556,4 +636,5 @@ External cutover still requires Lucie to:
    feedback/MySQL smoke, record the previous image digest, and activate the
    defined monitors before gradual traffic admission.
 6. Treat any confirmed major-safety incident as a release blocker for a
-   separately versioned repair; do not silently retune this sealed result.
+   separately versioned repair; do not silently retune against the sealed
+   holdout.

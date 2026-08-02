@@ -1,10 +1,14 @@
-# API-AI-Websearch D36 production runbook
+# Provider-profile AI production runbook
 
-This packages the holdout-validated D36 semantic treatment without changing
-its prompt, schema, parser, sanitizer, Azure client, retry policy, or runtime
-defaults. The evaluated ancestor is
-`d6afd2d2c24983ea2dbbdbdaf064864d17a13186`, tree
-`9bd581ad68d8b88b891b2833d356d17791d4bda6`.
+This packages the selected short provider-search contract with the same parser,
+provenance handling, narrow sanitizer, Azure client, retry policy, and runtime
+defaults used in its paired development comparison. Its static prompt contract
+is 11,196 bytes, 87.1% smaller than the 86,769-byte working comparator.
+
+The preceding longer configuration was frozen and evaluated on a disjoint
+60-provider holdout. The short contract was selected later using only the
+frozen 60-provider development battery and has not been rerun on that holdout.
+Do not describe the short contract itself as holdout-validated.
 
 ## Build and identify the image
 
@@ -51,6 +55,15 @@ The deployment must resolve to:
 - feature and compliance gates enabled;
 - the evaluated non-stacking retry policy in application code; and
 - the approved cost rate card and pricing-version label.
+
+Before building, verify the selected contract:
+
+```sh
+node -r ./node_modules/ts-node/register scripts/measure-provider-prompt-contract.ts
+```
+
+The command must report `11196` static bytes. Any other result is a treatment
+change and requires review and representative validation before release.
 
 The application health response must be HTTP 200, `redis: "ok"`, and
 `ai.ready: true`. The image healthcheck enforces Redis and AI configuration
@@ -108,8 +121,9 @@ NODE
 
 ## Initial monitoring gates
 
-These are conservative launch gates derived from the 60-case holdout and must
-be reviewed after real traffic establishes a baseline:
+These are conservative launch gates informed by the predecessor's 60-case
+holdout and the short contract's paired 60-case development comparison. They
+must be reviewed after real traffic establishes a baseline:
 
 | Signal | Warning | Critical / action |
 | --- | --- | --- |
@@ -125,7 +139,7 @@ be reviewed after real traffic establishes a baseline:
 
 Content-filter exhaustion is operational censoring, not evidence that an arm is
 low quality. It is still monitored for availability and unusual increases.
-The evaluated client retains the SDK timeout behavior used in the holdout; the
+The selected client retains the SDK timeout behavior used in both studies; the
 single-request and saturation gates above explicitly cover long-tail occupancy
 without silently changing that validated runtime policy.
 
