@@ -8,23 +8,29 @@ defaults. The evaluated ancestor is
 
 ## Build and identify the image
 
-Use the exact reviewed release commit as `SOURCE_REVISION`:
+Use the exact reviewed release commit as `SOURCE_REVISION` and require the
+actual deployment platform. Do not rely on the build workstation's native
+architecture:
 
 ```sh
 release_sha=$(git rev-parse HEAD)
+: "${RELEASE_PLATFORM:?Set the deployed platform, for example linux/amd64}"
 
 docker build \
+  --platform "$RELEASE_PLATFORM" \
   --file Dockerfile \
   --build-arg "SOURCE_REVISION=$release_sha" \
   --tag "api-ai-websearch:$release_sha" \
   .
 
 docker image inspect "api-ai-websearch:$release_sha" \
-  --format '{{.Id}} {{index .Config.Labels "org.opencontainers.image.revision"}}'
+  --format '{{.Id}} {{.Os}}/{{.Architecture}} {{index .Config.Labels "org.opencontainers.image.revision"}}'
 ```
 
 The image must be published and deployed by immutable digest. Record both the
-release commit and digest. Never rebuild an existing release tag.
+release commit and digest. Never rebuild an existing release tag. If multiple
+architectures are required, use an explicitly reviewed buildx matrix and smoke
+each deployed platform digest.
 
 The Dockerfile also pins the Node 22 Alpine manifest list to
 `sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32`.
@@ -57,6 +63,13 @@ profile requests fail closed.
 The example Compose service is a deployment contract, not a secret-management
 system. Supply secrets through the target platform's approved secret store and
 render `compose.production.example.yaml` only in controlled environments.
+Before rendering or deploying it, reject a mutable image reference:
+
+```sh
+printf '%s\n' "$API_AI_WEBSEARCH_IMAGE" \
+  | grep -Eq '@sha256:[0-9a-f]{64}$' \
+  || { echo 'API_AI_WEBSEARCH_IMAGE must end in @sha256:<64 lowercase hex characters>' >&2; exit 1; }
+```
 
 ## Pre-cutover smoke
 

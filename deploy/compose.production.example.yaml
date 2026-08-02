@@ -1,6 +1,6 @@
 services:
   api-ai-websearch:
-    image: ${API_AI_WEBSEARCH_IMAGE:?Set an immutable image reference, preferably by digest}
+    image: ${API_AI_WEBSEARCH_IMAGE:?Set an immutable registry reference ending in @sha256:<digest>}
     init: true
     restart: unless-stopped
     read_only: true

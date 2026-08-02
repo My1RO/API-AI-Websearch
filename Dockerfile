@@ -1,6 +1,4 @@
-ARG NODE_IMAGE=node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32
-
-FROM ${NODE_IMAGE} AS build
+FROM node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32 AS build
 
 WORKDIR /home/node/app
 
@@ -13,7 +11,7 @@ COPY scripts ./scripts
 
 RUN npm run build
 
-FROM ${NODE_IMAGE} AS production-dependencies
+FROM node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32 AS production-dependencies
 
 WORKDIR /home/node/app
 
@@ -21,9 +19,11 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts \
   && npm cache clean --force
 
-FROM ${NODE_IMAGE} AS runtime
+FROM node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32 AS runtime
 
-ARG SOURCE_REVISION=unknown
+ARG SOURCE_REVISION
+
+RUN test -n "${SOURCE_REVISION}"
 
 LABEL org.opencontainers.image.source="https://github.com/My1RO/API-AI-Websearch" \
   org.opencontainers.image.revision="${SOURCE_REVISION}"
