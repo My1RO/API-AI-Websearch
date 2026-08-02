@@ -1,30 +1,31 @@
 # CMS response: AI web-search provider profiles
 
-Status: CMS-ready technical draft. Lucie completed a source-quality study,
-sealed holdout, and later development-only prompt-minimization study. The
-selected short contract is not represented as already deployed or newly
-holdout-validated.
+Status: technical draft updated with the short contract's sealed holdout. The
+holdout overturned the proposed promotion: the short contract is not approved
+for deployment unchanged. The longer source-quality predecessor remains the
+release candidate while Lucie develops and independently validates a narrow
+repair.
 
 The [companion validation report](CMS_PROVIDER_AI_VALIDATION_REPORT.md) gives
 the complete design, denominators, cost and latency distributions, limitations,
 API reproductions, and evidence inventory. The
-[prompt-minimization report](PROVIDER_PROMPT_MINIMIZATION_REPORT.md) gives the
-paired development non-inferiority result.
+[prompt-minimization report](PROVIDER_PROMPT_MINIMIZATION_REPORT.md) records
+both the paired development result and the later holdout reversal.
 
 ## Responses to CMS
 
 | Original CMS question | Lucie response |
 | --- | --- |
-| **Will there be guardrails to prevent the disclosure and display of the provider’s personal information (e.g., to prevent the provider’s personal cell phone number or address from being displayed)?** | Yes. The model may return only public professional contacts for the exact provider and must omit fax, mobile/cell, personal/home, residential, people-search, and uncertain-purpose candidates. Every fact carries its own provider-identity quotation, fact quotation, and direct page URL. Narrow host checks reject literal self-declared prohibited values and invalid output, but Lucie does not claim deterministic code can identify every unlabeled personal contact. The longer predecessor's disjoint holdout found zero manually confirmed major-safety violations among 59 evaluable cases; one case was evaluator overflow. The short contract introduced zero new wrong-provider, unsupported-material, unsafe-contact, or contradicted claims in its paired 60-provider development comparison. This is measured evidence, not a guarantee that disclosure is impossible. |
+| **Will there be guardrails to prevent the disclosure and display of the provider’s personal information (e.g., to prevent the provider’s personal cell phone number or address from being displayed)?** | Yes, but the short successor is not approved unchanged. The model may return only public professional contacts for the exact provider and must omit fax, mobile/cell, personal/home, residential, people-search, and uncertain-purpose candidates. Every fact carries its own provider-identity quotation, fact quotation, and direct page URL. Narrow host checks reject literal self-declared prohibited values and invalid output, but Lucie does not claim deterministic code can identify every unlabeled personal contact. In the short contract's sealed holdout, no judged claim disclosed a personal/mobile phone or residential address; however, one bare fax number was incorrectly retained as a phone. Ten cases were evaluator no-call overflows and two produced no parsed profile. That confirmed prohibited contact blocks promotion under Lucie's safety-first rule. |
 | **When there are conflicts between HealthCare.gov API data and OpenAI indexed data, how would they be addressed?** | HealthCare.gov and plan-directory APIs exclusively determine network status. Plan/network data are not serialized into the provider objects sent to the model and are not returned by it, so AI contact information cannot override participation. Contact disagreements are resolved field by field from exact-provider evidence; agreement with an API is not proof that either value is current. NPI and name are primary identity keys. Specialty and requested location are stale-capable cross-checks. |
 | **If conflicting information is displayed, how should the consumer or agent/broker reconcile those conflicts?** | The product identifies AI contact information as supplemental, preserves plan-directory authority for network status, provides source links, and supports structured correctness feedback. Users should confirm important details with the cited provider source or provider/issuer. Lucie—not the consumer—owns investigation and correction. An unresolved same-field identity or safety conflict is omitted; a conflict in one field does not suppress unrelated supported facts. Feedback neither automatically trains the model nor replaces displayed data. |
-| **Please explain how Lucie would validate the accuracy of the OpenAI indexed data with respect to the proposed provider contact information modal solution. Specifically, what mechanisms would the Lucie team use to ensure the accuracy and reliability of each proposed LLM-generated/OpenAI indexed provider data field (i.e., ZocDoc ratings, telephone numbers, address, and website URL)?** | Every selected specialty, phone, address, and website must identify the exact provider and carry one direct page URL plus separate identity and fact spans. The model verifies professional purpose, resolves relevant different-NPI conflicts, applies fact-specific recency when available, and only then applies source priority. SDK-native strict Zod Structured Outputs and narrow host invariants enforce the response shape. Ratings, including Zocdoc ratings, are not in the shipped contract. In the longer predecessor's sealed holdout, 206 of 218 evaluable claims had exact whole-packet support, one was partial, nine were unreadable, and two raw contradictions were rejected after trace review. Of 126 claims with host-readable own citations, 125 exactly supported the value and one partially supported it. In the paired development comparison, the short contract's whole-packet and own-citation support were 99.38% and 98.05%; all frozen lower confidence bounds cleared the -5 percentage-point margin. Unreadable evidence remains unknown, not correct. |
-| **Has Lucie done testing to determine how the accuracy of the AI Web-Search Provider Profiles compare to the accuracy of information provided by the existing gov APIs?** | Yes, with limits. Lucie tested 40 source-quality configurations in live pilots, advanced four to complete 60-provider development evaluations, selected a winner under a fixed safety-first rule, and ran that longer predecessor once on a sealed disjoint 60-provider holdout. Every holdout provider came from CMS provider search, had literal coverage under at least one sampled actual 2026 Marketplace plan, and had an active matching NPPES identity/location at cohort construction. The predecessor returned 60/60 profiles. Among 59 evaluable address claims, 51 matched the requested CMS location category, six were other professional locations, and two were unreadable. The later short contract returned 60/60 development profiles and passed paired quality and safety gates, but did not receive a new holdout run. The study evaluates overlap and independent web support; it does not establish superiority over CMS, NPPES, or plan directories or national representativeness. |
+| **Please explain how Lucie would validate the accuracy of the OpenAI indexed data with respect to the proposed provider contact information modal solution. Specifically, what mechanisms would the Lucie team use to ensure the accuracy and reliability of each proposed LLM-generated/OpenAI indexed provider data field (i.e., ZocDoc ratings, telephone numbers, address, and website URL)?** | Every selected specialty, phone, address, and website must identify the exact provider and carry one direct page URL plus separate identity and fact spans. The model verifies professional purpose, resolves relevant different-NPI conflicts, applies fact-specific recency when available, and only then applies source priority. SDK-native strict Zod Structured Outputs and narrow host invariants enforce response shape, but the holdout showed those mechanisms are not sufficient by themselves. Of 166 judged short-contract claims, 164 had exact whole-packet support, one was contradicted, and one was unreadable. Own citations were 160 exact, two not found, one contradicted, and three unreadable. The contradicted claim was a fax emitted as a phone. Thirty-three additional claims were unjudged because complete evidence packets exceeded the fixed context ceiling. Ratings, including Zocdoc ratings, remain outside the contract. |
+| **Has Lucie done testing to determine how the accuracy of the AI Web-Search Provider Profiles compare to the accuracy of information provided by the existing gov APIs?** | Yes, with limits. Lucie tested 40 source-quality configurations and seven shorter prompt contracts. Four source-quality configurations advanced to complete 60-provider development evaluations; two prompt-minimization survivors received complete paired development comparisons. The short winner was then frozen and run once on the sealed disjoint 60-provider holdout. Every holdout provider came from CMS provider search, had literal coverage under at least one sampled actual 2026 Marketplace plan, and had an active matching NPPES identity/location at cohort construction. The short contract returned 58/60 parsed profiles and 54/60 profiles with a phone, address, or website, versus 60/60 for both in the predecessor run. Of 57 emitted addresses, 39 matched the requested location, ten were other or compatible professional locations, and eight were unjudged overflows. This evaluates overlap and independent support; it does not establish superiority over CMS, NPPES, or plan directories or national representativeness. |
 | **Will the feedback mechanism be displayed to consumers, or is it only intended for agent/broker use?** | It is available to anyone who can use the provider contact modal, including consumers and agent/broker users. It is not limited to agent/broker use. The application derives only a broad user class for aggregate quality analysis. |
 | **Will messaging be displayed to instruct users on how to interact with the feedback buttons (i.e., only use the buttons to indicate whether the information was correct)?** | Yes. The modal asks whether the overall contact details and each displayed field are correct. An incorrect response requires a field-compatible structured reason. This path does not collect free-text feedback. |
 | **Who will have access to the feedback data?** | Only approved Lucie data analysts will have access to feedback aggregates. Members, consumers, agent/broker users, and ordinary application users cannot read records or summaries; the application has no feedback read route. Production access requires a separate read-only analyst role, least privilege, SSO/MFA, audit logging, recertification, retention, and separation from database/platform administration. |
 | **How does Lucie intend to use that feedback data?** | Approved analysts will use organization-scoped daily aggregates to identify quality trends, investigate incorrect information, prioritize corrections, and monitor the service. Feedback will not be shown back to users, automatically train the model, change prompting, suppress fields, or replace directory data. Any future automated use requires separate approval and validation. |
-| **When the OpenAI search returns multiple results for a data field (e.g., multiple addresses), how does Lucie determine which information will be prioritized and displayed by default on the initial modal display versus which information will require the user to click to see more?** | Evidence qualification comes first. The model attaches each candidate to the exact provider, verifies the complete fact and professional purpose, resolves identity and same-field conflicts, and applies fact-specific recency when it exists. Only among otherwise eligible evidence does it prefer an exact provider/practice/facility page, then exact-provider government evidence including NPPES, then an established professional directory. NPPES is valid but may be stale; official branding does not guarantee correctness or independent corroboration. Missing recency is neutral rather than a rejection. Element zero is the default; later concurrently supported values appear behind “Show more.” Testing found this hierarchy useful but imperfect, so Lucie does not describe ordering as infallible. |
+| **When the OpenAI search returns multiple results for a data field (e.g., multiple addresses), how does Lucie determine which information will be prioritized and displayed by default on the initial modal display versus which information will require the user to click to see more?** | Evidence qualification comes first. The model attaches each candidate to the exact provider, verifies the complete fact and professional purpose, resolves identity and same-field conflicts, and applies fact-specific recency when it exists. Only among otherwise eligible evidence does it prefer an exact provider/practice/facility page, then exact-provider government evidence including NPPES, then an established professional directory. NPPES is valid but may be stale; official branding does not guarantee correctness or independent corroboration. Missing recency is neutral rather than a rejection. Element zero is the default; later concurrently supported values appear behind “Show more.” In 48 judged short-contract cases, the highest eligible returned tier was selected for 137 field decisions, a lower tier for 12, and 21 fields were inappropriately withheld. This hierarchy is useful but imperfect and does not override the release-blocking fax finding. |
 
 ## Selection and validation history
 
@@ -53,8 +54,8 @@ from Zod. Seven shorter contracts were piloted and the two shortest survivors
 received complete 60-provider paired comparisons against the predecessor under
 the same fixed evaluator.
 
-The selected shared sourced-value schema is **11,196 bytes versus 86,769 bytes
-(87.1% shorter)**. It was the shortest candidate to pass the frozen paired
+The complete selected short static contract is **11,196 bytes versus 86,769
+bytes (87.1% shorter)**. It was the shortest candidate to pass the frozen paired
 non-inferiority, safety, parser, fidelity-count, and evidence-availability
 gates; the next-shortest alternative exceeded the withholding-count limit.
 Length therefore plateaued for this iteration.
@@ -88,18 +89,31 @@ minor unsupported slash in `addressLine2`. The corrected fetch protocol had
 zero fallback failures for emitted citations and was applied identically to
 both arms.
 
-The prior holdout directly validates only the longer predecessor. No holdout
-request, result, trace, source, or case-specific fact was opened or used during
-minimization. CMS should therefore read the short contract as development-set
-non-inferior to a holdout-validated predecessor, not as newly holdout-validated.
+After the development decision was frozen, Lucie ran the short contract once
+on that same sealed, disjoint 60-provider holdout. It returned 58/60 parsed
+profiles and 54/60 profiles with a phone, address, or website. Two cases failed
+after the initial attempt and semantic retry because the lean structured schema
+accepted full state names while the downstream parser required two-letter
+states. Among 48 judge-complete cases,
+164/166 claims had exact whole-packet support, but one first-party fax was
+emitted as a phone. Ten complete evidence packets exceeded the fixed context
+ceiling and remained unknown. Twenty-one non-rating fields were also judged
+inappropriately withheld.
 
-## Production-shaped contract
+That result changes the decision. The development-selected short contract is
+not approved unchanged; the longer predecessor remains the release candidate.
+The short prompt is published below as the exact evaluated treatment, not as a
+claim of deployment approval. Across both phases Lucie exercised **47 prompt
+or stack configurations**: 40 source-quality configurations and seven prompt-
+minimization variants.
 
-The selected service path is:
+## Evaluated short production-shaped contract
+
+The rejected-as-is successor used this production-shaped service path:
 
 `provider-only request → one Azure Responses call with native web search → strict structured parsing → narrow local invariants → ordered modal facts`
 
-It uses:
+It used:
 
 - Azure OpenAI Responses API;
 - `gpt-5.6-terra`, reasoning `low`;
@@ -114,10 +128,12 @@ It uses:
 - model-owned semantic decisions with narrow independently checkable host
   invariants.
 
-The complete selected static contract is 11,196 bytes. Schema descriptions were
-removed after controlled evaluation showed that one lean system policy plus
-strict field names and types preserved performance. Requirements are stated
-once rather than duplicated in prompt and schema.
+The complete static contract is 11,196 bytes. Development evaluation suggested
+that removing schema descriptions while retaining one lean system policy and
+strict field names/types preserved performance. The sealed holdout disproved
+that conclusion for end-to-end robustness: full state names passed the lean
+structured schema but failed the downstream two-letter-state parser, citation
+span fidelity worsened, and a fax escaped the semantic policy.
 
 The public request retains `lineOfCoverage: "Medical"` for compatibility with
 the medical insurance-product workflow. `Medical` identifies product line,
@@ -130,10 +146,12 @@ APIs.
 
 The host validates public URL/string shape, exact request identity, phone-digit
 shape, website/citation URL equality, obvious placeholders, literal prohibited
-labels, and stable deduplication. It does not fetch pages in production or
-semantically classify source quality, currentness, or an unlabeled contact.
-Native citation/action mismatches are logged rather than used as a destructive
-parser gate.
+labels in emitted values, and stable deduplication. It does not fetch pages in
+production or semantically classify source quality, currentness, or an
+unlabeled contact. In the confirmed fax case, the emitted value and fact span
+contained only the digits, so this intentionally narrow check could not infer
+the page's omitted `Fax` label. Native citation/action mismatches are logged
+rather than used as a destructive parser gate.
 
 The retry envelope does not stack. The initial call uses SDK `maxRetries=1`;
 at most one semantic retry uses `maxRetries=0`. Native refusal and completion
@@ -163,10 +181,14 @@ eligible and neutral; Lucie does not call it current.
 
 The fixed evaluator was `gpt-5.6-sol`, reasoning `high`, with one categorical
 rubric, strict structured output, host-computed criteria, and no model-generated
-aggregate score. Each arm retained only its own returned URLs. The evaluator
-deterministically fetched those exact URLs and normalized readable content; it
-did not credit a page the arm did not return. Content-filter exhaustion was
-censored rather than treated as a quality failure.
+aggregate score. The successor retained only its own returned URLs. The
+evaluator fetched those exact URLs and normalized readable content; it did not
+credit a page the arm did not return. The holdout produced 48 paid judgments,
+10 honest no-call context overflows, two production errors, no judge error, and
+no content-filter censor. No source packet was truncated or summarized by an
+extraction model. Evaluation-only TLS verification was disabled under explicit
+authorization because of local interception; production performed no host
+fetch.
 
 The studies are model-assisted evaluations with additive trace review, not
 blinded independent human adjudication. They do not prove perfect citation
@@ -180,7 +202,7 @@ identifier, and has no application read route. Approved analyst access,
 retention, minimum-cell suppression, access review, audit evidence, and
 incident/correction ownership remain organizational release controls.
 
-## Appendix A — Literal selected prompt
+## Appendix A — Literal evaluated short prompt
 
 The following is the exact system instruction:
 
@@ -197,10 +219,10 @@ Return one profile per provider when any eligible fact is found; use empty array
 Providers: [{"providerId":"<providerId>","npi":"<npi>","name":"<name>","specialty":"<specialty>","city":"<city>","state":"<state>","zip":"<zip>"}]
 ```
 
-## Appendix B — Exact generated strict output schema
+## Appendix B — Exact evaluated generated strict output schema
 
 This is the exact JSON Schema passed as the strict Responses API text format.
-It is generated from the selected Zod schema and intentionally contains no
+It is generated from the evaluated short Zod schema and intentionally contains no
 field descriptions.
 
 ```json

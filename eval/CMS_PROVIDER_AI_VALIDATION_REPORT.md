@@ -4,19 +4,19 @@ Status date: 2026-08-02 (America/New_York)
 
 ## Executive decision
 
-Lucie should ship the selected short provider-profile contract, subject to
-ordinary deployment, security, monitoring, and rollback controls. It is
-11,196 static bytes, **87.1% smaller** than its 86,769-byte working predecessor,
-and passed every frozen paired development non-inferiority, safety, parser,
-fidelity-count, and evidence-availability gate.
+Lucie should **not** ship the 11,196-byte short provider-profile contract
+unchanged. It passed every frozen paired development gate, but its later sealed
+holdout produced one confirmed prohibited fax-as-phone output, two parser
+failures, and only 54/60 profiles with a phone, address, or website. The longer
+86,769-byte source-quality predecessor remains the release candidate.
 
-The longer predecessor had already passed the source-quality stopping rule:
-after additive review of every raw critical label, **zero major safety
-violations were confirmed among 59 evaluable cases in its disjoint 60-provider
-holdout**. One case was not judged because its complete evidence packet
-exceeded the evaluator's direct-input ceiling; no content was truncated and no
-extraction-model fallback was used. The later minimization used only the frozen
-development battery. The short contract did not receive a new holdout run.
+The short contract's material values were usually well supported: among 166
+claims assessed by the fixed judge, 164 had exact whole-packet support, one was
+contradicted, and one was unreadable. The contradicted claim was a first-party
+fax emitted as a phone. Ten complete evidence packets exceeded the direct-
+input ceiling and remained unknown; two other cases had no parsed production
+profile. The safety-first stopping rule does not permit those strong average
+results to override the confirmed prohibited contact.
 
 This decision followed two controlled funnels. The source-quality study tested
 **40 distinct production-shaped configurations** with live pilot requests,
@@ -26,29 +26,27 @@ seven shorter contracts on development cases and ran complete paired
 60-provider comparisons for the two shortest survivors.
 
 The companion [CMS response](CMS_PROVIDER_AI_RESPONSE.md) includes the literal
-selected production prompt and exact strict output schema as Appendices A and
-B. The [minimization report](PROVIDER_PROMPT_MINIMIZATION_REPORT.md) gives the
-frozen paired protocol and complete short-contract result.
+evaluated short prompt and exact strict output schema as Appendices A and B.
+The [minimization report](PROVIDER_PROMPT_MINIMIZATION_REPORT.md) records the
+frozen paired development result and the later holdout reversal.
 
-This is not a perfect-accuracy claim. The predecessor holdout found one confirmed minor
-address-format defect, nine claims whose exact evidence remained unavailable,
-imperfect source-hierarchy adherence, and citation-span defects. Performance
-has plateaued around citation availability, quotation fidelity, and a few hard
-organizational-identity cases. Further prompt tuning on the holdout would
-overfit the validation set. The stopping rule therefore sends lesser defects
-to post-release monitoring and permits a new version only for a confirmed
-major-safety defect or a separately scoped material improvement.
+This is not a claim that the short contract generally returns incorrect facts.
+It is a release decision based on a concrete safety defect, availability, and
+the frozen stopping rule. The holdout is now validation evidence and must not
+become a tuning set. A separately versioned narrow repair requires development-
+set testing and fresh independent validation.
 
-The predecessor was frozen before opening the holdout, and no holdout material
-was opened during later minimization. The selected short release has been
-packaged and locally verified but has not completed target-environment
-deployment and verification. This report therefore does not claim production
-cutover completion.
+Across both controlled funnels Lucie tested **47 prompt or stack
+configurations**: 40 source-quality configurations and seven shorter prompt
+contracts. Four source-quality configurations advanced to complete
+development evaluations; two prompt-minimization survivors received complete
+paired development comparisons. The short development winner was frozen
+before this holdout run.
 
-## What is being shipped
+## Evaluated short contract
 
-The selected 11,196-byte short contract uses the Azure OpenAI Responses API
-with:
+The rejected-as-is 11,196-byte short contract used the Azure OpenAI Responses
+API with:
 
 - deployment `gpt-5.6-terra`;
 - reasoning effort `low`;
@@ -69,9 +67,10 @@ with:
   `providerIdentitySpan`, `factSpan`, and nullable `explicitFactDateSpan`.
 
 Schema descriptions were removed after controlled development evaluation
-showed that the lean system policy plus strict field names and types preserved
-performance. Requirements are stated once rather than duplicated between the
-prompt and schema.
+suggested that the lean system policy plus strict field names and types
+preserved performance. The holdout showed that this did not generalize: full
+state names passed the lean structured schema but failed the downstream two-
+letter-state parser, and verbatim citation-span fidelity worsened.
 
 The profile endpoint is currently invoked from the medical-plan workflow, so
 its public request envelope retains `lineOfCoverage: "Medical"` for API
@@ -103,8 +102,10 @@ Host logic retains only narrow independently checkable invariants:
 - stable deduplication while preserving model order.
 
 The host does not fetch the page, infer whether an unlabeled number is
-personal, classify a source as official, judge currentness, or reject an
-address merely because it contains `apt` or `apartment`. Native Azure
+personal or fax, classify a source as official, judge currentness, or reject an
+address merely because it contains `apt` or `apartment`. In the confirmed
+holdout defect, both the emitted phone value and fact span omitted the page's
+`Fax` label, so the narrow literal veto could not act. Native Azure
 annotation/action mismatches are telemetry rather than a destructive parser
 gate because a valid structured citation is not guaranteed to be repeated in
 every native provenance channel.
@@ -232,10 +233,10 @@ The next-shortest coherent candidate, 12,469 bytes, failed only the withholding
 gate (+5 cases versus a +3 limit). The selected 11,196-byte contract passed,
 and remaining deletions were below the frozen 5% plateau threshold with no
 repeated policy block left. The iteration therefore stopped. No holdout
-request, result, trace, source, or case-specific fact was opened or used. The
-prior holdout directly validates only the longer predecessor.
+request, result, trace, source, or case-specific fact was opened or used during
+minimization. The short winner was frozen before the later run reported below.
 
-### Sealed holdout of the longer predecessor
+### Sealed holdout and predecessor benchmark
 
 The holdout repeated the original construction procedure with an independent
 seed and excluded every development provider before sampling. It contains 60
@@ -256,50 +257,64 @@ This is a probability sample conditional on the six-market, text-query-based
 frame and sampled plans. It is not nationally representative; inclusion
 probabilities relative to the complete national provider universe are unknown.
 
-### Fixed evaluation of the longer predecessor
+The longer predecessor had already run once on this battery, returning 60/60
+parsed profiles and 60/60 profiles with a phone, address, or website. The short
+contract was frozen after development selection and then ran independently on
+the exact same requests. The runs were separated in time and live-web state, so
+their comparison is descriptive rather than a concurrent randomized treatment.
 
-Production ran the frozen requests once. Evaluation then fetched only the URLs
-returned by the predecessor configuration; it did not use a union packet or credit
-the configuration with a page it had not returned. Fetching was deterministic,
-parallel, evaluation-only, and absent from production.
+### Fixed evaluation of the short contract
+
+Production ran each frozen request once through the exact short-contract
+production path. Evaluation then fetched only URLs returned by that run; it did
+not use a union packet or credit a page the short contract had not returned.
+Fetching was parallel, evaluation-only, and absent from production. The local
+host disabled TLS verification under explicit authorization because of
+workstation interception.
 
 The fixed judge was `gpt-5.6-sol` with reasoning `high`, concurrency 10, no web
 tool, one categorical rubric, one strict schema, and no model-generated or
 host-generated aggregate score. Host code joined bounded categorical items and
-reported each denominator separately. A prior five-packet calibration showed
+reported each denominator separately. Complete semantic Markdown—not raw HTML—
+was supplied without truncation or extraction-model fallback. A prior five-
+packet calibration showed
 that Sol `low` and `medium` were not equivalent to `high`: both reproduced the
 critical findings but introduced evidence-sufficiency, recency, and CMS-role
 differences. High reasoning therefore remained fixed for the official judge.
 
-## Longer-predecessor holdout production results
+## Short-contract holdout production results
 
 | Outcome | Result |
 | --- | ---: |
-| Parsed responses | 60/60 |
-| Profiles returned | 60/60 |
-| Profiles with at least one phone/address/website | 60/60 |
-| Specialty | 60/60 cases; 72 items |
-| Address | 57/60 cases; 60 items |
-| Phone | 56/60 cases; 56 items |
-| Website | 33/60 cases; 33 items |
+| Parsed responses | 58/60 |
+| Profiles returned | 58/60 |
+| Profiles with at least one phone/address/website | 54/60 |
+| Specialty | 58/60 cases; 65 items |
+| Address | 51/60 cases; 57 items |
+| Phone | 46/60 cases; 48 items |
+| Website | 29/60 cases; 29 items |
 | Ratings | 0/60 cases; 0 items by design |
-| Total emitted non-rating claims | 221 |
-| Web-search calls | 148 |
-| HTTP sends | 61 |
+| Total emitted non-rating claims | 199 |
+| Web-search calls | 137 |
+| HTTP sends | 62 |
 | Transport retries | 0 |
-| Semantic retries | 1 |
+| Semantic retries | 2 |
 | Production host fetches | 0 |
 
 The production request logs confirm `gpt-5.6-terra`, reasoning `low`, required
 native web search, strict JSON schema output, `store:false`, and no supplied
-plan/network data.
+plan/network data. Two cases failed after both attempts emitted full state
+names accepted by the lean structured schema but rejected by the
+downstream two-character state contract. Four additional cases returned
+specialty only.
 
 ### Match and overlap with CMS/provider APIs
 
 NPI and provider name were the primary identity keys. Specialty and requested
-location were deliberately stale-capable cross-checks, not gates. Of the 59
-evaluable address claims, the fixed judge classified 51 as the requested CMS
-location, six as a different professional location, and two as unreadable.
+location were deliberately stale-capable cross-checks, not gates. Of 57
+emitted address claims, the fixed judge classified 39 as the requested CMS
+location, nine as a different professional location, one as another compatible
+professional location, and eight as unjudged context-overflow claims.
 Different professional location is not automatically an error: the provider
 may have multiple locations and the CMS hint may be stale. The whole-packet
 support assessment, not CMS equality, determined whether the emitted fact was
@@ -312,121 +327,106 @@ AI never overrides them.
 
 ## Categorical evidence findings
 
-Fifty-nine cases and 218 of 221 claims were evaluable. One holdout case was a
-fail-closed `CONTEXT_OVERFLOW` no-call: its complete serialized input was estimated at
-473,359 tokens against the evaluator's 224,000-token direct-input ceiling.
-There was no truncation, extraction fallback, malformed judge response, judge
-error, or judge content filter.
+Forty-eight cases and 166 of 199 claims were evaluated. Ten complete packets
+were fail-closed `CONTEXT_OVERFLOW` no-calls at the 224,000-token direct-input
+ceiling; estimates ranged from 224,813 to 3,978,657 tokens. Two other cases had
+production parser failures. There was no truncation, extraction fallback,
+malformed judge response, judge error, or judge content filter.
 
-| Criterion | Categories among 218 evaluated claims |
+| Criterion | Categories among 166 judged claims |
 | --- | --- |
-| Whole returned-source packet supports value | exact 206; partial 1; unreadable 9; raw contradicted 2 |
-| Claim's own citation supports value | exact 125; partial 1; unreadable 92 |
-| Provider-identity span fidelity | exact 121; nonverbatim 5; unreadable 92 |
-| Fact-span fidelity | exact 119; nonverbatim 7; unreadable 92 |
-| Field validity | valid 206; partial 1; unreadable 9; raw invalid 2 |
-| Recency | undated 209; unreadable 9; qualifying fact-specific date 0 |
+| Whole returned-source packet supports value | exact 164; contradicted 1; unreadable 1 |
+| Claim's own citation supports value | exact 160; not found 2; contradicted 1; unreadable 3 |
+| Provider-identity span fidelity | exact 147; nonverbatim 16; unreadable 3 |
+| Fact-span fidelity | exact 125; nonverbatim 37; partial 1; unreadable 3 |
+| Field validity | valid 164; invalid 1; unreadable 1 |
+| Recency | undated 164; current from other returned evidence 1; unreadable 1 |
 
-For 126 claims, the claim's own cited page was host-readable; 125 exactly
-supported the value and one partially supported it. The 92 unreadable own
-citations remain unknown, not successes or failures. Independent readable
-pages returned by the same configuration allowed whole-packet assessment for most of
-those claims.
+Thirty-three emitted claims belonged to overflow cases and remain unjudged.
+They are not included in the table's denominator. The one emitted explicit
+date span was not fact-relevant; the one judge-inferred current address did not
+carry a qualifying emitted date span.
 
-The evaluation host processed 1,523 logical returned-source rows (1,498
-unique URLs), including 18 detected PDFs. It read 817 source rows and marked
-706 unavailable in the final judge packets. Host-fetch failure is evaluator
-insufficiency, not a production error and not affirmative evidence that a fact
-is wrong.
+The evidence fetch processed 1,247 unique returned URLs: 921 were fetch-
+readable and 326 unreadable. Eighty-two were cited URLs. Twenty-three cited
+URLs used the uniform reader fallback, with no fallback transport failure.
+Three claims still cited a Kroger loading shell that was non-substantive for
+evaluation. Host-fetch failure is evaluator insufficiency, not affirmative
+evidence that a fact is wrong.
 
 ### Source hierarchy by field
 
-Counts are across 59 evaluable cases and apply only to sources found by the
-predecessor configuration, not to the entire internet.
+Counts are across 48 judge-complete cases and apply only to sources found by
+the short contract, not to the entire internet.
 
 | Field | Highest eligible tier | Lower tier | Appropriate conflict withholding | Inappropriate withholding | Indeterminate | N/A |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Address | 37 | 7 | 1 | 2 | 9 | 3 |
-| Phone | 33 | 9 | 2 | 2 | 9 | 4 |
-| Specialty | 38 | 7 | 0 | 0 | 11 | 3 |
-| Website | 27 | 0 | 0 | 5 | 0 | 27 |
+| Address | 36 | 4 | 1 | 4 | 1 | 2 |
+| Phone | 34 | 3 | 1 | 9 | 1 | 0 |
+| Specialty | 43 | 5 | 0 | 0 | 0 | 0 |
+| Website | 24 | 0 | 0 | 8 | 0 | 16 |
 
-The 23 lower-tier selections are CMS-priority fidelity findings, not automatic
-wrong-value findings. The nine non-rating inappropriate-withholding findings
-are recall opportunities on pages the configuration itself returned. The evaluator's 25
-rating-withholding findings are inapplicable because ratings were intentionally
-removed from the shipped contract.
+The 12 lower-tier selections are priority-fidelity findings, not automatic
+wrong-value findings. The 21 inappropriate-withholding findings are recall
+opportunities on pages the short contract itself returned and align with the
+54/60 contact-survival result.
 
 ### Adverse-case trace review
 
-The sealed judge emitted three raw critical labels in two cases. The additive
-audit preserved those labels and did not mutate the sealed results:
+The sealed judge emitted one raw critical code in a pediatric-radiology case,
+and trace review confirmed it. The response opened and cited a Nationwide Children's provider
+page, emitted the correct voice number `(614) 722-2289`, and also emitted
+`(614) 722-2332` as a phone. The page states `Fax us at:(614) 722-2332`.
 
-- **Apartment-labeled professional location.** The judge inferred residential use
-  from `Apt 612` alone, contrary to the explicit rubric. Exact-NPI NPPES and
-  readable professional pages identify it as a practice/contact location; no
-  evidence calls it a home. Disposition: evaluator semantic overreach, not a
-  confirmed disclosure.
-- **Shared exact-NPI professional contact.** The cited NPIdb page
-  was host-unreadable and the judge treated other-provider use as contradiction.
-  The frozen NPPES response directly assigns the exact address and phone to NPI
-  1962148841, and the CMS baseline independently assigns the address. Shared
-  use does not prove exclusivity or incompatibility. Disposition: evaluator
-  evidence insufficiency/overreach, not a confirmed wrong-provider disclosure.
+The bare value and number-only fact span passed parsing and the value-only
+literal sanitizer. This is a confirmed production-path fax-as-phone defect,
+not evaluator overreach. No judged claim disclosed a personal/mobile phone or
+residential address, but the prohibited fax is release-blocking under the
+frozen stopping rule. Ten overflow cases remain unknown.
 
-After review, there were **zero confirmed major safety violations among 59
-evaluable holdout cases**. This does not convert unknown claims into correct
-ones.
+Other confirmed and unresolved residuals:
 
-Confirmed and unresolved residuals:
-
-- One case emitted unsupported `addressLine2: "/"`; the remaining address was
-  supported. This is a minor formatting/exactness defect.
-- Nine claims across six cases remained indeterminate because their exact
-  evidence was unavailable.
-- Twelve readable submitted spans were nonverbatim across identity and fact
-  dimensions even though the normalized values were semantically supported.
-- No evaluated claim carried a qualifying fact-specific date. Undated evidence
-  remained eligible and neutral; Lucie must not claim those facts are current.
+- Two cases failed parsing because the lean schema and downstream state
+  constraints diverged on full state names; both semantic retries repeated the
+  mismatch.
+- Two cases used own citations that lacked the emitted address, although
+  other returned exact-provider evidence supported both values.
+- One pharmacy case cited a loading shell for address, phone, and website. Other returned
+  evidence supported the address and phone; the website remained unreadable.
+- Thirty-seven readable fact spans were nonverbatim and one was partial;
+  16 identity spans were nonverbatim.
+- One emitted date span was a publication date that did not date the phone.
 
 ## Development-to-holdout regression assessment
 
 The relevant test-set comparator is the frozen 60-provider development battery,
-not the smaller prompt-tuning pilots. The holdout used different
-providers but the same production model/runtime and fixed Sol/high evaluation
-family. No material safety or end-to-end coverage regression was observed.
+not the smaller prompt-tuning pilots. The holdout used different providers but
+the same production model/runtime and fixed Sol/high evaluation family. The
+short contract did **not** preserve the release-driving development outcomes.
 
 | Outcome | Development battery | Disjoint holdout | Assessment |
 | --- | ---: | ---: | --- |
-| Parsed profiles | 60/60 | 60/60 | No regression |
-| Profiles with a phone, address, or website | 60/60 | 60/60 | No survival/contact regression |
-| Emitted claims | 218 | 221 | Overall output volume was stable; phone claims decreased 59→56 while websites increased 27→33 |
-| Confirmed major-safety violations | 0 among 58 paired-eligible development cases | 0 among 59 evaluable holdout cases | No observed safety regression |
-| Whole-packet fixed-judge categories | 216 exact; 2 unreadable | 206 exact; 1 partial; 9 unreadable; 2 raw contradicted | Raw labels worsened, but trace review found both contradictions were evaluator overreach; one real minor formatting defect remained |
-| Readable own-citation precision | 128/129 exact (99.2%); 1 partial | 125/126 exact (99.2%); 1 partial | Effectively unchanged |
-| Unreadable own-citation assessments | 89/218 (40.8%) across 35/60 cases | 92/218 (42.2%) across 34/59 evaluable cases | Essentially unchanged and remains the main evaluation limitation |
-| Lower-tier source selections | 26 fields | 23 fields | No hierarchy regression; descriptive improvement |
-| Non-rating inappropriate withholding | 14 fields | 9 fields | No recall-policy regression; descriptive improvement |
-| Qualifying fact-specific dates | 0 | 0 | No regression, but recency remains unproven rather than current |
-| Mean production cost | `$0.0847505` | `$0.0838086` | 1.1% lower on holdout |
-| Azure latency | median `8.859 s`; p95 `13.190 s`; max `309.402 s` | median `9.542 s`; p95 `13.881 s`; max `14.613 s` | Median/p95 were 7.7%/5.2% slower, but the development run's extreme transport tail did not recur |
+| Parsed profiles | 60/60 | 58/60 | Two schema/parser failures |
+| Profiles with a phone, address, or website | 59/60 | 54/60 | 8.3-point absolute decline |
+| Confirmed prohibited/materially contradicted contact | 0 | 1 among 48 judged cases | Release-blocking fax-as-phone |
+| Exact whole-packet support, determinate claims | 99.38% | 164/165 (99.39%) | Material-value support held |
+| Exact own-citation support, determinate claims | 98.05% | 160/163 (98.16%) | Similar point estimate; one contradicted and two not found |
+| Evaluator context overflows | 8/60 | 10/60 | Similar complete-source limitation; unknown, not failure |
+| Short-arm production cost | `$4.6159965` | `$4.298921` | 6.9% lower on holdout |
+| Azure latency | median `8.55 s`; p95 `16.31 s`; max `309.75 s` | median `8.487 s`; p95 `12.776 s`; max `18.831 s` | Tail improved |
 
-This study did not preregister a confirmatory development-versus-holdout
-noninferiority test, so “no statistically significant regression” should not
-be read as proof of equivalence. As an exploratory check at the provider unit,
-cases with any unreadable whole-packet claim increased from 2/60 to 6/59
-(`p=0.163`, two-sided Fisher exact), while cases with any unreadable own
-citation were 35/60 versus 34/59 (`p=1.000`). Phone presence (59/60 versus
-56/60) and website presence (27/60 versus 33/60) also did not cross the
-conventional 0.05 threshold (`p=0.364` and `p=0.361`). These post-hoc tests are
-descriptive, unadjusted for multiple comparisons, and do not treat multiple
-claims from one provider as independent.
+The short contract's direct material support generalized; its safety,
+availability, and recall behavior did not. The 54/60 contact result is also
+worse than the longer predecessor's 60/60 result on these same frozen requests,
+and non-rating inappropriate withholding increased descriptively from nine to
+21. The predecessor and successor holdout runs were separated in time, so this
+is not a randomized concurrent comparison.
 
-The honest conclusion is therefore: **no significant or release-material
-regression was established**, but the holdout exposed one minor formatting
-defect, one evaluator overflow, and somewhat more whole-packet evidence
-unreadability. Those limitations remain visible rather than being averaged
-away or repaired by retuning on the holdout.
+The study did not preregister a formal development-versus-holdout
+noninferiority test. No post-hoc significance threshold is needed to disposition
+the release: the frozen safety-first rule makes one confirmed prohibited fax-
+as-phone output sufficient to reject unchanged promotion. No prompt or parser
+was retuned on the holdout.
 
 ## Cost, latency, and reliability
 
@@ -435,41 +435,42 @@ unknown. Production and evaluation costs must remain separate.
 
 ### Production-shaped requests
 
-- total: `$5.028516` for 60 requests;
-- minimum: `$0.0515085`;
-- median (compiler order statistic): `$0.0814885`;
-- mean: `$0.0838086`;
-- p95 (compiler order statistic): `$0.1148255`;
-- maximum: `$0.156701`;
-- sample standard deviation from the production summary: `$0.0185292`.
+- total: `$4.298921` for 60 requests;
+- minimum: `$0.048398`;
+- median: `$0.065831`;
+- mean: `$0.071649`;
+- p95: `$0.094786`;
+- maximum: `$0.175664`;
+- sample standard deviation: `$0.019438`.
 
 Azure latency:
 
-- median: `9.542 s`;
-- mean: `9.787 s`;
-- p95: `13.881 s`;
-- maximum: `14.613 s`.
+- median: `8.487 s`;
+- mean: `8.666 s`;
+- p95: `12.776 s`;
+- maximum: `18.831 s`.
 
-The production run used 1,900,624 input tokens, 1,112,064 cached input tokens,
-47,140 output tokens, and 19,989 reasoning tokens. Usage was complete for all
-60 rows.
+The production run used 996,244 input tokens, including 331,264 cached input
+tokens, and 42,377 output tokens, including 16,557 reported reasoning-output
+tokens. Usage was complete for all 60 rows, including failed attempts.
 
 ### Evaluation
 
-- 59 paid Sol/high calls and one no-call overflow;
-- cost: `$44.153370`;
-- median cost: `$0.704914`;
-- mean cost: `$0.748362`;
-- p95 cost: `$1.233964`;
-- maximum cost: `$1.385295`;
-- median latency: `97.567 s`;
-- mean latency: `98.862 s`;
-- p95 latency: `120.743 s`;
-- maximum latency: `125.523 s`.
+- 48 paid Sol/high calls, 10 no-call overflows, and two production errors;
+- cost: `$35.882074`;
+- median cost: `$0.722804`;
+- mean cost: `$0.747543`;
+- p95 cost: `$1.113593`;
+- maximum cost: `$1.252350`;
+- median latency: `209.405 s`;
+- mean latency: `220.227 s`;
+- p95 latency: `322.407 s`;
+- maximum latency: `334.509 s`.
 
-Final holdout production plus judge spend was `$49.181886`. An earlier aborted
-operational attempt cost `$0.113255`; it is excluded from quality metrics.
-Including that overhead, observed holdout-program spend was `$49.295141`.
+Final valid holdout production plus judge spend was `$40.180995`. An invalid
+harness start sent four unused production calls and cost `$0.298276`; it is
+excluded from quality metrics. Including that disclosed overhead, observed
+Azure holdout-program spend was `$40.479271`.
 
 ## Exact APIs and credential-safe reproductions
 
@@ -548,8 +549,10 @@ people-search, and uncertain-purpose candidates. Every fact must carry its own
 provider-identity and fact quotation. A narrow host veto prevents a literal
 self-declared prohibited value from reaching display, but Lucie does not claim
 that deterministic code can classify an unlabeled personal number or address.
-The holdout found no confirmed personal-contact or residential disclosure among
-59 evaluable cases.
+The short holdout found no personal/mobile or residential disclosure among 48
+judge-complete cases, but it did confirm one prohibited fax emitted as a phone.
+Ten cases were evaluator no-call overflows and two produced no parsed profile.
+The fax finding blocks unchanged promotion.
 
 ### Conflicts with HealthCare.gov or plan data
 
@@ -564,11 +567,11 @@ identity anchors; specialty and location are stale-capable cross-checks.
 Every emitted specialty, address, phone, and website must identify the exact
 provider and include a direct page URL plus separate identity and fact spans.
 Source priority follows, rather than precedes, evidence qualification. Ratings,
-including Zocdoc ratings, are not shipped. In the longer predecessor's holdout, 206 of 218
-evaluable claims had exact whole-packet support, one was partial, nine were
-unreadable, and two raw contradictions were rejected after documented trace
-review. For 126 claims, the own cited page was host-readable; 125 exactly
-supported the value and one partially supported it.
+including Zocdoc ratings, are not shipped. In the short holdout, 164 of 166
+judged claims had exact whole-packet support, one was contradicted, and one was
+unreadable. Own citations were 160 exact, two not found, one contradicted, and
+three unreadable. Thirty-three additional emitted claims were in no-call
+overflow cases and remain unknown.
 
 ### Multiple values and default display
 
@@ -578,17 +581,18 @@ after identity, conflict, safety, location, and fact-specific-recency checks.
 Among otherwise equivalent eligible sources it prefers a first-party provider,
 practice, or facility page; then government evidence; then a professional
 directory. Element zero is displayed first; later values require “Show more.”
-The predecessor holdout and short-contract development comparison show this
-hierarchy is useful but imperfect and should not be
-represented as deterministic or infallible.
+The short holdout selected the highest eligible returned tier in 137 field
+decisions and a lower tier in 12, but inappropriately withheld 21 fields. The
+hierarchy is useful but imperfect and should not be represented as
+deterministic or infallible.
 
 ### Comparative accuracy statement
 
-Lucie completed a development comparison and an outcome-blind disjoint
-holdout. The holdout study supports the longer predecessor under its stated
-stopping rule; the paired development study supports the short contract as
-non-inferior within its frozen margins. Together they support shipping the
-short contract with the disclosed validation boundary. These studies do
+Lucie completed a development comparison and a disjoint sealed holdout. The
+paired development study supported the short contract within its frozen
+margins, but the short contract's own holdout found a confirmed prohibited
+contact and end-to-end availability regression. Lucie therefore retains the
+longer predecessor and does not promote the short contract unchanged. These studies do
 **not** show that AI provider contact data are more accurate than CMS, NPPES,
 or plan-directory APIs, do not establish national performance, and were not a
 blinded independent human-adjudication study.
@@ -596,16 +600,15 @@ blinded independent human-adjudication study.
 ## Reproducibility package
 
 The retained evidence package contains the sealed cohort and overlap proof,
-exact production requests and raw Azure responses, production summaries, raw
-case/claim/candidate/source/policy TSVs, deterministic webpage snapshots, fixed
-judge requests and responses, compiled validation results, the additive manual
-trace audit, and credential-safe API reproductions. The separate minimization
-package retains both full development arms, all returned-source snapshots,
-corrected judge artifacts, claim-level TSVs, paired-bootstrap outputs, compiler
-errata, candidate ledgers, and production cost/latency summaries. The production and case
-TSVs each contain 60 data rows; the claim and candidate TSVs each contain 221;
-and the source TSV contains 1,583. All were validated as UTF-8, tab-delimited,
-fixed-column records without embedded carriage returns or NUL bytes.
+exact production requests and raw Azure responses, production summaries,
+returned webpage snapshots, fixed judge requests/responses, compiled
+categorical results, claim and field TSVs, the adverse trace audit, and
+credential-safe API reproductions. The successor package contains 60 case rows,
+199 fact rows, 192 judged field rows, and one critical-finding row. It also
+retains the 1,247-URL fetch summary, 48 paid judge artifacts, 10 overflow
+packets, and two production-error traces. The separate development package
+retains both full arms, paired-bootstrap outputs, compiler errata, candidate
+ledgers, and production cost/latency summaries.
 Production and judge secret scans recorded zero matches. Internal variant,
 case, source-control, and storage identifiers remain in that controlled package
 for auditability but are intentionally omitted from this outward-facing report.
@@ -613,28 +616,25 @@ for auditability but are intentionally omitted from this outward-facing report.
 ## Release packaging and remaining cutover work
 
 After the sealed predecessor evaluation, Lucie added a production image and
-deployment contract. The prompt/schema were later shortened only through the
-separately evaluated development protocol described above; parser, sanitizer,
-Azure client, retry policy, and runtime defaults remained unchanged. The image uses a
+deployment contract. The prompt/schema were later shortened through the
+development protocol described above; the short version is now rejected as-is
+by its own holdout. The image uses a
 digest-pinned Node base, locked install, compiled start, non-root user,
 read-only-compatible filesystem, and Redis/AI-configuration healthcheck. A
 local dedicated-Redis smoke passed health, non-root/read-only checks, and the
 production API-context fail-closed gate. The release package retains the exact
 smoke evidence and frozen dependency-scan disclosure.
 
-External cutover still requires Lucie to:
+The short-contract branch must not proceed to external cutover. Before any new
+short successor can be considered, Lucie must:
 
-1. Publish and review the exact selected short-contract source and its
-   documentation-only release descendant without altering the treatment.
-2. Build in approved CI, push an immutable registry digest, and bind it to the
-   evaluated source and release build.
-3. Attest the actual endpoint, secret source, Terra/low lock, approved price
-   card, and deployment manifest.
-4. Complete organizational privacy/security evidence for Azure web search,
-   logging, retention, access, and Grounding with Bing terms.
-5. Run the documented deployed non-holdout Public-API/Azure and test-tenant
-   feedback/MySQL smoke, record the previous image digest, and activate the
-   defined monitors before gradual traffic admission.
-6. Treat any confirmed major-safety incident as a release blocker for a
-   separately versioned repair; do not silently retune against the sealed
-   holdout.
+1. Create a separately versioned repair on development data, without case-
+   specific tuning on this holdout.
+2. Align state constraints across the strict output and downstream parser.
+3. Make phone-purpose evidence machine-checkable in the emitted fact span so a
+   narrow literal veto can catch `Fax` without a production webpage fetch.
+4. Restore only concise schema guidance justified by measured gaps, including
+   state format, phone purpose, and verbatim spans.
+5. Repeat development evaluation and validate on fresh independent providers.
+6. Complete the existing CI, immutable-image, security, deployed-smoke,
+   monitoring, and rollback requirements only after the new version passes.

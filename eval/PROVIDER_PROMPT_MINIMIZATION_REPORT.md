@@ -4,18 +4,27 @@ Date: 2026-08-02
 
 ## Decision
 
-Lucie selected the 11,196-byte provider-search model contract. It is 87.1%
-smaller than the 86,769-byte working comparator and passed the frozen
-development-set non-inferiority, safety, parser, fidelity-count, and evidence-
-availability gates. This is the shortest candidate that passed; prompt length
-has therefore plateaued for this iteration.
+Lucie selected the 11,196-byte provider-search model contract on the frozen
+development battery, then tested it once on the sealed 60-provider holdout.
+The holdout **reversed the promotion decision**. Do not ship the short contract
+unchanged: it emitted one first-party fax as a phone, returned only 58/60
+parsed profiles and 54/60 profiles with a phone/address/website, and exposed a
+lean-schema/downstream-parser mismatch. The longer 86,769-byte source-quality
+predecessor remains the release candidate.
+
+The short contract is still 87.1% smaller and its judged values were usually
+well supported. The failure is driven by the preregistered safety-first rule
+and end-to-end availability, not by a model-generated or host-generated
+aggregate score.
 
 The measured contract includes the joined system instructions, fixed user
 scaffolding, and exact strict JSON schema generated from Zod. Dynamic provider
 values are excluded from the static numerator and were identical between arms.
 The selected schema contains no descriptions; field semantics remain in one
-lean system policy, while strict field names and types preserve the output
-contract.
+lean system policy. Development results suggested that strict field names and
+types preserved the output contract, but the holdout showed that this
+conclusion did not generalize for state formatting, fax purpose, and verbatim
+citation spans.
 
 ## Method
 
@@ -95,6 +104,44 @@ unsupported `addressLine2: "/"`, graded partial—not unsupported or
 contradicted. Review of every new withholding, hierarchy, span, overflow, and
 safety discordance found no additional evaluator defect affecting selection.
 
+## Sealed holdout reversal
+
+Only after the development selection was frozen did Lucie open the disjoint
+holdout. The case-file SHA-256 was
+`a072fa51322abf138b87a80cbebf4e762193f5e21937c1e930fde9cbef2b2561`.
+Production used the exact selected commit
+`8bd61fb87844063e2b4a008bded5d4533260c473` and the normal Terra/low parser,
+retry, provenance, and sanitizer path.
+
+| Holdout outcome | Result |
+| --- | ---: |
+| Parsed profiles | 58/60 |
+| Profiles with phone, address, or website | 54/60 |
+| Total claims | 199 |
+| Fixed-judge completed cases | 48/60 |
+| Context-overflow no-calls | 10/60 |
+| Production parser failures | 2/60 |
+| Whole-packet support among judged claims | 164 exact; 1 contradicted; 1 unreadable |
+| Own-citation support among judged claims | 160 exact; 2 not found; 1 contradicted; 3 unreadable |
+| Confirmed prohibited contact | 1 fax emitted as phone |
+
+In the confirmed pediatric-radiology fax case, the model opened and cited a
+first-party page that states `Fax us at:(614) 722-2332` but emitted the bare number as a phone. The value-only
+literal sanitizer could not infer the omitted label. This is a confirmed
+production-path defect, not a judge overreach.
+
+In the two parser-failure cases, the lean strict-output schema accepted
+`Florida` or `Ohio`, while the downstream public profile schema required a two-character
+state. The initial and identity-focused retry both repeated the mismatch.
+Empty nullable strings were normalized correctly and were not the cause.
+
+The judge also found 21 non-rating fields inappropriately withheld, 12 lower-
+tier selections, 37 nonverbatim fact spans, one partial fact span, and 16
+nonverbatim identity spans. Thirty-three claims in the ten overflow cases
+remain unknown. No judged claim disclosed a personal/mobile phone or
+residential address, but the prohibited fax and availability decline are
+sufficient to reject unchanged promotion.
+
 ## Operations
 
 The short arm used 1,083,269 input tokens versus 1,922,354 for the comparator
@@ -110,12 +157,22 @@ context overflows were no-call unknowns.
 Static contraction is larger than live token/cost contraction because web
 search context and model output remain substantial.
 
+The later holdout production run used 996,244 input tokens, 42,377 output
+tokens, and 137 searches. It cost an estimated `$4.298921`; mean/median/p95/max
+per request were `$0.071649`/`$0.065831`/`$0.094786`/`$0.175664`. Mean/median/
+p95/max production latency was 8.666/8.487/12.776/18.831 seconds. Forty-eight
+paid Sol/high judge calls cost `$35.882074`; production plus judge cost was
+`$40.180995`. Four calls from an invalid harness start added disclosed
+operational overhead of `$0.298276`, for `$40.479271` observed Azure spend.
+
 ## Scope and holdout boundary
 
 No holdout request, result, trace, source, or case-specific fact was opened or
-used. The previously published holdout directly validates only the longer
-predecessor. The new 11,196-byte contract is supported by paired development
-non-inferiority, not by a new holdout claim.
+used during minimization. After the development selection was frozen, the
+11,196-byte contract received one sealed holdout run. Those holdout results are
+validation evidence, not a tuning set, and they reject unchanged promotion.
+Any repair requires a new version developed without case-specific tuning on
+this holdout and validated on fresh cases.
 
 The public request retains `lineOfCoverage: "Medical"` for product-workflow
 compatibility, but that field is not serialized into the model's provider
@@ -132,7 +189,7 @@ npm test
 node -r ./node_modules/ts-node/register scripts/measure-provider-prompt-contract.ts
 ```
 
-The CMS response publishes the literal selected prompt and exact generated
-strict schema. Raw production responses, exact source snapshots, judge traces,
-claim-level TSVs, and paired-bootstrap outputs remain in the parent EDE
-evidence archive rather than the runtime repository.
+The CMS response publishes the literal evaluated short prompt and exact
+generated strict schema. Raw production responses, exact source snapshots,
+judge traces, claim-level TSVs, and paired-bootstrap outputs remain in the
+parent EDE evidence archive rather than the runtime repository.
