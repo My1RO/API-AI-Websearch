@@ -76,17 +76,7 @@ const structuredCitationSchema = z.object({
   explicitFactDateSpan: z.string().nullable()
 }).strict();
 
-const structuredWebsiteCitationSchema = structuredCitationSchema.extend({
-  sourceUrl: z.string(),
-  factSpan: z.string()
-}).strict();
-
-const structuredSpecialtySchema = z.object({
-  value: z.string(),
-  citation: structuredCitationSchema
-}).strict();
-
-const structuredPhoneSchema = z.object({
+const structuredSourcedValueSchema = z.object({
   value: z.string(),
   citation: structuredCitationSchema
 }).strict();
@@ -100,19 +90,14 @@ const structuredLocationSchema = z.object({
   citation: structuredCitationSchema
 }).strict();
 
-const structuredWebsiteSchema = z.object({
-  value: z.string(),
-  citation: structuredWebsiteCitationSchema
-}).strict();
-
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
   npi: z.string().nullable(),
   providerName: z.string(),
-  specialties: z.array(structuredSpecialtySchema),
+  specialties: z.array(structuredSourcedValueSchema),
   locations: z.array(structuredLocationSchema),
-  phoneNumbers: z.array(structuredPhoneSchema),
-  websites: z.array(structuredWebsiteSchema)
+  phoneNumbers: z.array(structuredSourcedValueSchema),
+  websites: z.array(structuredSourcedValueSchema)
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({
