@@ -69,50 +69,50 @@ export const providerProfileSchema = z.object({
 export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
-  sourceUrl: z.string().describe("Exact consulted readable page URL supporting this fact and provider identity. Prefer same-value first-party, then government, then professional-directory evidence. Never a search, snippet, metadata-only, unread, error, or different corroborating page."),
-  sourceTitle: z.string().nullable().describe("Page title, or null."),
-  providerIdentitySpan: z.string().describe("Shortest sufficient contiguous quotation from this page identifying the exact provider: normally NPI or full name plus compatible organization/location. No ellipses, joined passages, paraphrase, or invented text."),
-  factSpan: z.string().describe("Shortest contiguous exact quotation from this page supporting the complete fact. Preserve rendered words and token order; only markup, whitespace, and Unicode typography may be normalized. Do not rewrite it to match the normalized value."),
-  explicitFactDateSpan: z.string().nullable().describe("Contiguous quotation co-binding this exact fact to an effective/current date, else null. Retrieval, copyright, generic page, and record-wide registry dates do not qualify; undated evidence remains eligible.")
+  sourceUrl: z.string(),
+  sourceTitle: z.string().nullable(),
+  providerIdentitySpan: z.string(),
+  factSpan: z.string(),
+  explicitFactDateSpan: z.string().nullable()
 }).strict();
 
 const structuredWebsiteCitationSchema = structuredCitationSchema.extend({
-  sourceUrl: z.string().describe("Exact consulted readable first-party page URL; it must equal the website value."),
-  factSpan: z.string().describe("Shortest exact page-local provider or organization heading/name quotation. It may equal providerIdentitySpan; the URL itself is the website evidence.")
+  sourceUrl: z.string(),
+  factSpan: z.string()
 }).strict();
 
 const structuredSpecialtySchema = z.object({
-  value: z.string().describe("Supported professional specialty for the exact provider. Preserve source wording or use only an unambiguous credential expansion."),
-  citation: structuredCitationSchema.describe("Item-local evidence. factSpan quotes the source specialty or credential, not an expanded normalized value.")
+  value: z.string(),
+  citation: structuredCitationSchema
 }).strict();
 
 const structuredPhoneSchema = z.object({
-  value: z.string().describe("Public professional voice phone for the exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose."),
-  citation: structuredCitationSchema.describe("Item-local evidence whose factSpan contains the complete phone as displayed and establishes professional voice purpose.")
+  value: z.string(),
+  citation: structuredCitationSchema
 }).strict();
 
 const structuredLocationSchema = z.object({
-  addressLine1: z.string().describe("Street line of a complete professional office, practice, clinic, facility, or hospital address for the exact provider."),
-  addressLine2: z.string().nullable().describe("Professional suite/secondary line, or null; omit unresolved conflicting organizational subparts."),
-  city: z.string().nullable().describe("City, or null."),
-  state: z.string().nullable().describe("State, or null."),
-  zip: z.string().nullable().describe("ZIP or ZIP+4, or null."),
-  citation: structuredCitationSchema.describe("One page supporting all non-null material address components and professional purpose; factSpan preserves source wording rather than output normalization.")
+  addressLine1: z.string(),
+  addressLine2: z.string().nullable(),
+  city: z.string().nullable(),
+  state: z.string().nullable(),
+  zip: z.string().nullable(),
+  citation: structuredCitationSchema
 }).strict();
 
 const structuredWebsiteSchema = z.object({
-  value: z.string().describe("Exact URL of a consulted readable provider- or organization-specific first-party page for the exact provider; must equal citation.sourceUrl. Eligible biography/team pages need full name plus compatible credential/specialty and practice/location, not NPI or contact parity."),
-  citation: structuredWebsiteCitationSchema.describe("Evidence from this same page, with exact page-local identity and heading/name quotations.")
+  value: z.string(),
+  citation: structuredWebsiteCitationSchema
 }).strict();
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
-  npi: z.string().nullable().describe("Exact requested 10-digit NPI."),
-  providerName: z.string().describe("Requested provider name attached to that NPI."),
+  npi: z.string().nullable(),
+  providerName: z.string(),
   specialties: z.array(structuredSpecialtySchema),
-  locations: z.array(structuredLocationSchema).describe("Eligible professional locations, best first. Multiple values require affirmative concurrent-operation evidence; never residential, people-search, or uncertain-purpose."),
-  phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice contacts, best first. Multiple values require affirmative concurrent-operation evidence."),
-  websites: z.array(structuredWebsiteSchema).describe("Eligible exact consulted first-party page URLs, best first. Use empty only when none qualifies; additional domains require concurrent-operation evidence.")
+  locations: z.array(structuredLocationSchema),
+  phoneNumbers: z.array(structuredPhoneSchema),
+  websites: z.array(structuredWebsiteSchema)
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({
