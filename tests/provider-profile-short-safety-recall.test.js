@@ -5,8 +5,10 @@ describe("short provider contract safety and recall", () => {
   const profile = providerProfileStructuredOutputSchema.shape.profiles.element;
 
   it("checks a contact-bearing exact-NPI page before returning specialty only", () => {
-    expect(providerProfileSystemInstructions).toMatch(/Before returning specialty only, open the best exact-NPI result likely to contain contacts/i);
-    expect(providerProfileSystemInstructions).toMatch(/Do not emit a registry or directory contact while a plausible surfaced first-party contact page remains uninspected/i);
+    expect(providerProfileSystemInstructions).toMatch(/Complete this search workflow before answering/i);
+    expect(providerProfileSystemInstructions).toMatch(/open the best surfaced first-party provider\/contact page.*best exact-NPI page whose lead shows a phone or address/i);
+    expect(providerProfileSystemInstructions).toMatch(/Do not stop after a registry search/i);
+    expect(providerProfileSystemInstructions).toMatch(/emit every eligible supported fact rather than a subset/i);
   });
 
   it("resolves alternate-NPI, same-name geography, and phone-purpose conflicts", () => {
