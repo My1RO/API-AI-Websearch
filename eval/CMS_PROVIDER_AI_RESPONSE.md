@@ -1,11 +1,11 @@
 # CMS response: AI web-search provider profiles
 
-Status: CMS-ready technical draft based on the completed development and sealed
-holdout evaluations. The selected configuration is source-validated but is not
-represented here as already deployed.
+Status: corrected technical draft based on the completed development study and
+the re-evaluated sealed holdout. The evaluated configuration is not represented
+as deployed or ready for release.
 
-Current release contract: Lucie retains the original full production prompt
-and strict schema evaluated in the development and holdout studies. The exact
+Evaluated contract: Lucie retained the original full production prompt and
+strict schema for the sealed holdout. The exact
 static model-visible contract is 86,769 UTF-8 bytes at treatment commit
 `d6afd2d2c24983ea2dbbdbdaf064864d17a13186`; later packaging and documentation
 commits did not change the treatment files. A subsequent development-only
@@ -15,7 +15,10 @@ reevaluating every arm on the same frozen 60-provider development battery, no
 shortened contract passed both required primary evaluation strata. Lucie
 therefore did not replace the full prompt, did not use the prior holdout to
 select a shorter prompt, and does not present short-contract results as release
-evidence.
+evidence. A later corrected holdout reader evaluated all 60 cases and exposed
+release-blocking fax/voice and provider-identity failures that the historical
+reader missed. The full contract therefore remains the evaluated reference,
+not an approved production release.
 
 The complete methodology, denominators, costs, limitations, API reproductions,
 and raw TSV inventory are in the
@@ -30,11 +33,11 @@ a separate 60-provider holdout.
 
 | Original CMS question | Lucie response |
 | --- | --- |
-| **Will there be guardrails to prevent the disclosure and display of the provider’s personal information (e.g., to prevent the provider’s personal cell phone number or address from being displayed)?** | Yes. The model is instructed to return only public professional contacts for the exact provider and to omit fax, mobile/cell, personal/home, residential, people-search, and uncertain-purpose candidates. Each fact must include its own provider-identity quotation, fact quotation, and direct page URL. Narrow host checks reject literal self-declared prohibited values and invalid output, but Lucie does not claim that deterministic code can infer whether an unlabeled number or address is personal. The disjoint holdout found zero manually confirmed major safety violations, including personal-contact or residential disclosure, among 59 evaluable cases; one case was evaluator-overflow. This is evidence of performance in the tested battery, not a guarantee that disclosure is impossible. |
+| **Will there be guardrails to prevent the disclosure and display of the provider’s personal information (e.g., to prevent the provider’s personal cell phone number or address from being displayed)?** | The evaluated contract contains those guardrails: the model must return only public professional contacts for the exact provider and omit fax, mobile/cell, personal/home, residential, people-search, and uncertain-purpose candidates. Each fact carries a provider-identity quotation, fact quotation, and direct page URL. Narrow host checks reject literal self-declared prohibited values and invalid output, but cannot semantically classify an unlabeled contact. The corrected sealed-holdout review did not confirm a personal-mobile disclosure; it did confirm one emitted phone with arm-owned exact-NPI evidence explicitly labeling that value as a fax, plus two provider-identity/location cases described below. Lucie therefore will not represent this prompt as having passed its release safety gate. |
 | **When there are conflicts between HealthCare.gov API data and OpenAI indexed data, how would they be addressed?** | HealthCare.gov and plan-directory APIs exclusively determine whether a provider is in network. Lucie does not send plan/network information to the AI, and AI contact information cannot override network participation. Contact disagreements are resolved field by field using exact-provider evidence; agreement with an API is not treated as proof that either value is current. NPI and name are the primary identity keys. Specialty and requested location are possibly stale cross-checks. |
 | **If conflicting information is displayed, how should the consumer or agent/broker reconcile those conflicts?** | The product identifies AI contact information as supplemental, preserves plan-directory authority for network status, provides source links, and supports structured correctness feedback. Users should confirm important contact details with the cited provider source or the provider/issuer. Lucie—not the consumer—owns investigation and correction. An unresolved same-field identity or safety conflict is omitted; a conflict in one field does not suppress unrelated supported facts. Feedback does not automatically train the model or replace displayed data. |
-| **Please explain how Lucie would validate the accuracy of the OpenAI indexed data with respect to the proposed provider contact information modal solution. Specifically, what mechanisms would the Lucie team use to ensure the accuracy and reliability of each proposed LLM-generated/OpenAI indexed provider data field (i.e., ZocDoc ratings, telephone numbers, address, and website URL)?** | The selected configuration requires every specialty, phone, address, and website to identify the exact provider and carry a direct page URL plus separate identity and fact spans. The model verifies professional purpose, resolves different-NPI conflicts, applies fact-specific recency when available, and only then applies source priority. Strict Zod Structured Outputs and narrow host invariants enforce the response contract. Ratings, including Zocdoc ratings, were removed from the shipped model contract. In the sealed holdout, 206 of 218 evaluable claims had exact whole-packet support, one was partial, nine were unreadable, and two raw contradictions were rejected after documented trace review. For 126 claims, the claim's own cited page was host-readable; 125 exactly supported the value and one partially supported it. Unreadable evidence remains unknown rather than being counted as correct. |
-| **Has Lucie done testing to determine how the accuracy of the AI Web-Search Provider Profiles compare to the accuracy of information provided by the existing gov APIs?** | Yes, with important limits. Lucie tested 40 production-shaped configurations in live pilots, advanced four to complete 60-provider development evaluations, selected a winner under a fixed safety-first rule, and ran it once on a sealed, disjoint 60-provider holdout. Every holdout provider was returned by CMS provider search, was covered by at least one sampled actual 2026 Marketplace plan, and had an active matching NPPES identity/location at cohort construction. The selected configuration returned 60/60 profiles. Of 59 evaluable address claims, 51 matched the requested CMS location category, six were other professional locations, and two were unreadable. The study evaluates overlap and independent web support; it does not show that AI is more accurate than CMS, NPPES, or plan directories and is not nationally representative. |
+| **Please explain how Lucie would validate the accuracy of the OpenAI indexed data with respect to the proposed provider contact information modal solution. Specifically, what mechanisms would the Lucie team use to ensure the accuracy and reliability of each proposed LLM-generated/OpenAI indexed provider data field (i.e., ZocDoc ratings, telephone numbers, address, and website URL)?** | The evaluated contract requires every specialty, phone, address, and website to identify the exact provider and carry a direct page URL plus separate identity and fact spans. The model is instructed to verify professional purpose, resolve different-NPI conflicts, apply fact-specific recency when available, and only then apply source priority. Strict Zod Structured Outputs and narrow host invariants enforce the response shape. Ratings, including Zocdoc ratings, were removed from the model contract. The corrected evaluator assessed all 221 holdout claims: whole-packet support was 201 exact, one partial, one not found, and 18 contradicted; exact-own-page support was 174 exact, two partial, three not found, and 42 unreadable. Trace review confirmed at least three release-blocking provider/contact cases. Unreadable evidence remains unknown, and raw recency-sensitive labels are separately qualified because the judge sometimes over-weighted directory refresh metadata. |
+| **Has Lucie done testing to determine how the accuracy of the AI Web-Search Provider Profiles compare to the accuracy of information provided by the existing gov APIs?** | Yes, with important limits. Lucie tested 40 production-shaped configurations in live pilots, advanced four to complete 60-provider development evaluations, selected a development winner under a fixed safety-first rule, and ran it once on a sealed, disjoint 60-provider holdout. Every holdout provider was returned by CMS provider search, was covered by at least one sampled actual 2026 Marketplace plan, and had an active matching NPPES identity/location at cohort construction. The configuration returned 60/60 profiles, but the corrected evidence reader found an emitted fax/voice conflict, a wrong-NPI contact bundle, and a same-name wrong-location page. The study evaluates overlap and independent web support; it does not show that AI is more accurate than CMS, NPPES, or plan directories and is not nationally representative. |
 | **Will the feedback mechanism be displayed to consumers, or is it only intended for agent/broker use?** | It is available to anyone who can use the provider contact modal, including consumers and agent/broker users. It is not limited to agent/broker use. The application derives only a broad user class for aggregate quality analysis. |
 | **Will messaging be displayed to instruct users on how to interact with the feedback buttons (i.e., only use the buttons to indicate whether the information was correct)?** | Yes. The modal asks whether the overall contact details and each displayed field are correct. An incorrect response requires a field-compatible structured reason. Lucie does not collect free-text feedback in this path. |
 | **Who will have access to the feedback data?** | Only approved Lucie data analysts will have access to the feedback aggregates. Members, consumers, agent/broker users, and ordinary application users cannot read feedback records or summaries. The application has no feedback read route. Production access must be enforced with a separate read-only analyst role, least privilege, SSO/MFA, audit logging, recertification, retention, and separation from database/platform administration. |
@@ -92,12 +95,14 @@ lower 95% bound was -12 percentage points, below the frozen -5-point margin.
 The difference came from one real provider request in which the full contract
 returned a professional address and phone while the shortest contract returned
 only specialty. Every other shortened artifact failed at least one additional
-primary gate. Under the frozen rule there was no short-contract winner, so the
-full contract remains the production candidate.
+primary gate. Under the frozen development rule there was no short-contract
+winner. The full contract remained the holdout reference, but the corrected
+holdout result below means it is not a releasable production candidate without
+another iteration.
 
-## Implemented production-shaped contract
+## Evaluated production-shaped contract
 
-The selected service path is:
+The evaluated service path is:
 
 `provider-only request → one Azure Responses call with native web search → strict structured parsing → narrow local invariants → ordered modal facts`
 
@@ -172,76 +177,73 @@ national probability sample.
 - all 60 had at least one phone, address, or website;
 - 221 emitted claims: 72 specialty, 60 address, 56 phone, and 33 website;
 - 148 web searches, 61 HTTP sends, one semantic retry, and no transport retry;
-- production cost `$5.028516` total, `$0.0814885` median, `$0.0838086`
-  mean, `$0.1148255` p95, and `$0.156701` maximum;
-- Azure latency `9.542 s` median, `9.787 s` mean, `13.881 s` p95, and
-  `14.613 s` maximum.
+- production cost `$5.028516` total, `$0.081231` median, `$0.083809`
+  mean, `$0.112417` p95, and `$0.156701` maximum;
+- Azure latency `9.568 s` median, `9.830 s` mean, `13.591 s` p95, and
+  `14.651 s` maximum.
 
-### Fixed evaluation result
+### Corrected fixed-evaluation result
 
-The fixed evaluator used `gpt-5.6-sol`, reasoning `high`, concurrency 10, the
-same categorical rubric and strict schema for every case, no web search, and no
-aggregate score. Each case received only the selected configuration's returned
-webpages. The evaluation made 59 paid calls; one case was an honest no-call
-context overflow.
+The re-evaluator used `gpt-5.6-sol`, reasoning `high`, concurrency 10, a fixed
+categorical rubric and strict schema, no evaluator web search, and no aggregate
+score. It preserved the production treatment and its 1,523 exact returned URLs.
+Complete HTML was normalized to semantic Markdown; five large workbooks used
+deterministic indexes and four predeclared spreadsheet-boundary cases entered a
+blinded structured Codex-harness manual stratum. The final result contains 56
+automatic cases, four manual cases, and zero censored cases.
 
-- whole-packet claim support: 206 exact, 1 partial, 9 unreadable, and 2 raw
-  contradicted among 218 evaluated claims;
-- readable own-citation support: 125 exact and 1 partial among 126 claim-level
-  own-citation assessments; 92 additional assessments were host-unreadable;
-- identity spans: 121 exact, 5 nonverbatim, 92 unreadable;
-- fact spans: 119 exact, 7 nonverbatim, 92 unreadable;
-- recency: 209 undated and 9 unreadable; no qualifying fact-specific date;
-- judge cost `$44.153370`; final production plus judge cost `$49.181886`.
+- all 60 cases and all 221 claims were evaluated; the historical single-case
+  overflow was eliminated;
+- whole-packet claim support: 201 exact, one partial, one not found, and 18
+  contradicted;
+- own-citation support: 174 exact, two partial, three not found, and 42
+  unreadable;
+- identity spans: 158 exact, two partial, 19 nonverbatim, and 42 unreadable;
+- fact spans: 156 exact, 23 nonverbatim, and 42 unreadable;
+- raw recency labels: 115 current, 20 stale, 20 conflicting, 37 undated, and 29
+  unknown; every explicit fact-date span was absent;
+- successful automatic evaluator cost: `$128.052519` across 346 atomic and 56
+  synthesis calls; production plus that evaluator was `$133.081035`.
 
-The sealed judge emitted raw critical labels for two cases. Additive trace
-review preserved those labels but found them to be evaluator overreach or
-missing exact-NPI evidence, not confirmed safety failures. The final stopping
-result is **zero manually confirmed major safety violations among 59 evaluable
-cases; one case was evaluator-overflow**. One case had a confirmed minor defect:
-an unsupported slash in `addressLine2`. Nine claims remained indeterminate
-because their exact evidence was unavailable.
+The raw judge emitted advisory critical labels in 16 automatic cases. Detailed
+trace review found that some conflict labels over-weighted directory
+`dateModified`, `last reviewed`, or dataset-refresh metadata even though those
+dates did not govern the exact fact. It also repeated the known overbroad
+inference that an apartment label alone proves residential use. Those raw
+labels remain disclosed and are not silently converted to success.
 
-The evaluation was model-assisted and received an additive trace audit; it was
-not a blinded independent human-adjudication study. Unknown evidence was not
-converted into success. The result does not establish complete internet
-coverage, perfect citation fidelity, national performance, or superiority over
-government/provider-directory APIs.
+Separately, three release-blocking cases do not depend on those evaluator
+errors: one output phone had arm-owned exact-NPI evidence explicitly labeling
+it as a fax; one address-and-phone bundle was affirmatively assigned to other
+NPIs without requested-NPI or shared-use resolution; and one same-name
+first-party page supplied a California address for a provider whose readable
+exact-NPI evidence identified Ohio. The unsupported slash in one
+`addressLine2` remains a confirmed minor defect. The full prompt therefore did
+not pass the corrected holdout safety gate.
 
-### Development-to-holdout regression check
+The evaluation was model-assisted and included a separately reported blinded
+exception stratum plus additive trace review; it was not an independent human
+clinical-adjudication study. Unknown evidence was not converted into success.
+The result does not establish complete internet coverage, perfect citation
+fidelity, national performance, or superiority over government/provider-
+directory APIs.
 
-Lucie compared the frozen 60-provider development result with the disjoint
-60-provider holdout. There was no release-material regression:
+### Development-to-holdout regression assessment
 
-- parsed profiles and profiles containing a phone, address, or website remained
-  60/60;
-- confirmed major-safety violations remained zero (58 paired-eligible
-  development cases; 59 evaluable holdout cases);
-- readable direct-citation precision was effectively identical: 128/129
-  (99.2%) in development and 125/126 (99.2%) in holdout;
-- own-citation unreadability was also similar: 89/218 assessments across 35/60
-  development cases versus 92/218 across 34/59 evaluable holdout cases;
-- lower-tier source selections decreased from 26 to 23 fields, and non-rating
-  inappropriate withholding decreased from 14 to nine fields;
-- mean production cost decreased 1.1%, from `$0.0847505` to `$0.0838086` per
-  provider; and
-- median and p95 Azure latency increased from `8.859 s`/`13.190 s` to
-  `9.542 s`/`13.881 s`, while the development run's `309.402 s` transport tail
-  did not recur (holdout maximum `14.613 s`).
+Production availability and volume remained stable: both batteries returned
+60/60 profiles, and the holdout emitted 221 claims. Production mean cost was
+1.1% lower than development (`$0.083809` versus `$0.084751` per provider), and
+the development run's extreme transport tail did not recur.
 
-The holdout did expose three adverse differences that remain disclosed: one
-minor unsupported `/` address component, one evaluator context-overflow case,
-and whole-packet unreadability in six provider cases rather than two. An
-exploratory provider-unit Fisher comparison of the latter was `p=0.163`; it did
-not establish a cohort regression. Both raw holdout contradictions were traced
-to evaluator overreach against frozen exact-NPI evidence, not confirmed unsafe
-or wrong-provider output.
-
-This was not a preregistered confirmatory noninferiority test, and the
-exploratory comparisons were not adjusted for multiple testing. Lucie therefore
-states that no statistically established or operationally material regression
-was observed—not that development and holdout performance are proven
-equivalent. No prompt was retuned after the holdout was opened.
+The previous statement of “no release-material regression” is withdrawn. It
+was based on the historical evaluator, which judged only 59 cases, left 92 own
+citations unreadable, and overflowed on one case. The corrected reader judged all
+60 cases, reduced own-citation unreadability to 42/221, and exposed the three
+release-blocking cases above. Because the development and holdout source
+snapshots were collected at different times and the corrected recency labels
+still require qualification, Lucie does not claim a formal development-to-
+holdout effect estimate. No production prompt was retuned after the holdout was
+opened; instead, the failed holdout gate is reported as observed.
 
 ## Feedback governance
 
@@ -255,18 +257,20 @@ release controls rather than claims established solely by source code.
 
 ## Release packaging and remaining evidence
 
-The completed study supports shipping the selected configuration. A packaging-only release now
-provides a digest-pinned multistage production image, compiled entrypoint,
+The packaging work is complete, but the corrected holdout does not support
+shipping this configuration. A packaging-only release provides a digest-pinned
+multistage production image, compiled entrypoint,
 non-root/read-only runtime contract, healthcheck, immutable-image runbook,
 rollback procedure, and initial monitoring gates. A local dedicated-Redis
 container smoke passed health, non-root/read-only, and missing-Public-API-context
 fail-closed checks. These changes do not alter the evaluated prompt, schema, parser,
 sanitizer, Azure client, retry behavior, or runtime defaults.
 
-Local release readiness is not the same as completed production cutover. Before
-launch Lucie still must:
+Packaging readiness is not evidence that the Provider AI treatment passed its
+quality gate. Before launch Lucie must first correct and revalidate the three
+release-blocking cases described above, and then:
 
-1. publish and review the exact evaluated source plus its
+1. publish and review the exact successor source plus its
    packaging/documentation-only release changes;
 2. build in approved CI and bind an immutable registry digest and actual
    Terra/low deployment values to that evaluated source and release build;
@@ -286,7 +290,8 @@ the sealed holdout.
 ## Appendix A — Literal production prompt
 
 The Responses request sends the following system instruction string verbatim.
-This is the retained original full prompt, not a shortened experimental prompt.
+This is the retained original full prompt evaluated in the failed corrected
+holdout, not a shortened experimental prompt or an approved successor.
 The historical headings beginning with `D34` are inert labels retained in the
 evaluated runtime string; they do not select a hidden branch. In those quoted
 instructions, `Q1`, `Q2`, and `Q3` mean qualified first-party,

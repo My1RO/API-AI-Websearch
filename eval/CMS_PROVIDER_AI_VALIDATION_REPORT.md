@@ -1,18 +1,18 @@
 # Provider-profile validation and CMS response evidence
 
-Status date: 2026-08-01 (America/New_York)
+Status date: 2026-08-04 (America/New_York)
 
 ## Executive decision
 
-Lucie should ship the frozen selected provider-profile configuration, subject
-to ordinary deployment, security, monitoring, and rollback controls. It passed
-the preregistered stopping rule: after additive review of every raw critical
-label, **zero major safety violations were confirmed among 59 evaluable cases
-in the disjoint 60-provider holdout**. One case was not judged because its
-complete evidence packet exceeded the evaluator's direct-input ceiling; no
-content was truncated and no extraction-model fallback was used.
+Lucie should **not ship the frozen full-prompt provider-profile configuration**.
+A corrected format-aware evaluator judged all 60 disjoint holdout cases and all
+221 claims and found release-blocking failures that the historical evaluator
+missed: one fax/voice conflict, one wrong-NPI address-and-phone bundle, and one
+same-name wrong-location/provider-page bundle. The corrected stack eliminated
+the prior context-overflow no-call; no page content was truncated and no
+extraction-model fallback was used.
 
-The selected configuration remains the original full production prompt and
+The evaluated reference remains the original full production prompt and
 strict schema: 86,769 static UTF-8 bytes at treatment commit
 `d6afd2d2c24983ea2dbbdbdaf064864d17a13186`. A later development-only
 minimization program reevaluated the full contract and eight shortened
@@ -20,7 +20,7 @@ artifacts with the corrected fixed evaluator. No shortened artifact passed both
 required primary strata, so no prompt reduction was promoted and the sealed
 holdout was not reused to choose among shortened prompts.
 
-This decision followed a broad candidate funnel: **40 distinct
+The original development selection followed a broad candidate funnel: **40 distinct
 production-shaped configurations were tested with live pilot requests, four
 advanced to complete 60-provider development evaluations, and the selected
 configuration was then frozen and tested on a separate 60-provider holdout.**
@@ -28,14 +28,13 @@ configuration was then frozen and tested on a separate 60-provider holdout.**
 The companion [CMS response](CMS_PROVIDER_AI_RESPONSE.md) includes the literal
 evaluated production prompt and strict output schema as Appendices A and B.
 
-This is not a perfect-accuracy claim. The holdout found one confirmed minor
-address-format defect, nine claims whose exact evidence remained unavailable,
-imperfect source-hierarchy adherence, and citation-span defects. Performance
-has plateaued around citation availability, quotation fidelity, and a few hard
-organizational-identity cases. Further prompt tuning on the holdout would
-overfit the validation set. The stopping rule therefore sends lesser defects
-to post-release monitoring and permits a new version only for a confirmed
-major-safety defect or a separately scoped material improvement.
+The corrected result also found one confirmed minor address-format defect,
+imperfect source-hierarchy adherence, and citation-span defects. The raw judge
+flagged 16 automatic cases, but trace review showed that several additional
+labels over-weighted directory refresh metadata or ordinary coexistence of
+professional phone lines. Those raw findings remain disclosed rather than
+being silently converted into passes. The three release blockers above do not
+depend on the evaluator's recency errors.
 
 The evaluated configuration was frozen before opening the holdout. Its build
 passed, with 267 tests passing and four skipped across 41 passing suites and
@@ -43,9 +42,9 @@ one skipped suite. It has been packaged and smoke-tested locally but has not
 completed target-environment deployment and verification. This report therefore
 does not claim production cutover completion.
 
-## What is being shipped
+## Evaluated configuration
 
-The selected configuration uses the retained original full prompt/schema
+The failed holdout reference uses the retained original full prompt/schema
 contract with the Azure OpenAI Responses API. The literal contract is reproduced
 in Appendices A and B of the companion CMS response. It uses:
 
@@ -225,7 +224,7 @@ probabilities relative to the complete national provider universe are unknown.
 ### Fixed evaluation
 
 Production ran the frozen requests once. Evaluation then fetched only the URLs
-returned by the selected configuration; it did not use a union packet or credit
+returned by the evaluated configuration; it did not use a union packet or credit
 the configuration with a page it had not returned. Fetching was deterministic,
 parallel, evaluation-only, and absent from production.
 
@@ -263,13 +262,13 @@ plan/network data.
 ### Match and overlap with CMS/provider APIs
 
 NPI and provider name were the primary identity keys. Specialty and requested
-location were deliberately stale-capable cross-checks, not gates. Of the 59
-evaluable address claims, the fixed judge classified 51 as the requested CMS
-location, six as a different professional location, and two as unreadable.
-Different professional location is not automatically an error: the provider
-may have multiple locations and the CMS hint may be stale. The whole-packet
-support assessment, not CMS equality, determined whether the emitted fact was
-supported.
+location were deliberately stale-capable cross-checks, not gates. The corrected
+judge assessed all 60 address claims: 51 were at the requested location, six
+were compatible professional locations, one was a different professional
+location, one was wrong-location, and one was ambiguous. A different
+professional location is not automatically an error; the same-name California
+page in the wrong-location case was a provider-identity failure, not a penalty
+for differing from CMS by itself.
 
 The experiment therefore establishes overlap and independent support but does
 not establish that AI contact data are more accurate than CMS, NPPES, or plan
@@ -278,121 +277,129 @@ AI never overrides them.
 
 ## Categorical evidence findings
 
-Fifty-nine cases and 218 of 221 claims were evaluable. One holdout case was a
-fail-closed `CONTEXT_OVERFLOW` no-call: its complete serialized input was estimated at
-473,359 tokens against the evaluator's 224,000-token direct-input ceiling.
-There was no truncation, extraction fallback, malformed judge response, judge
-error, or judge content filter.
+All 60 cases and all 221 claims were evaluated. The corrected stack used 346
+bounded atomic readings and 56 categorical syntheses; four predeclared
+spreadsheet-boundary cases used the same schema in a blinded structured
+Codex-harness manual stratum. There was no context overflow, truncation,
+extraction-model fallback, terminal malformed response, or content-filter
+censor.
 
-| Criterion | Categories among 218 evaluated claims |
+| Criterion | Categories among 221 evaluated claims |
 | --- | --- |
-| Whole returned-source packet supports value | exact 206; partial 1; unreadable 9; raw contradicted 2 |
-| Claim's own citation supports value | exact 125; partial 1; unreadable 92 |
-| Provider-identity span fidelity | exact 121; nonverbatim 5; unreadable 92 |
-| Fact-span fidelity | exact 119; nonverbatim 7; unreadable 92 |
-| Field validity | valid 206; partial 1; unreadable 9; raw invalid 2 |
-| Recency | undated 209; unreadable 9; qualifying fact-specific date 0 |
+| Whole returned-source packet supports value | exact 201; partial 1; not found 1; contradicted 18 |
+| Claim's own citation supports value | exact 174; partial 2; not found 3; unreadable 42 |
+| Provider-identity span fidelity | exact 158; partial 2; nonverbatim 19; unreadable 42 |
+| Fact-span fidelity | exact 156; nonverbatim 23; unreadable 42 |
+| Field validity | valid 202; partial 1; invalid 18 |
+| Recency | current 115; stale 20; conflicting 20; undated 37; unknown 29 |
 
-For 126 claims, the claim's own cited page was host-readable; 125 exactly
-supported the value and one partially supported it. The 92 unreadable own
-citations remain unknown, not successes or failures. Independent readable
-pages returned by the same configuration allowed whole-packet assessment for most of
+The evaluation host preserved 1,523 logical returned-source rows. The corrected
+packets contained 1,230 readable arm-returned snapshots and 293 unavailable
+snapshots, plus one fixed identity-only context source per case. Unreadable own
+citations remain unknown, not successes or failures. Independent readable pages
+returned by the same configuration allowed whole-packet assessment for many of
 those claims.
 
-The evaluation host processed 1,523 logical returned-source rows (1,498
-unique URLs), including 18 detected PDFs. It read 817 source rows and marked
-706 unavailable in the final judge packets. Host-fetch failure is evaluator
-insufficiency, not a production error and not affirmative evidence that a fact
-is wrong.
+Every claim correctly omitted an explicit fact-date span. The raw recency row
+does not mean 155 claims had fact-specific dates. Trace review found that the
+judge sometimes treated directory `dateModified`, `last reviewed`, or data-
+refresh metadata as fact recency despite the fixed rubric. Recency-sensitive
+raw labels therefore require the adverse-case qualifications below.
 
 ### Source hierarchy by field
 
-Counts are across 59 evaluable cases and apply only to sources found by the
-selected configuration, not to the entire internet.
+Counts are across all 60 cases and apply only to sources found by the evaluated
+configuration, not to the entire internet.
 
 | Field | Highest eligible tier | Lower tier | Appropriate conflict withholding | Inappropriate withholding | Indeterminate | N/A |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Address | 37 | 7 | 1 | 2 | 9 | 3 |
-| Phone | 33 | 9 | 2 | 2 | 9 | 4 |
-| Specialty | 38 | 7 | 0 | 0 | 11 | 3 |
-| Website | 27 | 0 | 0 | 5 | 0 | 27 |
+| Address | 43 | 5 | 1 | 2 | 6 | 3 |
+| Phone | 43 | 5 | 0 | 2 | 6 | 4 |
+| Specialty | 39 | 9 | 0 | 0 | 8 | 4 |
+| Website | 32 | 0 | 0 | 3 | 0 | 25 |
 
-The 23 lower-tier selections are CMS-priority fidelity findings, not automatic
-wrong-value findings. The nine non-rating inappropriate-withholding findings
-are recall opportunities on pages the configuration itself returned. The evaluator's 25
-rating-withholding findings are inapplicable because ratings were intentionally
-removed from the shipped contract.
+The 19 lower-tier selections are CMS-priority fidelity findings, not automatic
+wrong-value findings. The seven non-rating inappropriate-withholding findings
+are recall opportunities on pages the configuration itself returned. Ratings
+were intentionally removed and remain out of scope.
 
 ### Adverse-case trace review
 
-The sealed judge emitted three raw critical labels in two cases. The additive
-audit preserved those labels and did not mutate the sealed results:
+The sealed judge emitted advisory critical labels in 16 automatic cases. The
+additive trace audit preserved those raw labels and did not mutate the sealed
+results. Its key dispositions are:
 
-- **Apartment-labeled professional location.** The judge inferred residential use
-  from `Apt 612` alone, contrary to the explicit rubric. Exact-NPI NPPES and
-  readable professional pages identify it as a practice/contact location; no
-  evidence calls it a home. Disposition: evaluator semantic overreach, not a
-  confirmed disclosure.
-- **Shared exact-NPI professional contact.** The cited NPIdb page
-  was host-unreadable and the judge treated other-provider use as contradiction.
-  The frozen NPPES response directly assigns the exact address and phone to NPI
-  1962148841, and the CMS baseline independently assigns the address. Shared
-  use does not prove exclusivity or incompatibility. Disposition: evaluator
-  evidence insufficiency/overreach, not a confirmed wrong-provider disclosure.
+- **Confirmed fax/voice failure.** A phone displayed by the output had
+  arm-owned exact-NPI evidence explicitly labeling the same value as a fax and
+  another value as the telephone. This violates the professional-voice rule.
+- **Confirmed wrong-NPI bundle.** A displayed address and phone were assigned
+  by readable evidence to other NPIs, while readable requested-NPI evidence
+  showed a different bundle and no shared-use resolution.
+- **Confirmed same-name wrong-location page.** A California address and
+  provider page were emitted for an exact-NPI provider whose readable evidence
+  identified Ohio.
+- **Apartment-only raw residential label.** The judge inferred residential use
+  from `Apt 612` alone. That remains evaluator overreach; `apt` is not a
+  deterministic residential classification.
+- **Recency and coexistence overreach.** Several other raw contradictions used
+  directory refresh/review metadata as if it dated the exact contact, or
+  treated different professional phone lines as mutually exclusive without
+  affirmative evidence. These are retained as unresolved quality warnings,
+  not promoted to confirmed safety incidents.
 
-After review, there were **zero confirmed major safety violations among 59
-evaluable holdout cases**. This does not convert unknown claims into correct
-ones.
+The three confirmed cases are sufficient to fail the release safety gate. One
+additional case emitted unsupported `addressLine2: "/"`; the remaining address
+was supported, making this a minor formatting/exactness defect. Forty-two own
+citations remain unreadable. Citation-span or field-contract defects occurred
+in 33 cases, including 19 nonverbatim identity spans and 23 nonverbatim fact
+spans across the claim set.
 
-Confirmed and unresolved residuals:
+### Historical versus corrected evaluator
 
-- One case emitted unsupported `addressLine2: "/"`; the remaining address was
-  supported. This is a minor formatting/exactness defect.
-- Nine claims across six cases remained indeterminate because their exact
-  evidence was unavailable.
-- Twelve readable submitted spans were nonverbatim across identity and fact
-  dimensions even though the normalized values were semantically supported.
-- No evaluated claim carried a qualifying fact-specific date. Undated evidence
-  remained eligible and neutral; Lucie must not claim those facts are current.
+The production outputs, claims, and returned URL sets were frozen. The
+corrected webpage snapshots were collected after the historical snapshots, so
+page drift can contribute to changed labels and this is not a randomized
+evaluator experiment.
+
+| Measure | Historical evaluator | Corrected evaluator |
+| --- | ---: | ---: |
+| Cases judged | 59/60 | 60/60 |
+| Claims judged | 218/221 | 221/221 |
+| Context-overflow no-calls | 1 | 0 |
+| Whole-packet exact | 206 | 201 |
+| Whole-packet contradicted | 2 | 18 |
+| Own-citation exact or partial | 126 | 176 |
+| Own-citation unreadable | 92 | 42 |
+| Raw critical-label cases | 2 | 16 |
+| Judge API cost | `$44.153370` | `$128.052519` successful run |
+
+On the 218 shared claims, 53 own-citation support labels changed. The corrected
+stack's bounded per-source reading materially improved citation coverage and
+eliminated the overflow, while also exposing more conflicts and more
+nonverbatim spans. The historical zero-major-defect conclusion is superseded.
 
 ## Development-to-holdout regression assessment
 
 The relevant test-set comparator is the frozen 60-provider development battery,
-not the smaller prompt-tuning pilots. The holdout used different
-providers but the same production model/runtime and fixed Sol/high evaluation
-family. No material safety or end-to-end coverage regression was observed.
+not the smaller prompt-tuning pilots. Production availability and output volume
+were stable: both batteries returned 60/60 profiles, and the holdout emitted
+221 claims versus 218 in development. Mean production cost decreased 1.1%,
+from `$0.084751` to `$0.083809` per provider, and the development run's extreme
+transport tail did not recur.
 
-| Outcome | Development battery | Disjoint holdout | Assessment |
-| --- | ---: | ---: | --- |
-| Parsed profiles | 60/60 | 60/60 | No regression |
-| Profiles with a phone, address, or website | 60/60 | 60/60 | No survival/contact regression |
-| Emitted claims | 218 | 221 | Overall output volume was stable; phone claims decreased 59→56 while websites increased 27→33 |
-| Confirmed major-safety violations | 0 among 58 paired-eligible development cases | 0 among 59 evaluable holdout cases | No observed safety regression |
-| Whole-packet fixed-judge categories | 216 exact; 2 unreadable | 206 exact; 1 partial; 9 unreadable; 2 raw contradicted | Raw labels worsened, but trace review found both contradictions were evaluator overreach; one real minor formatting defect remained |
-| Readable own-citation precision | 128/129 exact (99.2%); 1 partial | 125/126 exact (99.2%); 1 partial | Effectively unchanged |
-| Unreadable own-citation assessments | 89/218 (40.8%) across 35/60 cases | 92/218 (42.2%) across 34/59 evaluable cases | Essentially unchanged and remains the main evaluation limitation |
-| Lower-tier source selections | 26 fields | 23 fields | No hierarchy regression; descriptive improvement |
-| Non-rating inappropriate withholding | 14 fields | 9 fields | No recall-policy regression; descriptive improvement |
-| Qualifying fact-specific dates | 0 | 0 | No regression, but recency remains unproven rather than current |
-| Mean production cost | `$0.0847505` | `$0.0838086` | 1.1% lower on holdout |
-| Azure latency | median `8.859 s`; p95 `13.190 s`; max `309.402 s` | median `9.542 s`; p95 `13.881 s`; max `14.613 s` | Median/p95 were 7.7%/5.2% slower, but the development run's extreme transport tail did not recur |
+The historical statement that no release-material regression occurred is
+withdrawn. It relied on a reader that judged only 59 cases, left 92 own
+citations unreadable, and overflowed on one case. The corrected reader judged
+all 60 cases, reduced own-citation unreadability to 42/221, and exposed the
+three release-blocking cases above.
 
-This study did not preregister a confirmatory development-versus-holdout
-noninferiority test, so “no statistically significant regression” should not
-be read as proof of equivalence. As an exploratory check at the provider unit,
-cases with any unreadable whole-packet claim increased from 2/60 to 6/59
-(`p=0.163`, two-sided Fisher exact), while cases with any unreadable own
-citation were 35/60 versus 34/59 (`p=1.000`). Phone presence (59/60 versus
-56/60) and website presence (27/60 versus 33/60) also did not cross the
-conventional 0.05 threshold (`p=0.364` and `p=0.361`). These post-hoc tests are
-descriptive, unadjusted for multiple comparisons, and do not treat multiple
-claims from one provider as independent.
-
-The honest conclusion is therefore: **no significant or release-material
-regression was established**, but the holdout exposed one minor formatting
-defect, one evaluator overflow, and somewhat more whole-packet evidence
-unreadability. Those limitations remain visible rather than being averaged
-away or repaired by retuning on the holdout.
+This is not reported as a clean statistical development-versus-holdout effect:
+the source snapshots were collected at different times, the corrected
+evaluator was not the historical development judge, and its recency-sensitive
+labels still require qualification. The honest conclusion is narrower:
+availability, volume, cost, and ordinary latency did not materially regress,
+but the corrected holdout safety gate failed. No production prompt was retuned
+after the holdout was opened.
 
 ## Cost, latency, and reliability
 
@@ -403,39 +410,41 @@ unknown. Production and evaluation costs must remain separate.
 
 - total: `$5.028516` for 60 requests;
 - minimum: `$0.0515085`;
-- median (compiler order statistic): `$0.0814885`;
-- mean: `$0.0838086`;
-- p95 (compiler order statistic): `$0.1148255`;
+- median: `$0.081231`;
+- mean: `$0.083809`;
+- p95: `$0.112417`;
 - maximum: `$0.156701`;
 - sample standard deviation from the production summary: `$0.0185292`.
 
 Azure latency:
 
-- median: `9.542 s`;
-- mean: `9.787 s`;
-- p95: `13.881 s`;
-- maximum: `14.613 s`.
+- median: `9.568 s`;
+- mean: `9.830 s`;
+- p95: `13.591 s`;
+- maximum: `14.651 s`.
 
 The production run used 1,900,624 input tokens, 1,112,064 cached input tokens,
 47,140 output tokens, and 19,989 reasoning tokens. Usage was complete for all
 60 rows.
 
-### Evaluation
+### Corrected evaluation
 
-- 59 paid Sol/high calls and one no-call overflow;
-- cost: `$44.153370`;
-- median cost: `$0.704914`;
-- mean cost: `$0.748362`;
-- p95 cost: `$1.233964`;
-- maximum cost: `$1.385295`;
-- median latency: `97.567 s`;
-- mean latency: `98.862 s`;
-- p95 latency: `120.743 s`;
-- maximum latency: `125.523 s`.
+- 346 completed Sol/high atomic calls: `$102.021875` total, `$0.303369`
+  median, `$0.294861` mean, `$0.446209` p95, `$0.539665` maximum;
+- 56 completed Sol/high synthesis calls: `$26.030644` total, `$0.442820`
+  median, `$0.464833` mean, `$0.592251` p95, `$0.657274` maximum;
+- successful corrected automatic evaluator: `$128.052519` across 402 calls;
+- four blinded structured manual cases; manual-review cost was not captured;
+- zero context-overflow, content-filter, refusal, or malformed-output terminal
+  cases in the successful campaign.
 
-Final holdout production plus judge spend was `$49.181886`. An earlier aborted
-operational attempt cost `$0.113255`; it is excluded from quality metrics.
-Including that overhead, observed holdout-program spend was `$49.295141`.
+Production plus the successful corrected automatic evaluator was
+`$133.081035`. An earlier aborted atomic attempt completed 107 paid calls for
+`$34.395307`; it is excluded from final quality denominators. Including that
+operational overhead, production and corrected-evaluator API spend was
+`$167.476342`, excluding uncaptured manual-review cost. The historical broken
+judge's `$44.153370` is reported as superseded evaluation spend, not added to
+the corrected-run total.
 
 ## Exact APIs and credential-safe reproductions
 
@@ -514,8 +523,9 @@ people-search, and uncertain-purpose candidates. Every fact must carry its own
 provider-identity and fact quotation. A narrow host veto prevents a literal
 self-declared prohibited value from reaching display, but Lucie does not claim
 that deterministic code can classify an unlabeled personal number or address.
-The holdout found no confirmed personal-contact or residential disclosure among
-59 evaluable cases.
+The corrected holdout did not confirm a personal-mobile disclosure. It did
+confirm an emitted fax/voice conflict and two provider-identity/location cases,
+so the evaluated prompt failed the release safety gate.
 
 ### Conflicts with HealthCare.gov or plan data
 
@@ -530,11 +540,11 @@ identity anchors; specialty and location are stale-capable cross-checks.
 Every emitted specialty, address, phone, and website must identify the exact
 provider and include a direct page URL plus separate identity and fact spans.
 Source priority follows, rather than precedes, evidence qualification. Ratings,
-including Zocdoc ratings, are not shipped. In the holdout, 206 of 218
-evaluable claims had exact whole-packet support, one was partial, nine were
-unreadable, and two raw contradictions were rejected after documented trace
-review. For 126 claims, the own cited page was host-readable; 125 exactly
-supported the value and one partially supported it.
+including Zocdoc ratings, are not emitted. In the corrected holdout, 201 of 221
+claims had exact whole-packet support, one was partial, one was not found, and
+18 were contradicted. Own-citation support was 174 exact, two partial, three not
+found, and 42 unreadable. Raw recency-driven contradictions remain qualified,
+but the three release-blocking cases do not depend on them.
 
 ### Multiple values and default display
 
@@ -544,14 +554,15 @@ after identity, conflict, safety, location, and fact-specific-recency checks.
 Among otherwise equivalent eligible sources it prefers a first-party provider,
 practice, or facility page; then government evidence; then a professional
 directory. Element zero is displayed first; later values require “Show more.”
-The holdout shows this hierarchy is useful but imperfect and should not be
-represented as deterministic or infallible.
+The holdout shows this hierarchy is useful but imperfect; 19 fields selected a
+lower tier and seven non-rating fields were inappropriately withheld. It should
+not be represented as deterministic or infallible.
 
 ### Comparative accuracy statement
 
 Lucie completed a development comparison and an outcome-blind disjoint
-holdout. The study supports the selected configuration as shippable under the stated
-stopping rule. It does **not** show that AI provider contact data are more
+holdout. The corrected holdout does **not** support shipping the evaluated full
+prompt. The study also does **not** show that AI provider contact data are more
 accurate than CMS, NPPES, or plan-directory APIs, does not establish national
 performance, and was not a blinded independent human-adjudication study.
 
@@ -572,7 +583,8 @@ for auditability but are intentionally omitted from this outward-facing report.
 ## Release packaging and remaining cutover work
 
 After the sealed evaluation, Lucie added a packaging-only production image and
-deployment contract without changing the evaluated treatment. The image uses a
+deployment contract without changing the evaluated treatment. Packaging does
+not override the failed safety gate. The image uses a
 digest-pinned Node base, locked install, compiled start, non-root user,
 read-only-compatible filesystem, and Redis/AI-configuration healthcheck. A
 local dedicated-Redis smoke passed health, non-root/read-only checks, and the
@@ -581,16 +593,18 @@ smoke evidence and frozen dependency-scan disclosure.
 
 External cutover still requires Lucie to:
 
-1. Publish and review the exact evaluated source and its
+1. Correct and revalidate the fax/voice, wrong-NPI bundle, and same-name
+   location/domain failures in a separately versioned treatment.
+2. Publish and review that exact successor source and its
    packaging/documentation-only descendant without altering the treatment.
-2. Build in approved CI, push an immutable registry digest, and bind it to the
+3. Build in approved CI, push an immutable registry digest, and bind it to the
    evaluated source and release build.
-3. Attest the actual endpoint, secret source, Terra/low lock, approved price
+4. Attest the actual endpoint, secret source, Terra/low lock, approved price
    card, and deployment manifest.
-4. Complete organizational privacy/security evidence for Azure web search,
+5. Complete organizational privacy/security evidence for Azure web search,
    logging, retention, access, and Grounding with Bing terms.
-5. Run the documented deployed non-holdout Public-API/Azure and test-tenant
+6. Run the documented deployed non-holdout Public-API/Azure and test-tenant
    feedback/MySQL smoke, record the previous image digest, and activate the
    defined monitors before gradual traffic admission.
-6. Treat any confirmed major-safety incident as a release blocker for a
+7. Treat any confirmed major-safety incident as a release blocker for a
    separately versioned repair; do not silently retune this sealed result.
