@@ -15,12 +15,12 @@ describe("short provider contract safety and recall", () => {
     expect(providerProfileSystemInstructions).toMatch(/same-name alternate NPI surfaces, open its exact-NPI source before emitting a first-party contact or domain/i);
     expect(providerProfileSystemInstructions).toMatch(/An implicated value or domain needs requested-provider attachment/i);
     expect(providerProfileSystemInstructions).toMatch(/bare tel link is insufficient/i);
-    expect(providerProfileSystemInstructions).toMatch(/opened exact-provider first-party professional contact controls a conflicting registry\/directory value/i);
+    expect(providerProfileSystemInstructions).toMatch(/opened exact-provider first-party page shows a professional contact, emit it and no conflicting government\/registry\/directory value/i);
   });
 
   it("gives phones and locations concise field-specific structured-output contracts", () => {
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/Professional voice number/);
-    expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/first-party contact controls a conflicting registry\/directory value/i);
+    expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/first-party page shows one, emit it and no conflicting government\/registry\/directory number/i);
     expect(profile.shape.locations.element.description).toMatch(/never residential/i);
     expect(profile.shape.locations.element.description).toMatch(/citation\.factSpan contains every non-null address component/i);
     expect(profile.shape.locations.element.shape.addressLine2.description).toMatch(/never punctuation-only/i);
