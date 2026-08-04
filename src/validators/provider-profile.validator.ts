@@ -69,11 +69,11 @@ export const providerProfileSchema = z.object({
 export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
-  sourceUrl: z.string(),
+  sourceUrl: z.string().describe("Exact consulted readable page supporting this fact."),
   sourceTitle: z.string().nullable(),
-  providerIdentitySpan: z.string().describe("Shortest contiguous verbatim passage on this page identifying the exact provider."),
-  factSpan: z.string().describe("Shortest contiguous verbatim passage on this page supporting the complete value; preserve an adjacent phone-purpose label."),
-  explicitFactDateSpan: z.string().nullable()
+  providerIdentitySpan: z.string().describe("Shortest contiguous verbatim page passage identifying the exact provider."),
+  factSpan: z.string().describe("Shortest contiguous verbatim passage supporting the complete value: every phone digit plus voice purpose, every non-null address component, or the website's provider heading."),
+  explicitFactDateSpan: z.string().nullable().describe("Verbatim date/status passage bound to this exact fact, else null.")
 }).strict();
 
 const structuredSourcedValueSchema = z.object({
@@ -82,15 +82,15 @@ const structuredSourcedValueSchema = z.object({
 }).strict();
 
 const structuredPhoneSchema = z.object({
-  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose."),
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. A qualified opened first-party contact controls a conflicting registry/directory value unless fact-specific evidence disproves it."),
   citation: structuredCitationSchema
 }).strict();
 
 const structuredLocationSchema = z.object({
-  addressLine1: z.string(),
+  addressLine1: z.string().describe("Professional street address, never residential or uncertain-purpose."),
   addressLine2: z.string().nullable().describe("Unit, suite, or floor only; null when absent; never punctuation-only."),
   city: z.string().nullable(),
-  state: z.string().length(2).regex(/^[A-Z]{2}$/).nullable(),
+  state: z.string().regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
 }).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose.");
@@ -99,10 +99,10 @@ const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
   npi: z.string().nullable(),
   providerName: z.string(),
-  specialties: z.array(structuredSourcedValueSchema),
+  specialties: z.array(structuredSourcedValueSchema).describe("Specialties supported for the exact provider."),
   locations: z.array(structuredLocationSchema),
-  phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice numbers ordered best first. When qualified first-party and undated registry/directory values conflict without concurrent-use evidence, emit only the first-party value."),
-  websites: z.array(structuredSourcedValueSchema)
+  phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice numbers ordered best first."),
+  websites: z.array(structuredSourcedValueSchema).describe("Exact consulted readable first-party page URLs for this provider; each value equals citation.sourceUrl. Omit a domain implicated by an unresolved same-name other-NPI or incompatible-operation conflict.")
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({
