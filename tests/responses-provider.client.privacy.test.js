@@ -285,19 +285,19 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       name: "provider_profiles",
       strict: true
     }));
-    expect(JSON.stringify(request.text.format)).toMatch(/Verified professional practice, office, clinic, facility, or hospital locations/i);
-    expect(JSON.stringify(request.text.format)).toMatch(/Verified professional voice contacts/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/Verified professional location/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/Professional voice number/i);
     expect(JSON.stringify(request.text.format)).toMatch(/providerIdentitySpan/);
     expect(JSON.stringify(request.text.format)).toMatch(/factSpan/);
     expect(JSON.stringify(request.text.format)).toMatch(/explicitFactDateSpan/);
-    expect(JSON.stringify(request.text.format)).toMatch(/factSpan.*from this same cited page/i);
+    expect(JSON.stringify(request.text.format)).toMatch(/factSpan.*complete value/i);
     expect(JSON.stringify(request.text.format)).not.toMatch(/sourceId|"sources"/);
     expect(JSON.stringify(request.text.format)).not.toMatch(/insurance|payer|health.?plan|network|coverage/i);
     expect(request.instructions).not.toMatch(/return json|citation annotations|citation payloads/i);
-    expect(request.instructions).toMatch(/Do not search for, send back, infer, or discuss insurance, payer, health-plan, network, coverage/i);
-    expect(request.instructions).toMatch(/professional voice number/i);
+    expect(request.instructions).toMatch(/Never search for or return insurance, payer, plan\/network\/coverage\/enrollment/i);
+    expect(request.instructions).toMatch(/professional voice numbers/i);
     expect(request.instructions).toMatch(/uncertain-purpose/i);
-    expect(request.instructions).toMatch(/professional practice, clinic, facility, hospital, or office location/i);
+    expect(request.instructions).toMatch(/professional office\/practice\/clinic\/facility\/hospital locations/i);
     expect(request.input).not.toMatch(/return json/i);
     expect(JSON.stringify(request)).not.toMatch(/web_search_preview|background":true|store":true/i);
     expect(request.input).not.toMatch(/quote|member|client|patient|dob|diagnosis|medication/i);
@@ -996,7 +996,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     expect(profiles[0].phoneNumbers).toHaveLength(1);
   });
 
-  it("preserves a provenance-backed fact without a deterministic span-value veto", async () => {
+  it("drops a phone when its own fact span omits the complete number", async () => {
     const response = successfulProfileResponse();
     response.output_parsed.profiles[0].phoneNumbers[0].citation.factSpan = "Scheduling is available by telephone.";
     mockCreateResponse.mockResolvedValue(response);
@@ -1008,8 +1008,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       providers: [{ providerId: "provider-123", name: "Public Provider", state: "OH" }]
     });
 
-    expect(profiles).toHaveLength(1);
-    expect(profiles[0].phoneNumbers[0].citation.factSpan).toBe("Scheduling is available by telephone.");
+    expect(profiles).toEqual([]);
   });
 
   it("does not host-reject a location because one emitted component is absent from its fact span", async () => {

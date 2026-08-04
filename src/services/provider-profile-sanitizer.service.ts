@@ -62,7 +62,7 @@ const punctuationWrappedNullPattern = /^[\s\p{P}]*null[\s\p{P}]*$/iu;
 
 const normalizeNullableAddressComponentInput = (value: unknown): string | null => {
   const text = coerceString(value);
-  return !text || punctuationWrappedNullPattern.test(text) ? null : text;
+  return !text || punctuationWrappedNullPattern.test(text) || !/[\p{L}\p{N}]/u.test(text) ? null : text;
 };
 
 const normalizeCitationInput = (value: unknown): Record<string, unknown> => {
@@ -196,7 +196,11 @@ const sanitizePhoneNumber = (
     return undefined;
   }
   const digitCount = sanitized.value.replace(/\D/g, "").length;
-  return digitCount >= 7 && digitCount <= 15 && !placeholderPhonePattern.test(sanitized.value)
+  const valueDigits = sanitized.value.replace(/\D/g, "");
+  const factSpanDigits = sanitized.citation.factSpan.replace(/\D/g, "");
+  return digitCount >= 7 && digitCount <= 15
+    && factSpanDigits.includes(valueDigits)
+    && !placeholderPhonePattern.test(sanitized.value)
     ? sanitized
     : undefined;
 };

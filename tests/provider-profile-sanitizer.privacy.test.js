@@ -371,6 +371,69 @@ describe("provider profile sanitizer", () => {
     ]);
   });
 
+  it("normalizes a punctuation-only address line 2 without dropping the location", () => {
+    const [profile] = sanitizer.sanitizeProviderProfiles([{
+      providerId: "1588494181",
+      npi: "1588494181",
+      providerName: "RUPERTA RODRIGUEZ SCHWARTZ PHD, MSW",
+      specialties: [],
+      locations: [{
+        addressLine1: "4653 E Main St",
+        addressLine2: "/",
+        city: "Whitehall",
+        state: "OH",
+        zip: "43213-3298",
+        citation: {
+          sourceUrl: "https://npino.com/case-manager/1588494181-ruperta-rodriguez-schwartz/",
+          sourceTitle: "NPI 1588494181",
+          providerIdentitySpan: "Ruperta Rodriguez Schwartz NPI 1588494181",
+          factSpan: "4653 E Main St, Whitehall, Ohio",
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profile.locations).toHaveLength(1);
+    expect(profile.locations[0].addressLine2).toBeNull();
+  });
+
+  it("drops a phone whose complete digits are absent from its own fact span", () => {
+    const [profile] = sanitizer.sanitizeProviderProfiles([{
+      providerId: "1568203883",
+      npi: "1568203883",
+      providerName: "Brian Edward Garcia",
+      specialties: [{
+        value: "Nurse Practitioner",
+        citation: {
+          sourceUrl: "https://doctor.webmd.com/doctor/brian-garcia",
+          sourceTitle: "Brian Garcia",
+          providerIdentitySpan: "Brian Edward Garcia",
+          factSpan: "Nurse Practitioner",
+          explicitFactDateSpan: null
+        }
+      }],
+      locations: [],
+      phoneNumbers: [{
+        value: "(713) 566-5100",
+        citation: {
+          sourceUrl: "https://doctor.webmd.com/doctor/brian-garcia",
+          sourceTitle: "Brian Garcia",
+          providerIdentitySpan: "Brian Edward Garcia",
+          factSpan: "Lbj Hospital 5656 Kelley St, Houston, TX, 77026",
+          explicitFactDateSpan: null
+        }
+      }],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profile.specialties).toHaveLength(1);
+    expect(profile.phoneNumbers).toEqual([]);
+  });
+
   it("limits punctuation-wrapped null repair to nullable address components", () => {
     const [profile] = sanitizer.sanitizeProviderProfiles([{
       providerId: "1881655736",
