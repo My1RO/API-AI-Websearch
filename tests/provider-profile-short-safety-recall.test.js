@@ -21,7 +21,9 @@ describe("short provider contract safety and recall", () => {
 
   it("gives phones and locations concise field-specific structured-output contracts", () => {
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/Professional voice number/);
+    expect(profile.shape.phoneNumbers.description).toMatch(/emit only the first-party value/i);
     expect(profile.shape.locations.element.description).toMatch(/never residential/i);
+    expect(profile.shape.locations.element.shape.addressLine2.description).toMatch(/never punctuation-only/i);
     expect(profile.shape.locations.element.shape.state.unwrap()._def.checks).toEqual(expect.arrayContaining([
       expect.objectContaining({ kind: "length", value: 2 }),
       expect.objectContaining({ kind: "regex" })

@@ -88,7 +88,7 @@ const structuredPhoneSchema = z.object({
 
 const structuredLocationSchema = z.object({
   addressLine1: z.string(),
-  addressLine2: z.string().nullable(),
+  addressLine2: z.string().nullable().describe("Unit, suite, or floor only; null when absent; never punctuation-only."),
   city: z.string().nullable(),
   state: z.string().length(2).regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
@@ -101,7 +101,7 @@ const structuredProviderProfileSchema = z.object({
   providerName: z.string(),
   specialties: z.array(structuredSourcedValueSchema),
   locations: z.array(structuredLocationSchema),
-  phoneNumbers: z.array(structuredPhoneSchema),
+  phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice numbers ordered best first. When qualified first-party and undated registry/directory values conflict without concurrent-use evidence, emit only the first-party value."),
   websites: z.array(structuredSourcedValueSchema)
 }).strict();
 
