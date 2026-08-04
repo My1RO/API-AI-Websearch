@@ -73,7 +73,7 @@ const structuredCitationSchema = z.object({
   sourceTitle: z.string().nullable(),
   providerIdentitySpan: z.string().describe("Shortest contiguous verbatim page passage identifying the exact provider."),
   factSpan: z.string().describe("Shortest contiguous verbatim passage supporting the complete value: every phone digit plus voice purpose, every non-null address component, or the website's provider heading."),
-  explicitFactDateSpan: z.string().nullable().describe("Verbatim date/status passage bound to this exact fact, else null.")
+  explicitFactDateSpan: z.string().nullable().describe("Verbatim date/status explicitly governing this exact value, never a page, profile, registry, license, retrieval, or copyright date; else null.")
 }).strict();
 
 const structuredSourcedValueSchema = z.object({
@@ -93,7 +93,7 @@ const structuredLocationSchema = z.object({
   state: z.string().regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
-}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose.");
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. citation.factSpan contains every non-null address component.");
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
