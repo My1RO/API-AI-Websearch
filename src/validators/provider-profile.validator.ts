@@ -71,8 +71,8 @@ export const providerProfilesSchema = z.array(providerProfileSchema);
 const structuredCitationSchema = z.object({
   sourceUrl: z.string(),
   sourceTitle: z.string().nullable(),
-  providerIdentitySpan: z.string(),
-  factSpan: z.string(),
+  providerIdentitySpan: z.string().describe("Shortest contiguous verbatim passage on this page identifying the exact provider."),
+  factSpan: z.string().describe("Shortest contiguous verbatim passage on this page supporting the complete value; preserve an adjacent phone-purpose label."),
   explicitFactDateSpan: z.string().nullable()
 }).strict();
 
@@ -87,10 +87,10 @@ const structuredPhoneSchema = z.object({
 }).strict();
 
 const structuredLocationSchema = z.object({
-  addressLine1: z.string().describe("Complete professional office, practice, clinic, facility, or hospital street address for this exact provider."),
+  addressLine1: z.string(),
   addressLine2: z.string().nullable(),
   city: z.string().nullable(),
-  state: z.string().nullable(),
+  state: z.string().length(2).regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
 }).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose.");
