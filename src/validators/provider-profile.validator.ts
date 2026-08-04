@@ -81,14 +81,19 @@ const structuredSourcedValueSchema = z.object({
   citation: structuredCitationSchema
 }).strict();
 
+const structuredPhoneSchema = z.object({
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose."),
+  citation: structuredCitationSchema
+}).strict();
+
 const structuredLocationSchema = z.object({
-  addressLine1: z.string(),
+  addressLine1: z.string().describe("Complete professional office, practice, clinic, facility, or hospital street address for this exact provider."),
   addressLine2: z.string().nullable(),
   city: z.string().nullable(),
   state: z.string().nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
-}).strict();
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose.");
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
@@ -96,7 +101,7 @@ const structuredProviderProfileSchema = z.object({
   providerName: z.string(),
   specialties: z.array(structuredSourcedValueSchema),
   locations: z.array(structuredLocationSchema),
-  phoneNumbers: z.array(structuredSourcedValueSchema),
+  phoneNumbers: z.array(structuredPhoneSchema),
   websites: z.array(structuredSourcedValueSchema)
 }).strict();
 
