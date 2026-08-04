@@ -78,9 +78,11 @@ substantially smaller prompt and schema. The comparison included the full
 86,769-byte contract and eight shortened artifacts on the same 60-provider
 development battery. The corrected evaluator kept 33 providers in the
 automatic Sol/high stratum, routed 25 provider-paired cases to a separately
-reported manual exception protocol, and censored two provider-paired
-operational failures. The pooled 58-provider analysis was preregistered as
-secondary and was not allowed to replace either primary stratum.
+reported Codex-harness manual exception protocol, and censored two
+provider-paired operational failures. “Manual” here means blinded structured
+exception adjudication in the Codex harness, not an independent human clinical
+review. The pooled 58-provider analysis was preregistered as secondary and was
+not allowed to replace either primary stratum.
 
 The shortest 11,196-byte artifact reduced the static contract by 87.1% and had
 no new confirmed safety finding. It passed the automatic and secondary pooled

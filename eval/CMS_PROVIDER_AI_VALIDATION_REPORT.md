@@ -185,8 +185,10 @@ support, and the lean synthesis prompt had omitted the fixed source-hierarchy
 and conflict policy.
 
 The corrected campaign comprised 33 automatic Sol/high providers, 25 paired
-manual-exception providers, and two paired operational censors. No shortened
-artifact passed both primary strata. The 87.1%-short artifact was the closest:
+Codex-harness manual-exception providers, and two paired operational censors.
+“Manual” denotes blinded structured exception adjudication in the Codex
+harness, not an independent human clinical review. No shortened artifact passed
+both primary strata. The 87.1%-short artifact was the closest:
 it introduced no new confirmed safety finding and passed all automatic and
 secondary pooled gates, but its manual-stratum eligible-contact difference was
 -4 percentage points with a lower 95% confidence bound of -12 percentage
