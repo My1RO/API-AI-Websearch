@@ -8,14 +8,15 @@ describe("short provider contract safety and recall", () => {
     expect(providerProfileSystemInstructions).toMatch(/Complete this search workflow before answering/i);
     expect(providerProfileSystemInstructions).toMatch(/open the best surfaced first-party provider\/contact page.*best exact-NPI page whose lead shows a phone or address/i);
     expect(providerProfileSystemInstructions).toMatch(/Do not stop after a registry search/i);
-    expect(providerProfileSystemInstructions).toMatch(/emit every eligible supported fact rather than a subset/i);
+    expect(providerProfileSystemInstructions).toMatch(/emit every eligible supported field rather than a subset, including supported specialties/i);
+    expect(providerProfileSystemInstructions).toMatch(/Do not return a profile containing only specialty unless/i);
   });
 
   it("resolves alternate-NPI, same-name geography, and phone-purpose conflicts", () => {
     expect(providerProfileSystemInstructions).toMatch(/After evidence qualification, reconcile contact\/domain candidates/i);
     expect(providerProfileSystemInstructions).toMatch(/same-name non-NPI page is ineligible.*incompatible provider or location/i);
     expect(providerProfileSystemInstructions).toMatch(/bare tel link is insufficient/i);
-    expect(providerProfileSystemInstructions).toMatch(/For an unresolved same-field conflict, prefer qualified current exact-provider first-party evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/For an unresolved same-field conflict, use a professional contact displayed on an opened qualified exact-provider first-party page as element zero/i);
   });
 
   it("gives phones and locations concise field-specific structured-output contracts", () => {
