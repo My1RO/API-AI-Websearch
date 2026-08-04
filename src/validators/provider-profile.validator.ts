@@ -82,7 +82,7 @@ const structuredSourcedValueSchema = z.object({
 }).strict();
 
 const structuredPhoneSchema = z.object({
-  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. When a qualified opened first-party page shows one, emit it and no conflicting government/registry/directory number."),
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. When a qualified opened first-party page shows one, emit it and no conflicting government/registry/directory number."),
   citation: structuredCitationSchema
 }).strict();
 

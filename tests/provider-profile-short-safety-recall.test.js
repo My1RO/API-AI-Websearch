@@ -20,6 +20,7 @@ describe("short provider contract safety and recall", () => {
 
   it("gives phones and locations concise field-specific structured-output contracts", () => {
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/Professional voice number/);
+    expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/explicitly labels its phone\/main\/scheduling purpose/i);
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/first-party page shows one, emit it and no conflicting government\/registry\/directory number/i);
     expect(profile.shape.locations.element.description).toMatch(/never residential/i);
     expect(profile.shape.locations.element.description).toMatch(/citation\.factSpan contains every non-null address component/i);
