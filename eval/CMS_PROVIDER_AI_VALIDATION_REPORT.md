@@ -12,6 +12,14 @@ in the disjoint 60-provider holdout**. One case was not judged because its
 complete evidence packet exceeded the evaluator's direct-input ceiling; no
 content was truncated and no extraction-model fallback was used.
 
+The selected configuration remains the original full production prompt and
+strict schema: 86,769 static UTF-8 bytes at treatment commit
+`d6afd2d2c24983ea2dbbdbdaf064864d17a13186`. A later development-only
+minimization program reevaluated the full contract and eight shortened
+artifacts with the corrected fixed evaluator. No shortened artifact passed both
+required primary strata, so no prompt reduction was promoted and the sealed
+holdout was not reused to choose among shortened prompts.
+
 This decision followed a broad candidate funnel: **40 distinct
 production-shaped configurations were tested with live pilot requests, four
 advanced to complete 60-provider development evaluations, and the selected
@@ -37,7 +45,9 @@ does not claim production cutover completion.
 
 ## What is being shipped
 
-The selected configuration uses the Azure OpenAI Responses API with:
+The selected configuration uses the retained original full prompt/schema
+contract with the Azure OpenAI Responses API. The literal contract is reproduced
+in Appendices A and B of the companion CMS response. It uses:
 
 - deployment `gpt-5.6-terra`;
 - reasoning effort `low`;
@@ -163,6 +173,31 @@ universal or statistical superiority.
 The two-configuration development production run cost an estimated `$10.2757645`; the
 118 paid Sol/high judge calls cost `$83.879661`. Evaluation cost is not
 production unit cost.
+
+### Subsequent prompt-minimization evaluation
+
+After the release configuration had been selected and holdout-tested, Lucie
+evaluated eight shorter prompt/schema artifacts on the frozen development set
+only. Static reductions ranged from 72.1% to 87.1%. All nine arms—the full
+contract plus eight shortened artifacts—were reevaluated after correcting two
+evaluator defects: whole-packet support had been conflated with own-citation
+support, and the lean synthesis prompt had omitted the fixed source-hierarchy
+and conflict policy.
+
+The corrected campaign comprised 33 automatic Sol/high providers, 25 paired
+manual-exception providers, and two paired operational censors. No shortened
+artifact passed both primary strata. The 87.1%-short artifact was the closest:
+it introduced no new confirmed safety finding and passed all automatic and
+secondary pooled gates, but its manual-stratum eligible-contact difference was
+-4 percentage points with a lower 95% confidence bound of -12 percentage
+points, missing the preregistered -5-point margin because of one genuine
+contact-recall loss. The pooled 58-provider lower bound was -3.45 percentage
+points, but that pooled analysis was frozen as secondary and could not be used
+post hoc to override the failed primary stratum.
+
+Accordingly, the minimization study changes neither the release contract nor
+the CMS holdout claims in this report. It supplies negative evidence against
+shortening the contract with the currently tested deletions.
 
 ### Sealed holdout
 
