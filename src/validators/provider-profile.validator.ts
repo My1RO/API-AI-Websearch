@@ -88,12 +88,12 @@ const structuredPhoneSchema = z.object({
 
 const structuredLocationSchema = z.object({
   addressLine1: z.string().describe("Professional street address, never residential or uncertain-purpose."),
-  addressLine2: z.string().nullable().describe("Unit, suite, or floor only; null when absent; never punctuation-only."),
+  addressLine2: z.string().nullable().describe("Unit, suite, or floor only when literally present in citation.factSpan; otherwise null."),
   city: z.string().nullable(),
   state: z.string().regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
-}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. citation.factSpan contains every non-null address component.");
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. Construct fields only from citation.factSpan: it literally contains every non-null component, including unit/floor and full ZIP; use null rather than infer an absent component.");
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
