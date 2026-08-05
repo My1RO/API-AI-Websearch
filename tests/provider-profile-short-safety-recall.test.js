@@ -36,4 +36,10 @@ describe("short provider contract safety and recall", () => {
       /For an individual, do not cite a general organization\/location page for any fact unless that page names the provider; another page cannot supply the missing identity/i
     );
   });
+
+  it("does not preserve a phone solely because a residential registry bundle labels it Phone", () => {
+    expect(providerProfileSystemInstructions).toMatch(
+      /If its only support co-lists it with an address this call found residential, omit the phone unless another readable page identifies that number as an office, scheduling, clinic, facility, or hospital voice contact/i
+    );
+  });
 });
