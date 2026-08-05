@@ -7,7 +7,7 @@ describe("conditional individual-premises evidence policy", () => {
   const serializedSchema = JSON.stringify(
     zodTextFormat(providerProfileStructuredOutputSchema, "provider_profiles").schema
   );
-  const policyPhrase = "Registration of a business/entity there";
+  const policyPhrase = "quoted exact full address alone";
 
   it("rejects the measured P004 entity-linkage false corroboration", () => {
     expect(fixture.verificationCase).toMatchObject({
@@ -26,21 +26,26 @@ describe("conditional individual-premises evidence policy", () => {
       premisesEvidence: null
     });
     expect(providerProfileSystemInstructions).toMatch(
-      /if a registry\/directory practice location has neither a suite\/floor nor named professional premises, search the exact address once/i
+      /for an individual, before emitting any registry\/directory-only address without a named professional venue, run a separate web search for the quoted exact full address alone, without provider name or NPI/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /registration of a business\/entity there, an authorized-official link, or another practice-address label does not establish office\/clinic\/facility\/commercial premises/i
+      /a registry practice-location or directory Locations label is attribution, not premises evidence/i
     );
-    expect(providerProfileSystemInstructions).toMatch(/omit without such venue evidence or with residential evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(
+      /if an opened result classifies the premises as a house, home, single-family, or residential, or no opened result establishes an office, clinic, facility, hospital, or commercial premises, omit the address/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /mixed-use is eligible only when readable evidence identifies a distinct public professional venue there/i
+    );
   });
 
-  it("retains the measured P002 suite control without the extra address check", () => {
+  it("requires the measured P002 suite control to receive the same address check", () => {
     expect(fixture.retentionControls[0]).toMatchObject({
       caseId: "P002",
       candidateAddress: "2730 SW 3RD AVE, STE 800, MIAMI, FL 33129-2339",
       suiteOrFloorIndicator: true,
       namedProfessionalPremisesIndicator: false,
-      expectedPolicy: "eligible_after_ordinary_checks_without_extra_address_search"
+      expectedPolicy: "requires_separate_address_search_despite_suite_without_named_venue"
     });
   });
 
@@ -58,7 +63,11 @@ describe("conditional individual-premises evidence policy", () => {
   it("keeps the semantic refinement model-owned and stated once", () => {
     expect(providerProfileSystemInstructions.split(policyPhrase)).toHaveLength(2);
     expect(serializedSchema).not.toContain(policyPhrase);
-    expect(serializedSchema).not.toMatch(/registration of a business\/entity there/i);
+    expect(serializedSchema).not.toMatch(/quoted exact full address alone/i);
     expect(providerProfileSystemInstructions).not.toMatch(/never (?:use|emit) (?:a )?(?:registry|directory)/i);
+  });
+
+  it("requires every emitted citation page to be opened before return", () => {
+    expect(providerProfileSystemInstructions).toMatch(/before returning, open every cited page/i);
   });
 });

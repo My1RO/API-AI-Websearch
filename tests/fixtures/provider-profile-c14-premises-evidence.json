@@ -32,7 +32,7 @@
       "suiteOrFloorIndicator": true,
       "namedProfessionalPremisesIndicator": false,
       "consultedEvidence": "2730 SW 3RD AVE STE 800 MIAMI, FL 33129-2339",
-      "expectedPolicy": "eligible_after_ordinary_checks_without_extra_address_search"
+      "expectedPolicy": "requires_separate_address_search_despite_suite_without_named_venue"
     },
     {
       "caseId": "P036",
