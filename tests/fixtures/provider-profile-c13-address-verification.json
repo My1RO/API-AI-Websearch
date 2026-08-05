@@ -1,0 +1,43 @@
+{
+  "verificationCase": {
+    "caseId": "P004",
+    "entityType": "individual",
+    "provider": {
+      "npi": "1215534896",
+      "name": "MACARENA JONES BCBA"
+    },
+    "candidateAddress": "5740 SW 81st St, Miami, FL 33143-8208",
+    "suiteOrFloorIndicator": false,
+    "namedProfessionalPremisesIndicator": false,
+    "consultedEvidence": "The practitioner's main practice location is at 5740 Sw 81st St, Miami, FL 33143-8208",
+    "expectedPolicy": "search_exact_address_once_then_omit_if_professional_use_unestablished"
+  },
+  "retentionControls": [
+    {
+      "caseId": "P002",
+      "entityType": "individual",
+      "provider": {
+        "npi": "1104373091",
+        "name": "YORDALYS RODRIGUEZ PEREZ MS, BCBA"
+      },
+      "candidateAddress": "2730 SW 3RD AVE, STE 800, MIAMI, FL 33129-2339",
+      "suiteOrFloorIndicator": true,
+      "namedProfessionalPremisesIndicator": false,
+      "consultedEvidence": "2730 SW 3RD AVE STE 800 MIAMI, FL 33129-2339",
+      "expectedPolicy": "eligible_after_ordinary_checks_without_extra_address_search"
+    },
+    {
+      "caseId": "P036",
+      "entityType": "individual",
+      "provider": {
+        "npi": "1659091973",
+        "name": "LEONDRISS D DAVIS"
+      },
+      "candidateAddress": "4500 Euclid Ave, Cleveland, OH 44103-3736",
+      "suiteOrFloorIndicator": false,
+      "namedProfessionalPremisesIndicator": true,
+      "consultedEvidence": "Practice: 4500 Euclid Ave, Cleveland, OH 44103",
+      "expectedPolicy": "eligible_after_ordinary_checks_without_extra_address_search"
+    }
+  ]
+}
