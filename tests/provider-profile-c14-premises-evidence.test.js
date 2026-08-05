@@ -26,7 +26,10 @@ describe("conditional individual-premises evidence policy", () => {
       premisesEvidence: null
     });
     expect(providerProfileSystemInstructions).toMatch(
-      /for an individual, before emitting any registry\/directory-only address without a named professional venue, run a separate web search for the quoted exact full address alone, without provider name or NPI/i
+      /for an individual, before emitting any registry\/directory-only address with neither a suite\/floor nor named professional venue, run a separate web search for the quoted exact full address alone, without provider name or NPI/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /apartment or unit labels do not count as a suite\/floor/i
     );
     expect(providerProfileSystemInstructions).toMatch(
       /a registry practice-location or directory Locations label is attribution, not premises evidence/i
@@ -39,13 +42,13 @@ describe("conditional individual-premises evidence policy", () => {
     );
   });
 
-  it("requires the measured P002 suite control to receive the same address check", () => {
+  it("retains the measured P002 professional-suite control", () => {
     expect(fixture.retentionControls[0]).toMatchObject({
       caseId: "P002",
       candidateAddress: "2730 SW 3RD AVE, STE 800, MIAMI, FL 33129-2339",
       suiteOrFloorIndicator: true,
       namedProfessionalPremisesIndicator: false,
-      expectedPolicy: "requires_separate_address_search_despite_suite_without_named_venue"
+      expectedPolicy: "eligible_after_ordinary_checks_without_extra_address_search"
     });
   });
 
