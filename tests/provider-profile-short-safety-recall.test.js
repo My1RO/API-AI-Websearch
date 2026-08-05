@@ -30,4 +30,10 @@ describe("short provider contract safety and recall", () => {
     ]));
     expect(profile.shape.phoneNumbers.element.shape.citation.shape.factSpan.description).toMatch(/every phone digit plus voice purpose/i);
   });
+
+  it("does not attach an individual to a generic organization or location page", () => {
+    expect(providerProfileSystemInstructions).toMatch(
+      /For an individual, do not cite a general organization\/location page for any fact unless that page names the provider; another page cannot supply the missing identity/i
+    );
+  });
 });
