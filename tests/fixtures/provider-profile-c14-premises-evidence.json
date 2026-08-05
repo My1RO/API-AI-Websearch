@@ -9,8 +9,16 @@
     "candidateAddress": "5740 SW 81st St, Miami, FL 33143-8208",
     "suiteOrFloorIndicator": false,
     "namedProfessionalPremisesIndicator": false,
-    "consultedEvidence": "The practitioner's main practice location is at 5740 Sw 81st St, Miami, FL 33143-8208",
-    "expectedPolicy": "search_exact_address_once_then_omit_if_professional_use_unestablished"
+    "initialRegistryEvidence": "The practitioner's main practice location is at 5740 Sw 81st St, Miami, FL 33143-8208",
+    "rejectedCorroboration": {
+      "sourceUrl": "https://opengovus.com/npi/1457060253",
+      "otherNpi": "1457060253",
+      "entityName": "Best-Self Behavior Therapy",
+      "authorizedOfficialLink": "Macarena Jones (Manager)",
+      "repeatedAddressLabel": "Practice Address 5740 Sw 81st St Miami FL 33143-8208",
+      "premisesEvidence": null
+    },
+    "expectedPolicy": "omit_without_venue_or_property_professional_premises_evidence"
   },
   "retentionControls": [
     {
