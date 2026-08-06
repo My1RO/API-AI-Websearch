@@ -32,35 +32,37 @@ describe("short provider contract safety and recall", () => {
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/explicitly labels its phone\/main\/scheduling purpose/i);
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/Preserve independently supported eligible numbers/i);
     expect(profile.shape.locations.element.description).toMatch(/never residential/i);
-    expect(profile.shape.locations.element.description).toMatch(/citation\.factSpan contains every emitted non-null address component/i);
-    expect(profile.shape.locations.element.shape.addressLine2.description).toMatch(/never punctuation-only/i);
+    expect(profile.shape.locations.element.description).toMatch(/same cited page contains every emitted component/i);
+    expect(profile.shape.locations.element.shape.addressLine2.description).toMatch(/facility-only page cannot supply it/i);
     expect(profile.shape.locations.element.shape.state.unwrap()._def.checks).toEqual(expect.arrayContaining([
       expect.objectContaining({ kind: "regex" })
     ]));
     expect(profile.shape.phoneNumbers.element.shape.citation.shape.factSpan.description).toMatch(/every phone digit plus voice purpose/i);
   });
 
-  it("rejects P043-style facility-only citations for an individual's phone or location", () => {
+  it("rejects P043-style facility-only citations and suite components for an individual", () => {
     const phoneContract = profile.shape.phoneNumbers.element.shape.value.description;
     const locationContract = profile.shape.locations.element.description;
 
     expect(providerProfileSystemInstructions).toMatch(
-      /Individual phone\/location.*own cited page contains the complete value.*providerIdentitySpan contains the requested full name or exact NPI/i
+      /individual phone, address, or website.*own cited page must contain the requested full name or exact NPI and the complete fact/i
     );
     expect(providerProfileSystemInstructions).toMatch(
-      /another page or facility\/organization identity cannot repair it/i
+      /facility\/organization-only page or another page cannot repair it/i
+    );
+    expect(providerProfileSystemInstructions).toMatch(
+      /Never add a suite\/unit from a facility-only page.*emit that address with addressLine2 null/i
     );
     for (const contract of [phoneContract, locationContract]) {
-      expect(contract).toMatch(/own cited page has the complete/i);
-      expect(contract).toMatch(/providerIdentitySpan has the requested full name or exact NPI/i);
-      expect(contract).toMatch(/another page or facility\/organization identity cannot repair it/i);
+      expect(contract).toMatch(/same cited page contains/i);
+      expect(contract).toMatch(/requested full name or exact NPI/i);
+      expect(contract).toMatch(/facility\/organization identity or another page cannot repair it/i);
     }
-    expect(locationContract).toMatch(/citation\.factSpan contains every emitted non-null address component/i);
+    expect(profile.shape.websites.description).toMatch(/same page contains the requested full name or exact NPI/i);
   });
 
   it("preserves exact-name or exact-NPI individual contacts and facility requests", () => {
-    expect(providerProfileSystemInstructions).toMatch(/Individual phone\/location: keep an otherwise-eligible item when/i);
-    expect(providerProfileSystemInstructions).toMatch(/otherwise omit/i);
+    expect(providerProfileSystemInstructions).toMatch(/For an individual phone, address, or website/i);
     expect(providerProfileSystemInstructions).toMatch(/requested full name or exact NPI/i);
     expect(providerProfileSystemInstructions).toMatch(/Facility requests may use exact facility\/organization identity/i);
     expect(profile.shape.phoneNumbers.element.shape.value.description).toMatch(/For an individual/i);
@@ -69,7 +71,7 @@ describe("short provider contract safety and recall", () => {
 
   it("limits websites to exact first-party provider or organization pages", () => {
     expect(providerProfileSystemInstructions).toMatch(/first-party provider or organization page that names or identifies the requested provider/i);
-    expect(profile.shape.websites.description).toMatch(/name or identify the exact requested provider/i);
+    expect(profile.shape.websites.description).toMatch(/same page contains the requested full name or exact NPI/i);
     expect(profile.shape.websites.description).toMatch(/Never a directory, marketplace, social, search, or listing page/i);
     expect(providerProfileSystemInstructions).not.toMatch(/open every cited page/i);
   });
@@ -78,9 +80,8 @@ describe("short provider contract safety and recall", () => {
     expect(providerProfileSystemInstructions).toMatch(/Location mismatch never rejects exact-NPI evidence/i);
     expect(providerProfileSystemInstructions).toMatch(/no-NPI individual page from a materially different professional city\/state as a different person/i);
     expect(providerProfileSystemInstructions).toMatch(/do not let its rejected values suppress exact-NPI facts/i);
-    expect(profile.shape.websites.description).toMatch(/no-NPI individual page from a materially different professional city\/state/i);
     expect(profile.shape.locations.element.description).toMatch(
-      /own cited page has the complete address.*providerIdentitySpan has the requested full name or exact NPI/i
+      /same cited page contains every emitted component and the requested full name or exact NPI/i
     );
   });
 

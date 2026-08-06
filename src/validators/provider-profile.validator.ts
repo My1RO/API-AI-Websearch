@@ -82,18 +82,18 @@ const structuredSourcedValueSchema = z.object({
 }).strict();
 
 const structuredPhoneSchema = z.object({
-  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. For an individual, its own cited page has the complete number and citation.providerIdentitySpan has the requested full name or exact NPI; another page or facility/organization identity cannot repair it. Preserve independently supported eligible numbers unless fact-bound evidence marks one former, closed, wrong, or another exact number current/primary/active."),
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. For an individual, this same cited page contains the complete number and requested full name or exact NPI; facility/organization identity or another page cannot repair it. Preserve independently supported eligible numbers unless fact-bound evidence marks one former, closed, wrong, or another exact number current/primary/active."),
   citation: structuredCitationSchema
 }).strict();
 
 const structuredLocationSchema = z.object({
   addressLine1: z.string().describe("Professional street address, never residential or uncertain-purpose."),
-  addressLine2: z.string().nullable().describe("Unit, suite, or floor only when literally present in citation.factSpan; never punctuation-only; otherwise null."),
+  addressLine2: z.string().nullable().describe("Unit, suite, or floor only when this same citation.factSpan contains it and, for an individual, the same cited page contains the requested full name or exact NPI. A facility-only page cannot supply it; use null."),
   city: z.string().nullable(),
   state: z.string().regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
-}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. For an individual, its own cited page has the complete address and citation.providerIdentitySpan has the requested full name or exact NPI; another page or facility/organization identity cannot repair it. citation.factSpan contains every emitted non-null address component, including unit/floor and full ZIP; use null rather than infer an absent component.");
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. For an individual, this same cited page contains every emitted component and the requested full name or exact NPI; facility/organization identity or another page cannot repair it. Use null rather than infer an absent component.");
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
@@ -102,7 +102,7 @@ const structuredProviderProfileSchema = z.object({
   specialties: z.array(structuredSourcedValueSchema).describe("Specialties supported for the exact provider."),
   locations: z.array(structuredLocationSchema),
   phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice numbers ordered best first."),
-  websites: z.array(structuredSourcedValueSchema).describe("Exact consulted readable first-party provider or organization pages that name or identify the exact requested provider; each value equals citation.sourceUrl. Never a directory, marketplace, social, search, or listing page. Omit a no-NPI individual page from a materially different professional city/state absent a unique identity bridge, or an unresolved other-NPI or incompatible-operation domain.")
+  websites: z.array(structuredSourcedValueSchema).describe("Exact consulted readable first-party provider or organization pages; each value equals citation.sourceUrl. For an individual, this same page contains the requested full name or exact NPI; a facility-only page is ineligible. Never a directory, marketplace, social, search, or listing page. Omit an unresolved other-NPI or incompatible-operation domain.")
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({
