@@ -82,7 +82,7 @@ const structuredSourcedValueSchema = z.object({
 }).strict();
 
 const structuredPhoneSchema = z.object({
-  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. Preserve independently supported eligible numbers unless fact-bound evidence marks one former, closed, wrong, or another exact number current/primary/active."),
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. For an individual, its own cited page has the complete number and citation.providerIdentitySpan has the requested full name or exact NPI; another page or facility/organization identity cannot repair it. Preserve independently supported eligible numbers unless fact-bound evidence marks one former, closed, wrong, or another exact number current/primary/active."),
   citation: structuredCitationSchema
 }).strict();
 
@@ -93,7 +93,7 @@ const structuredLocationSchema = z.object({
   state: z.string().regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
-}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. This cited page itself identifies the exact provider; another page cannot repair missing identity. citation.factSpan contains every emitted non-null address component, including unit/floor and full ZIP; use null rather than infer an absent component.");
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. For an individual, its own cited page has the complete address and citation.providerIdentitySpan has the requested full name or exact NPI; another page or facility/organization identity cannot repair it. citation.factSpan contains every emitted non-null address component, including unit/floor and full ZIP; use null rather than infer an absent component.");
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
