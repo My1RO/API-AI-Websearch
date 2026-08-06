@@ -82,7 +82,7 @@ const structuredSourcedValueSchema = z.object({
 }).strict();
 
 const structuredPhoneSchema = z.object({
-  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. When a qualified opened first-party page shows one, emit it and no conflicting government/registry/directory number."),
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. Preserve independently supported eligible numbers unless fact-bound evidence marks one former, closed, wrong, or another exact number current/primary/active."),
   citation: structuredCitationSchema
 }).strict();
 
@@ -93,7 +93,7 @@ const structuredLocationSchema = z.object({
   state: z.string().regex(/^[A-Z]{2}$/).nullable(),
   zip: z.string().nullable(),
   citation: structuredCitationSchema
-}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. For an individual, this cited page itself names the provider or shows the exact NPI; another page cannot repair missing identity. citation.factSpan contains every non-null address component, including unit/floor and full ZIP; use null rather than infer an absent component.");
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. This cited page itself identifies the exact provider; another page cannot repair missing identity. citation.factSpan contains every emitted non-null address component, including unit/floor and full ZIP; use null rather than infer an absent component.");
 
 const structuredProviderProfileSchema = z.object({
   providerId: z.string().nullable(),
@@ -102,7 +102,7 @@ const structuredProviderProfileSchema = z.object({
   specialties: z.array(structuredSourcedValueSchema).describe("Specialties supported for the exact provider."),
   locations: z.array(structuredLocationSchema),
   phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice numbers ordered best first."),
-  websites: z.array(structuredSourcedValueSchema).describe("Exact consulted readable first-party pages for this provider; each value equals citation.sourceUrl. Omit a no-NPI individual page from a materially different professional city/state absent a unique identity bridge. Omit an unresolved other-NPI or incompatible-operation domain.")
+  websites: z.array(structuredSourcedValueSchema).describe("Exact consulted readable first-party provider or organization pages that name or identify the exact requested provider; each value equals citation.sourceUrl. Never a directory, marketplace, social, search, or listing page. Omit a no-NPI individual page from a materially different professional city/state absent a unique identity bridge, or an unresolved other-NPI or incompatible-operation domain.")
 }).strict();
 
 export const providerProfileStructuredOutputSchema = z.object({
