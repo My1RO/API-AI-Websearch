@@ -37,6 +37,18 @@ describe("short provider contract safety and recall", () => {
     );
   });
 
+  it("rejects incompatible no-NPI individual pages without suppressing exact-NPI facts", () => {
+    expect(providerProfileSystemInstructions).toMatch(/Location mismatch never rejects exact-NPI evidence/i);
+    expect(providerProfileSystemInstructions).toMatch(/no-NPI individual page from a materially different professional city\/state as a different person/i);
+    expect(providerProfileSystemInstructions).toMatch(/do not let its rejected values suppress exact-NPI facts/i);
+    expect(profile.shape.websites.description).toMatch(/no-NPI individual page from a materially different professional city\/state/i);
+    expect(profile.shape.locations.element.description).toMatch(/this cited page itself names the provider or shows the exact NPI/i);
+  });
+
+  it("treats dwelling vocabulary as residential unless professional use is established", () => {
+    expect(providerProfileSystemInstructions).toMatch(/condominium\/condo, townhouse, apartment, other dwelling/i);
+  });
+
   it("establishes provider identity on each fact's own cited page", () => {
     const citation = profile.shape.specialties.element.shape.citation.shape;
     expect(citation.providerIdentitySpan.description).toMatch(/literally occurs on sourceUrl/i);
