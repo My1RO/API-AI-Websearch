@@ -37,6 +37,13 @@ describe("short provider contract safety and recall", () => {
     );
   });
 
+  it("establishes provider identity on each fact's own cited page", () => {
+    const citation = profile.shape.specialties.element.shape.citation.shape;
+    expect(citation.providerIdentitySpan.description).toMatch(/literally occurs on sourceUrl/i);
+    expect(citation.providerIdentitySpan.description).toMatch(/never borrow identity from another page/i);
+    expect(citation.providerIdentitySpan.description).toMatch(/omit the fact/i);
+  });
+
   it("does not preserve a phone solely because a residential registry bundle labels it Phone", () => {
     expect(providerProfileSystemInstructions).toMatch(
       /If its only support co-lists it with an address this call found residential, omit the phone unless another readable page identifies that number as an office, scheduling, clinic, facility, or hospital voice contact/i
