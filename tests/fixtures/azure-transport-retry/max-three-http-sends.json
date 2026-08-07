@@ -30,7 +30,7 @@
       "requestId": "trace-recovery-200",
       "body": {
         "status": "completed",
-      "output_text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"citation\":{\"sourceUrl\":\"https://npiprofile.com/provider/123\",\"sourceTitle\":\"Public directory\",\"providerIdentitySpan\":\"Public Provider\",\"factSpan\":\"2164442200\",\"explicitFactDateSpan\":null}}],\"websites\":[]}]}",
+      "output_text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"citation\":{\"sourceUrl\":\"https://npiprofile.com/provider/123\",\"providerIdentitySpan\":\"Public Provider\",\"factSpan\":\"2164442200\",\"explicitFactDateSpan\":null}}],\"websites\":[]}]}",
         "output": [
           {
             "type": "web_search_call",
@@ -44,7 +44,7 @@
             "content": [
               {
                 "type": "output_text",
-              "text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"citation\":{\"sourceUrl\":\"https://npiprofile.com/provider/123\",\"sourceTitle\":\"Public directory\",\"providerIdentitySpan\":\"Public Provider\",\"factSpan\":\"2164442200\",\"explicitFactDateSpan\":null}}],\"websites\":[]}]}",
+              "text": "{\"profiles\":[{\"providerId\":\"provider-123\",\"npi\":null,\"providerName\":\"Public Provider\",\"specialties\":[],\"locations\":[],\"phoneNumbers\":[{\"value\":\"2164442200\",\"citation\":{\"sourceUrl\":\"https://npiprofile.com/provider/123\",\"providerIdentitySpan\":\"Public Provider\",\"factSpan\":\"2164442200\",\"explicitFactDateSpan\":null}}],\"websites\":[]}]}",
                 "annotations": [
                   {
                     "type": "url_citation",

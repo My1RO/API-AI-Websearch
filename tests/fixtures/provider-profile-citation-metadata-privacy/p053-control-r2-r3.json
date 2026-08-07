@@ -1,0 +1,33 @@
+{
+  "provenance": "Development-set regression fixture derived from P053 CONTROL_R2 and CONTROL_R3 production traces; no holdout evidence.",
+  "cases": [
+    {
+      "caseId": "P053",
+      "arm": "CONTROL_R2",
+      "factType": "specialty",
+      "factValue": "Emergency Medicine",
+      "observedSourceTitle": "Tessa Evett Smith · 607 Oakley St, Unit 1, Houston, TX 77006-5976 · Emergency Medicine Physician",
+      "expectedStructuredCitation": {
+        "sourceUrl": "https://opennpi.com/provider/1386828655",
+        "providerIdentitySpan": "Tessa Evett Smith is a Emergency Medicine Physician practicing in Houston, Texas. The National Provider Identifier (NPI) is #1386828655",
+        "factSpan": "The primary taxonomy of Tessa Evett Smith is Emergency Medicine Physician (207P00000X).",
+        "explicitFactDateSpan": null
+      },
+      "expectedPublicSourceTitle": "opennpi.com"
+    },
+    {
+      "caseId": "P053",
+      "arm": "CONTROL_R3",
+      "factType": "specialty",
+      "factValue": "Emergency Medicine",
+      "observedSourceTitle": "Tessa Evett Smith · 607 Oakley St, Unit 1, Houston, TX 77006-5976 · Emergency Medicine Physician",
+      "expectedStructuredCitation": {
+        "sourceUrl": "https://opennpi.com/provider/1386828655",
+        "providerIdentitySpan": "The National Provider Identifier (NPI) is #1386828655",
+        "factSpan": "The primary taxonomy of Tessa Evett Smith is Emergency Medicine Physician (207P00000X).",
+        "explicitFactDateSpan": null
+      },
+      "expectedPublicSourceTitle": "opennpi.com"
+    }
+  ]
+}

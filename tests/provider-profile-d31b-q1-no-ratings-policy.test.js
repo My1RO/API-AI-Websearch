@@ -13,7 +13,6 @@ const {
 
 const citation = {
   sourceUrl: "https://hospital.org/providers/ada-smith",
-  sourceTitle: "Provider page",
   providerIdentitySpan: "Ada Smith, NPI 1234567890",
   factSpan: "Ada Smith specializes in Family Medicine.",
   explicitFactDateSpan: null

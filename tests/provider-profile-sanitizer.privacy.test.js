@@ -551,7 +551,7 @@ describe("provider profile sanitizer", () => {
         scale: "5",
         citation: {
           sourceUrl: "https://healthgrades.com/rating-source",
-          sourceTitle: "Public ratings",
+          sourceTitle: "healthgrades.com",
           providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
           factSpan: "4.8",
           explicitFactDateSpan: null
@@ -668,7 +668,7 @@ describe("provider profile sanitizer", () => {
         zip: "44195",
         citation: {
           sourceUrl: "https://npiprofile.com/src-1",
-          sourceTitle: "NPI 1234567890 Profile",
+          sourceTitle: "npiprofile.com",
           providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
           factSpan: "9500 Euclid Ave",
           explicitFactDateSpan: null
@@ -680,7 +680,7 @@ describe("provider profile sanitizer", () => {
         value: "(216) 444-2200",
         citation: {
           sourceUrl: "https://npiprofile.com/src-1",
-          sourceTitle: "NPI 1234567890 Profile",
+          sourceTitle: "npiprofile.com",
           providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
           factSpan: "(216) 444-2200",
           explicitFactDateSpan: null
@@ -877,7 +877,7 @@ describe("provider profile sanitizer", () => {
       value: "https://clevelandclinic.org/locations/main-campus",
       citation: {
         sourceUrl: "https://clevelandclinic.org/locations/main-campus",
-        sourceTitle: "The Cleveland Clinic Foundation official site",
+        sourceTitle: "clevelandclinic.org",
         providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
         factSpan: "https://clevelandclinic.org/locations/main-campus?tracking=1",
         explicitFactDateSpan: null
@@ -925,11 +925,11 @@ describe("provider profile sanitizer", () => {
     );
 
     expect(profile.phoneNumbers).toHaveLength(2);
-    expect(profile.phoneNumbers[0].citation.sourceTitle).toMatch(/NPI 1234567890 Profile/);
+    expect(profile.phoneNumbers[0].citation.sourceTitle).toBe("npiprofile.com");
     expect(profile.locations[0].zip).toBe("44308");
     expect(profile.ratings.map((rating) => rating.citation.sourceTitle)).toEqual([
-      "Healthgrades rating",
-      "Zocdoc rating"
+      "healthgrades.com",
+      "zocdoc.com"
     ]);
     expect(profile).not.toHaveProperty("sources");
   });

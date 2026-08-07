@@ -80,7 +80,6 @@ const citedProfileResponse = profiles => {
       const source = sourcesById.get(sourceId);
       return {
         sourceUrl: source?.url || "https://npiprofile.com/provider/123",
-        sourceTitle: source?.title || null,
         providerIdentitySpan: profile.providerName,
         factSpan,
         explicitFactDateSpan: null
@@ -932,7 +931,7 @@ describe("Azure OpenAI Responses client privacy contract", () => {
           explicitFactDateSpan: null,
           factSpan: "2164442200",
           providerIdentitySpan: "Public Provider",
-          sourceTitle: "Public directory",
+          sourceTitle: "npiprofile.com",
           sourceUrl: "https://npiprofile.com/provider/123"
         }
       }
@@ -971,7 +970,6 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     response.output_parsed.profiles[0].npi = "1234567890";
     response.output_parsed.profiles[0].phoneNumbers[0].citation = {
       sourceUrl: "https://npiregistry.cms.hhs.gov/api/?number=1234567890&version=2.1",
-      sourceTitle: "NPPES record for NPI 1234567890",
       providerIdentitySpan: "Public Provider NPI 1234567890",
       factSpan: "2164442200",
       explicitFactDateSpan: null

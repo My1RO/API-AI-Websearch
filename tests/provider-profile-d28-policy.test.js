@@ -84,7 +84,6 @@ describe("D28 alternate-NPI relevance and citation-only pass", () => {
     expect(Object.keys(profileShape.websites.element.shape)).toEqual(["value", "citation"]);
     expect(Object.keys(sharedCitationShape)).toEqual([
       "sourceUrl",
-      "sourceTitle",
       "providerIdentitySpan",
       "factSpan",
       "explicitFactDateSpan"

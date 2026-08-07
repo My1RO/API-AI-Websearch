@@ -171,7 +171,9 @@ const sanitizeCitation = (
   }
   return {
     sourceUrl,
-    sourceTitle: cleanPublicText(citation.sourceTitle || domain, 255) || domain,
+    // Page titles are model-controlled metadata and can disclose an otherwise
+    // rejected contact. Keep the outward field without relaying that metadata.
+    sourceTitle: domain,
     providerIdentitySpan,
     factSpan,
     explicitFactDateSpan: cleanPublicText(citation.explicitFactDateSpan, 1000) || null

@@ -89,7 +89,6 @@ describe("D1 concise direct-citation policy", () => {
           value: "Behavior Analyst",
           citation: {
             sourceUrl: "https://registry.example.org/provider/1104373091",
-            sourceTitle: "Provider record",
             providerIdentitySpan: "Yordalys Rodriguez Perez NPI 1104373091",
             factSpan: "Specialty: Behavior Analyst",
             explicitFactDateSpan: null

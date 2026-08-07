@@ -70,7 +70,6 @@ export const providerProfilesSchema = z.array(providerProfileSchema);
 
 const structuredCitationSchema = z.object({
   sourceUrl: z.string().describe("Exact consulted readable page supporting this fact."),
-  sourceTitle: z.string().nullable(),
   providerIdentitySpan: z.string().describe("Shortest contiguous verbatim passage that literally occurs on sourceUrl and establishes the exact provider under the prompt's identity rules. Never borrow identity from another page; if sourceUrl lacks such a passage, omit the fact."),
   factSpan: z.string().describe("Shortest contiguous verbatim passage supporting the complete value: every phone digit plus voice purpose, every non-null address component, or the website's provider heading."),
   explicitFactDateSpan: z.string().nullable().describe("Verbatim date/status explicitly governing this exact value, never a page, profile, registry, license, retrieval, or copyright date; else null.")

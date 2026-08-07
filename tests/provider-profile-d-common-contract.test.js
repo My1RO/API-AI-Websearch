@@ -11,7 +11,6 @@ const {
 const sourceUrl = "https://provider.example.org/clinicians/ada-smith";
 const citation = (factSpan, url = sourceUrl) => ({
   sourceUrl: url,
-  sourceTitle: "Ada Smith, MD",
   providerIdentitySpan: "Ada Smith, MD — NPI 1234567890",
   factSpan,
   explicitFactDateSpan: null
@@ -72,7 +71,10 @@ describe("common D-series production contract", () => {
     const parsed = parseProviderProfilesFromResponse(response(provenanceItem));
 
     expect(parsed).toHaveLength(1);
-    expect(parsed[0].phoneNumbers[0].citation).toEqual(citation("Office: 617-444-0123"));
+    expect(parsed[0].phoneNumbers[0].citation).toEqual({
+      ...citation("Office: 617-444-0123"),
+      sourceTitle: "provider.example.org"
+    });
   });
 
   it("logs but retains a direct citation absent from every native provenance channel", () => {
@@ -125,7 +127,6 @@ describe("common D-series production contract", () => {
         zip: "43220",
         citation: {
           sourceUrl: healthgradesUrl,
-          sourceTitle: "Marina Rodriguez, NP - Nurse Practitioner in Upper Arlington, OH",
           providerIdentitySpan: identitySpan,
           factSpan: "Practice 1 Office 3924 Mountview Rd Upper Arlington, OH 43220",
           explicitFactDateSpan: null
@@ -135,7 +136,6 @@ describe("common D-series production contract", () => {
         value: "(614) 338-9158",
         citation: {
           sourceUrl: healthgradesUrl,
-          sourceTitle: "Marina Rodriguez, NP - Nurse Practitioner in Upper Arlington, OH",
           providerIdentitySpan: identitySpan,
           factSpan: "Practice 1 Office 3924 Mountview Rd Upper Arlington, OH 43220 (614) 338-9158",
           explicitFactDateSpan: null
