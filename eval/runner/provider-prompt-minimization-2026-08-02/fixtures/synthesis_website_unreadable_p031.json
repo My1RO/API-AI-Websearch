@@ -1,0 +1,19 @@
+{
+  "provenance": {
+    "campaign": "selective-safety-vs-phone-purpose-full-development-v1",
+    "armId": "SELECTIVE_SAFETY",
+    "caseId": "P031",
+    "sourceArtifact": "synthesis-sol-high-live-v5/cells/SELECTIVE_SAFETY/P031/parsed-v14.json"
+  },
+  "observed": {
+    "citedSourceSupport": "unreadable",
+    "providerIdentitySpanFidelity": "unreadable",
+    "factSpanFidelity": "unreadable",
+    "exactSupport": "partial",
+    "fieldValidity": "partial",
+    "criticalFindings": [
+      "OFFICIAL_WEBSITE_MISREPRESENTATION"
+    ]
+  },
+  "expectedCriticalFindings": []
+}

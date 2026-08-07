@@ -1,0 +1,2228 @@
+{
+  "schemaVersion": 1,
+  "sourceFormat": "jsonl_rows",
+  "sourceSha256": "a072fa51322abf138b87a80cbebf4e762193f5e21937c1e930fde9cbef2b2561",
+  "cases": [
+    {
+      "schemaVersion": 1,
+      "caseId": "H001",
+      "request": {
+        "providerId": "1013931773",
+        "npi": "1013931773",
+        "name": "JOY J MUNAJJ-BROWN APRN",
+        "specialty": "Nurse Practitioner · Women's Health",
+        "city": "MIAMI GARDENS",
+        "state": "FL",
+        "zip": "33056"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1013931773",
+        "name": "JOY J MUNAJJ-BROWN APRN",
+        "specialty": "Nurse Practitioner · Women's Health",
+        "address": "20612 NW 27TH AVE  MIAMI GARDENS FL 33056"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1013931773",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H002",
+      "request": {
+        "providerId": "1073178950",
+        "npi": "1073178950",
+        "name": "WILLIAM IAN EVANS MD",
+        "specialty": "Ophthalmology · Ophthalmic Plastic and Reconstructive Surgery",
+        "city": "MIAMI",
+        "state": "FL",
+        "zip": "33136"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "dental/vision",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1073178950",
+        "name": "WILLIAM IAN EVANS MD",
+        "specialty": "Ophthalmology · Ophthalmic Plastic and Reconstructive Surgery",
+        "address": "900 NW 17TH ST  MIAMI FL 33136"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1073178950",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H003",
+      "request": {
+        "providerId": "1134340433",
+        "npi": "1134340433",
+        "name": "MR. JEFFREY A MILLER LCSW",
+        "specialty": "Social Worker · Clinical",
+        "city": "MIAMI SHORES",
+        "state": "FL",
+        "zip": "33138"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1134340433",
+        "name": "MR. JEFFREY A MILLER LCSW",
+        "specialty": "Social Worker · Clinical",
+        "address": "9999 NE 2ND AVE  MIAMI SHORES FL 33138"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1134340433",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H004",
+      "request": {
+        "providerId": "1235409525",
+        "npi": "1235409525",
+        "name": "TONYA MAKEDA SMITH ARNP",
+        "specialty": "Nurse Practitioner · Family",
+        "city": "MIAMI",
+        "state": "FL",
+        "zip": "33136"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1235409525",
+        "name": "TONYA MAKEDA SMITH ARNP",
+        "specialty": "Nurse Practitioner · Family",
+        "address": "1400 NW 12TH AVE  MIAMI FL 33136"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1235409525",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H005",
+      "request": {
+        "providerId": "1427233006",
+        "npi": "1427233006",
+        "name": "GLENN PATTERSON MILLER JR. M.D.",
+        "specialty": "Surgery",
+        "city": "DORAL",
+        "state": "FL",
+        "zip": "33178"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1427233006",
+        "name": "GLENN PATTERSON MILLER JR. M.D.",
+        "specialty": "Surgery",
+        "address": "7661 NW 107TH AVE APT 612  DORAL FL 33178"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1427233006",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H006",
+      "request": {
+        "providerId": "1528370483",
+        "npi": "1528370483",
+        "name": "DR. JENNIFER GARCIA MD",
+        "specialty": "Pediatrics · Pediatric Gastroenterology",
+        "city": "MIAMI",
+        "state": "FL",
+        "zip": "33136"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "pediatrics",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1528370483",
+        "name": "DR. JENNIFER GARCIA MD",
+        "specialty": "Pediatrics · Pediatric Gastroenterology",
+        "address": "1611 NW 12TH AVE MCCD 3005A MIAMI FL 33136"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1528370483",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H007",
+      "request": {
+        "providerId": "1699019299",
+        "npi": "1699019299",
+        "name": "JAMIE DAVIS",
+        "specialty": "Behavior Analyst",
+        "city": "DORAL",
+        "state": "FL",
+        "zip": "33172"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1699019299",
+        "name": "JAMIE DAVIS",
+        "specialty": "Behavior Analyst",
+        "address": "2500 NW 107TH AVE SUITE 200 DORAL FL 33172"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1699019299",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H008",
+      "request": {
+        "providerId": "1962148841",
+        "npi": "1962148841",
+        "name": "GABRIELL COHEN DAVIS",
+        "specialty": "Behavior Analyst",
+        "city": "MIAMI",
+        "state": "FL",
+        "zip": "33183"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1962148841",
+        "name": "GABRIELL COHEN DAVIS",
+        "specialty": "Behavior Analyst",
+        "address": "11925 SW 72ND ST  MIAMI FL 33183"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1962148841",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H009",
+      "request": {
+        "providerId": "1033283445",
+        "npi": "1033283445",
+        "name": "PHT Dr Rafael A Penalver Clinic",
+        "specialty": "Clinic/Center · Multi-Specialty",
+        "city": "MIAMI",
+        "state": "FL",
+        "zip": "33128"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1033283445",
+        "name": "PHT Dr Rafael A Penalver Clinic",
+        "specialty": "Clinic/Center · Multi-Specialty",
+        "address": "971 NW 2ND ST  MIAMI FL 33128"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1033283445",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H010",
+      "request": {
+        "providerId": "1295376960",
+        "npi": "1295376960",
+        "name": "PROFESSIONAL BEHAVIORAL & MENTAL HEALTH INC",
+        "specialty": "Community/Behavioral Health",
+        "city": "MIAMI",
+        "state": "FL",
+        "zip": "33186"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "fl-miami",
+        "rurality": "urban",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1295376960",
+        "name": "PROFESSIONAL BEHAVIORAL & MENTAL HEALTH INC",
+        "specialty": "Community/Behavioral Health",
+        "address": "11780 SW 89TH ST STE 204  MIAMI FL 33186"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1295376960",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H011",
+      "request": {
+        "providerId": "1043220775",
+        "npi": "1043220775",
+        "name": "MR. CLAYTON HOUSTON DAVIS M.D.",
+        "specialty": "Family Medicine",
+        "city": "FRANKLIN",
+        "state": "NC",
+        "zip": "28734"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1043220775",
+        "name": "MR. CLAYTON HOUSTON DAVIS M.D.",
+        "specialty": "Family Medicine",
+        "address": "55 MEDICAL PARK DR STE 118  FRANKLIN NC 28734"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1043220775",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H012",
+      "request": {
+        "providerId": "1093854754",
+        "npi": "1093854754",
+        "name": "CHERYL A JOHNSON CRNA",
+        "specialty": "Nurse Anesthetist, Certified Registered",
+        "city": "ASHEVILLE",
+        "state": "NC",
+        "zip": "28801"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1093854754",
+        "name": "CHERYL A JOHNSON CRNA",
+        "specialty": "Nurse Anesthetist, Certified Registered",
+        "address": "191 BILTMORE AVENUE  ASHEVILLE NC 28801"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1093854754",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H013",
+      "request": {
+        "providerId": "1285783167",
+        "npi": "1285783167",
+        "name": "JOSEPH MILLER MD",
+        "specialty": "Surgery",
+        "city": "CLYDE",
+        "state": "NC",
+        "zip": "28721"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1285783167",
+        "name": "JOSEPH MILLER MD",
+        "specialty": "Surgery",
+        "address": "40 BRETTWOOD TRCE  CLYDE NC 28721"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1285783167",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H014",
+      "request": {
+        "providerId": "1326140005",
+        "npi": "1326140005",
+        "name": "VANESSA ANNE DAVY LCSW",
+        "specialty": "Social Worker · Clinical",
+        "city": "ASHEVILLE",
+        "state": "NC",
+        "zip": "28801"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1326140005",
+        "name": "VANESSA ANNE DAVY LCSW",
+        "specialty": "Social Worker · Clinical",
+        "address": "257 BILTMORE AVE  ASHEVILLE NC 28801"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1326140005",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H015",
+      "request": {
+        "providerId": "1396412110",
+        "npi": "1396412110",
+        "name": "ALEJANDRA ESCAMILLA MARTINEZ PA-C",
+        "specialty": "Physician Assistant",
+        "city": "DAWSONVILLE",
+        "state": "GA",
+        "zip": "30534"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1396412110",
+        "name": "ALEJANDRA ESCAMILLA MARTINEZ PA-C",
+        "specialty": "Physician Assistant",
+        "address": "204 DAWSON VILLAGE WAY S  DAWSONVILLE GA 30534"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1396412110",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H016",
+      "request": {
+        "providerId": "1558322495",
+        "npi": "1558322495",
+        "name": "RUSSELL S JONES THD, LPC",
+        "specialty": "Counselor · Professional",
+        "city": "ASHEVILLE",
+        "state": "NC",
+        "zip": "28801"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1558322495",
+        "name": "RUSSELL S JONES THD, LPC",
+        "specialty": "Counselor · Professional",
+        "address": "239 S FRENCH BROAD AVE  ASHEVILLE NC 28801"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1558322495",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H017",
+      "request": {
+        "providerId": "1649201997",
+        "npi": "1649201997",
+        "name": "MARIA CARMINA CASTILLO GARCIA M.D.",
+        "specialty": "Internal Medicine · Pulmonary Disease",
+        "city": "JOHNSON CITY",
+        "state": "TN",
+        "zip": "37604"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1649201997",
+        "name": "MARIA CARMINA CASTILLO GARCIA M.D.",
+        "specialty": "Internal Medicine · Pulmonary Disease",
+        "address": "310 N STATE OF FRANKLIN RD STE 303  JOHNSON CITY TN 37604"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1649201997",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H018",
+      "request": {
+        "providerId": "1649460049",
+        "npi": "1649460049",
+        "name": "DR. ALLISON EVANS JOHNSON M.D.",
+        "specialty": "Surgery",
+        "city": "CLYDE",
+        "state": "NC",
+        "zip": "28721"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1649460049",
+        "name": "DR. ALLISON EVANS JOHNSON M.D.",
+        "specialty": "Surgery",
+        "address": "40 BRETTWOOD TRCE  CLYDE NC 28721"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1649460049",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H019",
+      "request": {
+        "providerId": "1760498059",
+        "npi": "1760498059",
+        "name": "HOT SPRINGS MEDICAL CENTER PHARMACY",
+        "specialty": "Pharmacy · Clinic Pharmacy",
+        "city": "HOT SPRINGS",
+        "state": "NC",
+        "zip": "28743"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1760498059",
+        "name": "HOT SPRINGS MEDICAL CENTER PHARMACY",
+        "specialty": "Pharmacy · Clinic Pharmacy",
+        "address": "66 NW HWY 25-70  HOT SPRINGS NC 28743"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1760498059",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H020",
+      "request": {
+        "providerId": "1841644531",
+        "npi": "1841644531",
+        "name": "Sylva Community Health Center",
+        "specialty": "Clinic/Center · Federally Qualified Health Center (FQHC)",
+        "city": "SYLVA",
+        "state": "NC",
+        "zip": "28779"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "nc-sylva",
+        "rurality": "rural",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1841644531",
+        "name": "Sylva Community Health Center",
+        "specialty": "Clinic/Center · Federally Qualified Health Center (FQHC)",
+        "address": "154 MEDICAL PARK LOOP # A  SYLVA NC 28779"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1841644531",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H021",
+      "request": {
+        "providerId": "1114717048",
+        "npi": "1114717048",
+        "name": "LAUREN DAVIS FNP",
+        "specialty": "Nurse Practitioner · Family",
+        "city": "PARKERSBURG",
+        "state": "WV",
+        "zip": "26101"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1114717048",
+        "name": "LAUREN DAVIS FNP",
+        "specialty": "Nurse Practitioner · Family",
+        "address": "801 GARFIELD AVE  PARKERSBURG WV 26101"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1114717048",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H022",
+      "request": {
+        "providerId": "1275586695",
+        "npi": "1275586695",
+        "name": "SCOTT E. SMITH D.O.",
+        "specialty": "Family Medicine",
+        "city": "POMEROY",
+        "state": "OH",
+        "zip": "45769"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1275586695",
+        "name": "SCOTT E. SMITH D.O.",
+        "specialty": "Family Medicine",
+        "address": "88 E MEMORIAL DR  POMEROY OH 45769"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1275586695",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H023",
+      "request": {
+        "providerId": "1295553436",
+        "npi": "1295553436",
+        "name": "WILLIAM RODERICK",
+        "specialty": "Social Worker",
+        "city": "ATHENS",
+        "state": "OH",
+        "zip": "45701"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1295553436",
+        "name": "WILLIAM RODERICK",
+        "specialty": "Social Worker",
+        "address": "11 GRAHAM DR  ATHENS OH 45701"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1295553436",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H024",
+      "request": {
+        "providerId": "1538626932",
+        "npi": "1538626932",
+        "name": "BRIANA BROWN LPC",
+        "specialty": "Counselor · Professional",
+        "city": "ATHENS",
+        "state": "OH",
+        "zip": "45701"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1538626932",
+        "name": "BRIANA BROWN LPC",
+        "specialty": "Counselor · Professional",
+        "address": "90 HOSPITAL DR  ATHENS OH 45701"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1538626932",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H025",
+      "request": {
+        "providerId": "1548893480",
+        "npi": "1548893480",
+        "name": "MISS ANDREA VICTORIA GARCIA GONZALEZ MD",
+        "specialty": "Hospitalist",
+        "city": "COLUMBUS",
+        "state": "OH",
+        "zip": "43210"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1548893480",
+        "name": "MISS ANDREA VICTORIA GARCIA GONZALEZ MD",
+        "specialty": "Hospitalist",
+        "address": "452 W 10TH AVE  COLUMBUS OH 43210"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1548893480",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H026",
+      "request": {
+        "providerId": "1639197445",
+        "npi": "1639197445",
+        "name": "DIANA P RODRIGUEZ ARENAS MD",
+        "specialty": "Radiology · Pediatric Radiology",
+        "city": "COLUMBUS",
+        "state": "OH",
+        "zip": "43205"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "pediatrics",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1639197445",
+        "name": "DIANA P RODRIGUEZ ARENAS MD",
+        "specialty": "Radiology · Pediatric Radiology",
+        "address": "700 CHILDRENS DR  COLUMBUS OH 43205"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1639197445",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H027",
+      "request": {
+        "providerId": "1649273137",
+        "npi": "1649273137",
+        "name": "ANGELA DAWN MILLER CFNP",
+        "specialty": "Nurse Practitioner · Family",
+        "city": "MARIETTA",
+        "state": "OH",
+        "zip": "45750"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1649273137",
+        "name": "ANGELA DAWN MILLER CFNP",
+        "specialty": "Nurse Practitioner · Family",
+        "address": "611 2ND ST  MARIETTA OH 45750"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1649273137",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H028",
+      "request": {
+        "providerId": "1770953259",
+        "npi": "1770953259",
+        "name": "BONNIE J WILLIAMS APRNFNP",
+        "specialty": "Nurse Practitioner · Family",
+        "city": "POMEROY",
+        "state": "OH",
+        "zip": "45769"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1770953259",
+        "name": "BONNIE J WILLIAMS APRNFNP",
+        "specialty": "Nurse Practitioner · Family",
+        "address": "33101 HILAND RD STE B  POMEROY OH 45769"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1770953259",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H029",
+      "request": {
+        "providerId": "1053983148",
+        "npi": "1053983148",
+        "name": "ANEW BEHAVIORAL HEALTH, LLC",
+        "specialty": "Clinic/Center · Rehabilitation, Substance Use Disorder",
+        "city": "ATHENS",
+        "state": "OH",
+        "zip": "45701"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1053983148",
+        "name": "ANEW BEHAVIORAL HEALTH, LLC",
+        "specialty": "Clinic/Center · Rehabilitation, Substance Use Disorder",
+        "address": "400 E STATE ST STE D  ATHENS OH 45701"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1053983148",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H030",
+      "request": {
+        "providerId": "1851171300",
+        "npi": "1851171300",
+        "name": "HOPEWELL HEALTH CENTERS, INC.",
+        "specialty": "Clinic/Center · Federally Qualified Health Center (FQHC)",
+        "city": "THE PLAINS",
+        "state": "OH",
+        "zip": "45780"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "oh-athens",
+        "rurality": "rural",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1851171300",
+        "name": "HOPEWELL HEALTH CENTERS, INC.",
+        "specialty": "Clinic/Center · Federally Qualified Health Center (FQHC)",
+        "address": "1 HIGH SCHOOL ROAD OFC B153 THE PLAINS OH 45780"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1851171300",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H031",
+      "request": {
+        "providerId": "1023800802",
+        "npi": "1023800802",
+        "name": "DR. PALOMA DEL PILAR RODRIGUEZ ALVAREZ MD",
+        "specialty": "Internal Medicine · Endocrinology, Diabetes & Metabolism",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44195"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1023800802",
+        "name": "DR. PALOMA DEL PILAR RODRIGUEZ ALVAREZ MD",
+        "specialty": "Internal Medicine · Endocrinology, Diabetes & Metabolism",
+        "address": "9500 EUCLID AVE  CLEVELAND OH 44195"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1023800802",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H032",
+      "request": {
+        "providerId": "1194352039",
+        "npi": "1194352039",
+        "name": "DR. TIMOTHY WILLIAM GROSEL MD",
+        "specialty": "Ophthalmology",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44195"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "dental/vision",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1194352039",
+        "name": "DR. TIMOTHY WILLIAM GROSEL MD",
+        "specialty": "Ophthalmology",
+        "address": "9500 EUCLID AVE  CLEVELAND OH 44195"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1194352039",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H033",
+      "request": {
+        "providerId": "1194962035",
+        "npi": "1194962035",
+        "name": "VICTORIA L SMITH LISW - SUPERVISOR",
+        "specialty": "Social Worker",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44195"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1194962035",
+        "name": "VICTORIA L SMITH LISW - SUPERVISOR",
+        "specialty": "Social Worker",
+        "address": "9500 EUCLID AVE  CLEVELAND OH 44195"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1194962035",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H034",
+      "request": {
+        "providerId": "1366603284",
+        "npi": "1366603284",
+        "name": "SUSAN BROWN M.D.",
+        "specialty": "Emergency Medicine",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44109"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1366603284",
+        "name": "SUSAN BROWN M.D.",
+        "specialty": "Emergency Medicine",
+        "address": "2500 METROHEALTH DR  CLEVELAND OH 44109"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1366603284",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H035",
+      "request": {
+        "providerId": "1679058465",
+        "npi": "1679058465",
+        "name": "DR. ASHLEY KAY MILLER PH.D.",
+        "specialty": "Psychologist · Clinical",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44195"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1679058465",
+        "name": "DR. ASHLEY KAY MILLER PH.D.",
+        "specialty": "Psychologist · Clinical",
+        "address": "9500 EUCLID AVE # P57  CLEVELAND OH 44195"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1679058465",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H036",
+      "request": {
+        "providerId": "1952807018",
+        "npi": "1952807018",
+        "name": "TIMOTHY EARL DAVIS SR.",
+        "specialty": "Case Manager/Care Coordinator",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44103"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1952807018",
+        "name": "TIMOTHY EARL DAVIS SR.",
+        "specialty": "Case Manager/Care Coordinator",
+        "address": "4400 EUCLID AVE  CLEVELAND OH 44103"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1952807018",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H037",
+      "request": {
+        "providerId": "1972001204",
+        "npi": "1972001204",
+        "name": "KHAI BROWN",
+        "specialty": "Counselor · Mental Health",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44115"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1972001204",
+        "name": "KHAI BROWN",
+        "specialty": "Counselor · Mental Health",
+        "address": "3100 EUCLID AVE  CLEVELAND OH 44115"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1972001204",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H038",
+      "request": {
+        "providerId": "1972507945",
+        "npi": "1972507945",
+        "name": "DR. JOSE ALBERTO GARCIA M.D.",
+        "specialty": "Obstetrics & Gynecology",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44109"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1972507945",
+        "name": "DR. JOSE ALBERTO GARCIA M.D.",
+        "specialty": "Obstetrics & Gynecology",
+        "address": "2500 METROHEALTH DR  CLEVELAND OH 44109"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1972507945",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H039",
+      "request": {
+        "providerId": "1093820979",
+        "npi": "1093820979",
+        "name": "AFFILIATES IN BEHAVIORAL HEALTH, LLC",
+        "specialty": "Psychologist",
+        "city": "INDEPENDENCE",
+        "state": "OH",
+        "zip": "44131"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1093820979",
+        "name": "AFFILIATES IN BEHAVIORAL HEALTH, LLC",
+        "specialty": "Psychologist",
+        "address": "6133 ROCKSIDE RD SUITE 207 INDEPENDENCE OH 44131"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1093820979",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H040",
+      "request": {
+        "providerId": "1336600253",
+        "npi": "1336600253",
+        "name": "International Community Health Center",
+        "specialty": "Family Medicine",
+        "city": "CLEVELAND",
+        "state": "OH",
+        "zip": "44114"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "oh-cleveland",
+        "rurality": "urban",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1336600253",
+        "name": "International Community Health Center",
+        "specialty": "Family Medicine",
+        "address": "2999 PAYNE AVE STE 140  CLEVELAND OH 44114"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1336600253",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H041",
+      "request": {
+        "providerId": "1104636927",
+        "npi": "1104636927",
+        "name": "APRIL D RODRIGUEZ FNP",
+        "specialty": "Nurse Practitioner · Family",
+        "city": "JACKSBORO",
+        "state": "TN",
+        "zip": "37757"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1104636927",
+        "name": "APRIL D RODRIGUEZ FNP",
+        "specialty": "Nurse Practitioner · Family",
+        "address": "136 MOUNTAIN PERKINS LN STE 2  JACKSBORO TN 37757"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1104636927",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H042",
+      "request": {
+        "providerId": "1114953080",
+        "npi": "1114953080",
+        "name": "MARY JANE BROWN M.D.",
+        "specialty": "Emergency Medicine",
+        "city": "MURFREESBORO",
+        "state": "TN",
+        "zip": "37130"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1114953080",
+        "name": "MARY JANE BROWN M.D.",
+        "specialty": "Emergency Medicine",
+        "address": "400 N HIGHLAND AVE  MURFREESBORO TN 37130"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1114953080",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H043",
+      "request": {
+        "providerId": "1124096904",
+        "npi": "1124096904",
+        "name": "RAY CHARLES JOHNSON MD, FCCP",
+        "specialty": "Internal Medicine · Pulmonary Disease",
+        "city": "MURFREESBORO",
+        "state": "TN",
+        "zip": "37129"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1124096904",
+        "name": "RAY CHARLES JOHNSON MD, FCCP",
+        "specialty": "Internal Medicine · Pulmonary Disease",
+        "address": "1800 MEDICAL CENTER PKWY STE 310  MURFREESBORO TN 37129"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1124096904",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H044",
+      "request": {
+        "providerId": "1174550040",
+        "npi": "1174550040",
+        "name": "DALIA MILLER MD",
+        "specialty": "Psychiatry & Neurology · Neurology",
+        "city": "COOKEVILLE",
+        "state": "TN",
+        "zip": "38501"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1174550040",
+        "name": "DALIA MILLER MD",
+        "specialty": "Psychiatry & Neurology · Neurology",
+        "address": "1 MEDICAL CENTER BLVD SUITE 103 COOKEVILLE TN 38501"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1174550040",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H045",
+      "request": {
+        "providerId": "1336147685",
+        "npi": "1336147685",
+        "name": "ORLANDO RODRIGUEZ M.D.",
+        "specialty": "Internal Medicine · Pulmonary Disease",
+        "city": "NASHVILLE",
+        "state": "TN",
+        "zip": "37207"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1336147685",
+        "name": "ORLANDO RODRIGUEZ M.D.",
+        "specialty": "Internal Medicine · Pulmonary Disease",
+        "address": "3443 DICKERSON PIKE SUITE 680 NASHVILLE TN 37207"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1336147685",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H046",
+      "request": {
+        "providerId": "1417395641",
+        "npi": "1417395641",
+        "name": "BELEN GARCIA-RIVAS LMFT",
+        "specialty": "Marriage & Family Therapist",
+        "city": "CHATTANOOGA",
+        "state": "TN",
+        "zip": "37406"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1417395641",
+        "name": "BELEN GARCIA-RIVAS LMFT",
+        "specialty": "Marriage & Family Therapist",
+        "address": "3410 AMNICOLA HWY  CHATTANOOGA TN 37406"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1417395641",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H047",
+      "request": {
+        "providerId": "1609845882",
+        "npi": "1609845882",
+        "name": "TAMMY L BROWN MD",
+        "specialty": "Family Medicine",
+        "city": "ALBANY",
+        "state": "KY",
+        "zip": "42602"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "primary care",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1609845882",
+        "name": "TAMMY L BROWN MD",
+        "specialty": "Family Medicine",
+        "address": "606 BURKESVILLE RD  ALBANY KY 42602"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1609845882",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H048",
+      "request": {
+        "providerId": "1639531007",
+        "npi": "1639531007",
+        "name": "JORDAN ANTONIO GARCIA MD",
+        "specialty": "Otolaryngology · Otolaryngology/Facial Plastic Surgery",
+        "city": "NASHVILLE",
+        "state": "TN",
+        "zip": "37232"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1639531007",
+        "name": "JORDAN ANTONIO GARCIA MD",
+        "specialty": "Otolaryngology · Otolaryngology/Facial Plastic Surgery",
+        "address": "3601 THE VANDERBILT CLINIC  NASHVILLE TN 37232"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1639531007",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H049",
+      "request": {
+        "providerId": "1306037478",
+        "npi": "1306037478",
+        "name": "Westmoreland Care & Rehabilitation Center",
+        "specialty": "Nursing Facility/Intermediate Care Facility",
+        "city": "WESTMORELAND",
+        "state": "TN",
+        "zip": "37186"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1306037478",
+        "name": "Westmoreland Care & Rehabilitation Center",
+        "specialty": "Nursing Facility/Intermediate Care Facility",
+        "address": "1559 NEW HIGHWAY 52 E  WESTMORELAND TN 37186"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1306037478",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H050",
+      "request": {
+        "providerId": "1487642765",
+        "npi": "1487642765",
+        "name": "TENNESSEE URGENT CARE ASSOCIATES, LLC",
+        "specialty": "Clinic/Center · Urgent Care",
+        "city": "MADISON",
+        "state": "TN",
+        "zip": "37115"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "tn-cookeville",
+        "rurality": "rural",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1487642765",
+        "name": "TENNESSEE URGENT CARE ASSOCIATES, LLC",
+        "specialty": "Clinic/Center · Urgent Care",
+        "address": "1616 GALLATIN RD N  MADISON TN 37115"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1487642765",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H051",
+      "request": {
+        "providerId": "1003469503",
+        "npi": "1003469503",
+        "name": "GUADALUPE GARCIA LPC",
+        "specialty": "Counselor · Professional",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77030"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "behavioral health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1003469503",
+        "name": "GUADALUPE GARCIA LPC",
+        "specialty": "Counselor · Professional",
+        "address": "6621 FANNIN ST STE B19510  HOUSTON TX 77030"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1003469503",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H052",
+      "request": {
+        "providerId": "1053518894",
+        "npi": "1053518894",
+        "name": "BONNIE KELLAM SMITH WHCNP",
+        "specialty": "Nurse Practitioner · Women's Health",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77023"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1053518894",
+        "name": "BONNIE KELLAM SMITH WHCNP",
+        "specialty": "Nurse Practitioner · Women's Health",
+        "address": "4600 GULF FWY  HOUSTON TX 77023"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1053518894",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H053",
+      "request": {
+        "providerId": "1063286763",
+        "npi": "1063286763",
+        "name": "ANDRES FELIPE RODRIGUEZ GONZALEZ MD",
+        "specialty": "Radiology · Neuroradiology",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77030"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "medical specialty",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1063286763",
+        "name": "ANDRES FELIPE RODRIGUEZ GONZALEZ MD",
+        "specialty": "Radiology · Neuroradiology",
+        "address": "6411 FANNIN ST  HOUSTON TX 77030"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1063286763",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H054",
+      "request": {
+        "providerId": "1437369675",
+        "npi": "1437369675",
+        "name": "STEPHANIE MARIE JOHNSON MA CCCSLP",
+        "specialty": "Speech-Language Pathologist",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77030"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "allied health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1437369675",
+        "name": "STEPHANIE MARIE JOHNSON MA CCCSLP",
+        "specialty": "Speech-Language Pathologist",
+        "address": "6410 FANNIN ST STE 1400  HOUSTON TX 77030"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1437369675",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H055",
+      "request": {
+        "providerId": "1548092364",
+        "npi": "1548092364",
+        "name": "MEGAN FRAZIER DAVIES MBA, RD, LD",
+        "specialty": "Dietitian, Registered",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77007"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1548092364",
+        "name": "MEGAN FRAZIER DAVIES MBA, RD, LD",
+        "specialty": "Dietitian, Registered",
+        "address": "3131 MEMORIAL CT APT 12114  HOUSTON TX 77007"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1548092364",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H056",
+      "request": {
+        "providerId": "1558620203",
+        "npi": "1558620203",
+        "name": "AMANDA JONES WILLIS DNP, CPNP-PC/AC",
+        "specialty": "Nurse Practitioner · Pediatrics",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77030"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "pediatrics",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1558620203",
+        "name": "AMANDA JONES WILLIS DNP, CPNP-PC/AC",
+        "specialty": "Nurse Practitioner · Pediatrics",
+        "address": "6651 MAIN ST STE E2310.23  HOUSTON TX 77030"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1558620203",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H057",
+      "request": {
+        "providerId": "1699166967",
+        "npi": "1699166967",
+        "name": "EMILIE MARTINEZ MS, PA-C",
+        "specialty": "Physician Assistant · Surgical",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77030"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "other individual",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1699166967",
+        "name": "EMILIE MARTINEZ MS, PA-C",
+        "specialty": "Physician Assistant · Surgical",
+        "address": "6411 FANNIN ST  HOUSTON TX 77030"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1699166967",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H058",
+      "request": {
+        "providerId": "1780249185",
+        "npi": "1780249185",
+        "name": "JONATHAN ROBINSON MILLER",
+        "specialty": "Physical Therapist",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77002"
+      },
+      "strata": {
+        "entityType": "individual",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "allied health",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1780249185",
+        "name": "JONATHAN ROBINSON MILLER",
+        "specialty": "Physical Therapist",
+        "address": "1475 TEXAS ST UNIT 705 HOUSTON TX 77002"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1780249185",
+          "entityType": "individual"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H059",
+      "request": {
+        "providerId": "1154494672",
+        "npi": "1154494672",
+        "name": "KROGER PHARMACY",
+        "specialty": "Pharmacy · Community/Retail Pharmacy",
+        "city": "HOUSTON",
+        "state": "TX",
+        "zip": "77019"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1154494672",
+        "name": "KROGER PHARMACY",
+        "specialty": "Pharmacy · Community/Retail Pharmacy",
+        "address": "1938 W GRAY ST  HOUSTON TX 77019"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1154494672",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "caseId": "H060",
+      "request": {
+        "providerId": "1588341416",
+        "npi": "1588341416",
+        "name": "Thrive Rehabilitation of Pearland",
+        "specialty": "Skilled Nursing Facility",
+        "city": "PEARLAND",
+        "state": "TX",
+        "zip": "77584"
+      },
+      "strata": {
+        "entityType": "facility",
+        "region": "tx-houston",
+        "rurality": "urban",
+        "specialtyGroup": "organization/facility",
+        "edgeCases": []
+      },
+      "cmsBaseline": {
+        "capturedAt": "2026-07-31T19:42:49.279072Z",
+        "providerId": "1588341416",
+        "name": "Thrive Rehabilitation of Pearland",
+        "specialty": "Skilled Nursing Facility",
+        "address": "3406 BUSINESS CENTER DR  PEARLAND TX 77584"
+      },
+      "gold": {
+        "identity": {
+          "npi": "1588341416",
+          "entityType": "facility"
+        },
+        "phones": [],
+        "addresses": [],
+        "websites": [],
+        "ratings": []
+      }
+    }
+  ]
+}
+

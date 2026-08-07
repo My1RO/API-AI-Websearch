@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "campaign": "development-curve-corrected-nine-arm-synthesis-sol-high-live-v8",
+    "armId": "SHORT1C",
+    "caseId": "P029",
+    "claimId": "claim:p0:specialty:0",
+    "sourceArtifact": "cells/SHORT1C/P029/parsed-v14.json"
+  },
+  "atomicGroups": [
+    {
+      "values": {
+        "support": "exact",
+        "identityLink": "exact_npi",
+        "locationLink": "requested_location",
+        "displaySafety": "not_applicable",
+        "recency": "stale",
+        "fieldValidity": "valid",
+        "sourceEligibility": "eligible",
+        "crossNpiConflict": "none",
+        "requestedNpiResolution": "exact_requested_npi"
+      }
+    },
+    {
+      "values": {
+        "support": "unreadable",
+        "identityLink": "ambiguous",
+        "locationLink": "not_applicable",
+        "displaySafety": "not_applicable",
+        "recency": "unknown",
+        "fieldValidity": "unreadable",
+        "sourceEligibility": "ambiguous",
+        "crossNpiConflict": "none",
+        "requestedNpiResolution": "none"
+      }
+    }
+  ],
+  "observedInvalidSynthesis": {
+    "exactSupport": "unreadable",
+    "reason": "The exact cited snapshot is non-substantive, even though other readable sources support the value."
+  }
+}

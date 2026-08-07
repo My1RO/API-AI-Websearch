@@ -1,0 +1,50 @@
+{
+  "caseId": "P043",
+  "armId": "OPPORTUNISTIC_RETRY_R3",
+  "requestIndex": 5,
+  "semanticRawArtifacts": [],
+  "result": {
+    "schemaVersion": 1,
+    "status": "EVALUATOR_MANUAL_REVIEW_REQUIRED",
+    "disposition": "evaluator_sufficiency_exception_not_arm_failure",
+    "reason": "EVALUATOR_TRANSPORT_FAILURE",
+    "requestIndex": 5,
+    "startedAt": "2026-08-06T20:11:34.150Z",
+    "completedAt": "2026-08-06T20:12:05.469Z",
+    "durationMs": 31319,
+    "totalEstimatedUsd": null,
+    "retryPolicy": {
+      "transportOwner": "openai_sdk_native",
+      "configuredTransportMaxRetries": 2,
+      "observedTransportAttemptCount": null
+    },
+    "attempts": [
+      {
+        "semanticAttempt": null,
+        "rawFile": "transport-error-5.json",
+        "responseId": null,
+        "responseStatus": null,
+        "insufficiency": {
+          "reason": "EVALUATOR_TRANSPORT_FAILURE",
+          "providerReason": "Request timed out."
+        },
+        "usage": null,
+        "estimatedCost": null
+      }
+    ]
+  },
+  "transportError": {
+    "schemaVersion": 1,
+    "status": "transport_error_after_native_retries",
+    "startedAt": "2026-08-06T20:11:34.150Z",
+    "completedAt": "2026-08-06T20:12:05.466Z",
+    "error": {
+      "constructorName": "APIConnectionTimeoutError",
+      "name": "Error",
+      "status": null,
+      "code": null,
+      "message": "Request timed out.",
+      "cause": null
+    }
+  }
+}

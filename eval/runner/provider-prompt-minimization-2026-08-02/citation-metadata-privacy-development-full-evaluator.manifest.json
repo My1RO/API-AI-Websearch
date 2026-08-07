@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "status": "authorized_development_evaluation",
+  "campaignId": "citation-metadata-privacy-development-full-v1-evaluator-v1",
+  "datasetRole": "development",
+  "holdoutPolicy": "sealed_holdout_not_loaded_or_referenced",
+  "caseBatteryFormat": "jsonl_rows",
+  "planNetworkContextPolicy": "preserve_frozen_audit_context",
+  "protocolFile": "PROTOCOL.md",
+  "protocolSha256": "997ce9b6f609a8377a9195095415aea98ae1b5e14b3ddb2ed2f97caf4734b325",
+  "caseBatteryFile": "development-provider-battery-60.jsonl",
+  "caseBatterySha256": "a714428b69c85301ce9c98329e58369ebaad37e8d402a118a6bf2fdd19c10ed9",
+  "productionEndpoint": "https://foundry-lucie-ai.openai.azure.com/openai/v1/responses",
+  "baselineArmId": "BASELINE",
+  "minimumPromptReductionFraction": 0.5,
+  "expectedCasesPerArm": 60,
+  "outputRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-analysis-sol-high-v1",
+  "bootstrap": {
+    "iterations": 10000,
+    "seed": "citation-metadata-privacy-development-full-v1-evaluator-v1",
+    "confidence": 0.95
+  },
+  "productionBinding": {
+    "manifestFile": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner-resumable-production/test-evidence/provider-prompt-minimization-2026-08-02/citation-metadata-privacy-development-full.manifest.json",
+    "manifestSha256": "791432d184ff6491f896340ef3c36a10343ce43279703e21cac0d16eb2026ec9",
+    "campaignId": "citation-metadata-privacy-development-full-v1",
+    "resolvedOutputRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-production",
+    "preregistrationSha256": "8556f395b9b12efaa4bd24a9c6fc77576e90163ea2e26420e8ce17362ef30965",
+    "summarySha256": "38783cef895b9c626a2d63ee74280539d6824a2aaf52572fd0e9e7676a9542b7",
+    "expectedRows": 120,
+    "expectedSuccesses": 120,
+    "expectedErrors": 0
+  },
+  "runtime": {
+    "evaluatorAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "evaluatorCommit": "5577c7a24fa646c9f01ed51abe5ec151786369a8",
+    "model": "gpt-5.6-sol",
+    "reasoning": "high",
+    "atomicConcurrency": 10,
+    "synthesisConcurrency": 10,
+    "structuredOutput": "strict_categorical_no_model_aggregate",
+    "atomicSchemaSha256": "7f4f1e008001a1c39ebbf5c54dcc28399a1dd0762b1e9ffcae58758b2229b369",
+    "atomicInstructionsSha256": "4318f0affb946a4952dce3edcf39c4f41c4c7b9cd2b94b04763b4323051a4adc",
+    "synthesisSchemaSha256": "307f92d30c245aa1b8a0e9e05473aa5ae4e9a9673cd40fc02de965cbd0ed5a47",
+    "synthesisInstructionsSha256": "d5b3ce6ba5ba059bbde5b13ada12fd715889041e120b22a487431ca3734518b7",
+    "tokenizerModules": "/Users/kui/lucie/EDE/test-evidence/provider-successor-experiment-2026-07-30/node_modules/js-tiktoken",
+    "sdkModules": "/Users/kui/lucie/EDE/API-AI-Websearch/node_modules",
+    "transportEnvelopeCompilerSupport": "native_d004a43",
+    "resumePolicy": "authenticated_source_and_cell_checkpoints_only",
+    "evidencePolicy": {
+      "globalTransferConcurrency": 32,
+      "originConcurrency": 4,
+      "timeoutMs": 15000,
+      "maximumTotalAttempts": 3,
+      "maximumRedirects": 5,
+      "maximumTransferBytes": 33554432,
+      "tlsIssuerVerification": "disabled_and_logged",
+      "armLocalExactUrlsOnly": true,
+      "unionEvidence": false
+    }
+  },
+  "paths": {
+    "evidenceOutputBase": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-evidence-v1",
+    "packetRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-packets-sol-high-v1",
+    "packetVerificationSeal": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-packets-sol-high-v1/POST_REFETCH_CAMPAIGN_READY.json",
+    "atomicDryRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-atomic-sol-high-dry-v1",
+    "atomicRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-atomic-sol-high-live-v1",
+    "synthesisDryRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-synthesis-sol-high-dry-v1",
+    "synthesisRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-synthesis-sol-high-live-v1",
+    "consistencyTriggerFile": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-consistency-v1.json",
+    "manualReviewRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-manual-v1",
+    "manualSealedRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-manual-sealed-v1",
+    "manualSealFile": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-manual-v1/final-unblinded-seal.json",
+    "manualMapFile": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-manual-sealed-v1/sealed-map.json"
+  },
+  "packetVerification": {
+    "expectedArms": [
+      "BASELINE",
+      "CITATION_PRIVACY"
+    ],
+    "expectedCasePrefix": "P",
+    "expectedCaseIds": [
+      "P001", "P002", "P003", "P004", "P005", "P006", "P007", "P008", "P009", "P010",
+      "P011", "P012", "P013", "P014", "P015", "P016", "P017", "P018", "P019", "P020",
+      "P021", "P022", "P023", "P024", "P025", "P026", "P027", "P028", "P029", "P030",
+      "P031", "P032", "P033", "P034", "P035", "P036", "P037", "P038", "P039", "P040",
+      "P041", "P042", "P043", "P044", "P045", "P046", "P047", "P048", "P049", "P050",
+      "P051", "P052", "P053", "P054", "P055", "P056", "P057", "P058", "P059", "P060"
+    ],
+    "expectedCasesPerArm": 60,
+    "requiredEmptyCases": []
+  },
+  "manualReview": {
+    "triggerFiles": [],
+    "preregisteredExternalSafetyCaseIds": [
+      "P053"
+    ],
+    "expectedArms": [
+      "BASELINE",
+      "CITATION_PRIVACY"
+    ],
+    "expectedCasesPerArm": 60,
+    "spreadsheetLane": "deterministic_workbook_projection_then_blinded_manual_if_insufficient",
+    "contentFilterDisposition": "operational_censor_not_arm_failure"
+  },
+  "packetMaterializations": [
+    {
+      "armId": "BASELINE",
+      "productionRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-production",
+      "evidenceRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-evidence-v1/BASELINE-format-aware-evidence-v4",
+      "generateBasePackets": true
+    },
+    {
+      "armId": "CITATION_PRIVACY",
+      "productionRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-production",
+      "evidenceRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-evidence-v1/CITATION_PRIVACY-format-aware-evidence-v4",
+      "generateBasePackets": true
+    }
+  ],
+  "arms": [
+    {
+      "armId": "BASELINE",
+      "name": "one-call item-local citation baseline",
+      "expectedArmCommit": "bfea3e63ad9d907af09b92e7b35d7e40c14d7c28",
+      "productionRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-production",
+      "promptStaticBytes": 18487
+    },
+    {
+      "armId": "CITATION_PRIVACY",
+      "name": "one-call hostname-derived citation metadata",
+      "expectedArmCommit": "8cb1bd884493b5c63affcfc8811707b7fb9e6ef8",
+      "productionRoot": "/Users/kui/lucie/EDE/test-evidence/provider-prompt-minimization-2026-08-02/runs/citation-metadata-privacy-development-full-v1-production",
+      "promptStaticBytes": 18143
+    }
+  ]
+}

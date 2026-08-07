@@ -1,0 +1,55 @@
+{
+  "caseId": "P044",
+  "armId": "OPPORTUNISTIC_RETRY_R1",
+  "requestIndex": 4,
+  "semanticRawArtifacts": [
+    {
+      "fileName": "raw-4-semantic-01.json",
+      "byteLength": 0
+    }
+  ],
+  "result": {
+    "schemaVersion": 1,
+    "status": "EVALUATOR_MANUAL_REVIEW_REQUIRED",
+    "disposition": "evaluator_sufficiency_exception_not_arm_failure",
+    "reason": "EVALUATOR_TRANSPORT_FAILURE",
+    "requestIndex": 4,
+    "startedAt": "2026-08-06T20:13:58.125Z",
+    "completedAt": "2026-08-06T20:14:10.951Z",
+    "durationMs": 12826,
+    "totalEstimatedUsd": null,
+    "retryPolicy": {
+      "transportOwner": "openai_sdk_native",
+      "configuredTransportMaxRetries": 2,
+      "observedTransportAttemptCount": null
+    },
+    "attempts": [
+      {
+        "semanticAttempt": null,
+        "rawFile": "transport-error-4.json",
+        "responseId": null,
+        "responseStatus": null,
+        "insufficiency": {
+          "reason": "EVALUATOR_TRANSPORT_FAILURE",
+          "providerReason": "ENOSPC: no space left on device, write"
+        },
+        "usage": null,
+        "estimatedCost": null
+      }
+    ]
+  },
+  "transportError": {
+    "schemaVersion": 1,
+    "status": "transport_error_after_native_retries",
+    "startedAt": "2026-08-06T20:13:58.125Z",
+    "completedAt": "2026-08-06T20:14:10.939Z",
+    "error": {
+      "constructorName": "Error",
+      "name": "Error",
+      "status": null,
+      "code": "ENOSPC",
+      "message": "ENOSPC: no space left on device, write",
+      "cause": null
+    }
+  }
+}

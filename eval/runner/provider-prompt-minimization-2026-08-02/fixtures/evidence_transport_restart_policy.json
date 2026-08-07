@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "globalConcurrency": 32,
+    "perOriginConcurrency": 4,
+    "requestTimeoutMs": 15000,
+    "totalAttempts": 3,
+    "maximumRedirects": 5,
+    "maximumBytes": 33554432
+  },
+  "unreadableExactUrlDisposition": {
+    "criterionState": "unknown",
+    "armDefect": false,
+    "requiresSufficiencyOrManualHandling": true
+  },
+  "tls": {
+    "disabledOnlyWhenNodeTlsRejectUnauthorizedIsExactlyZero": true,
+    "disabledVerificationLabel": "issuer_verification_disabled_by_protocol",
+    "defaultVerificationLabel": "runtime_default_verified",
+    "customCaVerificationLabel": "custom_ca_verified"
+  }
+}

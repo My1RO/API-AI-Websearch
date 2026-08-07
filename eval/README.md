@@ -1,22 +1,24 @@
 # Provider-profile evaluation
 
-This directory contains the current outward-facing CMS response and its
-technical validation report for the selected one-call provider web-search
-configuration.
+This directory contains exactly two outward-facing CMS documents for the
+shipped one-call provider web-search configuration. The remaining files and
+subdirectories are internal navigation, synthetic examples, or evidence.
 
 ## Current documents
 
-- [CMS_PROVIDER_AI_RESPONSE.md](CMS_PROVIDER_AI_RESPONSE.md): concise answers
-  to CMS, plus the literal selected production prompt and strict Zod schema.
-- [CMS_PROVIDER_AI_VALIDATION_REPORT.md](CMS_PROVIDER_AI_VALIDATION_REPORT.md):
-  experimental protocol, fixed categorical results, additive trace audit,
-  costs, latency, limitations, and credential-safe API reproductions.
+- [CMS_PROVIDER_AI_RESPONSE.md](CMS_PROVIDER_AI_RESPONSE.md): concise,
+  standalone answers to CMS and headline results.
+- [CMS_PROVIDER_AI_APPENDIX.md](CMS_PROVIDER_AI_APPENDIX.md): detailed results,
+  methodology, assessment of potential-safety screening flags, cost, latency,
+  API reproductions, limitations, and the literal production prompt and schema.
 - [provider-profile-cases.example.jsonl](provider-profile-cases.example.jsonl):
   synthetic request-shape example only; it is not the sealed battery.
+- [runner](runner/README.md): complete fixed evaluator, production campaign
+  runner, tests, fixtures, final protocols, and authority-bound dependencies.
 
-## Current selected configuration
+## Shipped configuration
 
-The release candidate is source commit
+The shipped semantic configuration is source commit
 `8cb1bd884493b5c63affcfc8811707b7fb9e6ef8`. It uses Azure OpenAI Responses,
 `gpt-5.6-terra` with reasoning `low`, required native web search, one semantic
 LLM call, and strict SDK-native Zod Structured Outputs.
@@ -27,18 +29,18 @@ and prohibited contact data are forbidden everywhere in the returned profile,
 including citation quotations.
 
 The static contract is 18,143 bytes: 79.1% shorter than the original
-86,769-byte legacy contract and 1.9% shorter than its immediate final control.
+86,769-byte legacy contract and 1.9% shorter than its immediate predecessor.
 
 The disjoint holdout completed 120/120 production responses and evaluated all
 60 provider pairs: 50 in the automatic stratum and 10 in blinded manual review,
-with no censoring. The selected configuration returned an eligible professional
-contact for 51/60 providers versus 48/60 for the control. It passed fixed
+with no censoring. The shipped configuration returned an eligible professional
+contact for 51/60 providers versus 48/60 for its immediate predecessor. It met fixed
 noninferiority gates for material support, readable own-citation support, and
 identity attachment; the contact-survival confidence bound missed the -5%
-margin despite the observed improvement. Raw safety labels failed the frozen
-gate, while a preserved additive trace audit found no confirmed fax,
-personal/mobile, residential, prohibited-source, or wrong-provider selected
-contact.
+margin despite the observed improvement. Broad potential-safety screening
+flags triggered detailed review; none was substantiated as a fax,
+personal/mobile phone, residential address, prohibited-source disclosure, or
+contact belonging exclusively to the wrong provider.
 
 `lineOfCoverage: "Medical"` remains in the public request solely as the plan
 product-line discriminator. It is not sent to the model, does not identify the
