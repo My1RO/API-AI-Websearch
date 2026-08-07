@@ -1,419 +1,335 @@
-# Provider-profile validation and CMS response evidence
+# Provider-profile AI validation report
 
-Status date: 2026-08-01 (America/New_York)
+Status date: 2026-08-06 (America/New_York)
 
-## Executive decision
+## Decision
 
-Lucie should ship the frozen selected provider-profile configuration, subject
-to ordinary deployment, security, monitoring, and rollback controls. It passed
-the preregistered stopping rule: after additive review of every raw critical
-label, **zero major safety violations were confirmed among 59 evaluable cases
-in the disjoint 60-provider holdout**. One case was not judged because its
-complete evidence packet exceeded the evaluator's direct-input ceiling; no
-content was truncated and no extraction-model fallback was used.
+Lucie should publish the privacy-hardened, one-call provider-search
+configuration evaluated in this report. The selected source commit is
+`8cb1bd884493b5c63affcfc8811707b7fb9e6ef8`.
 
-This decision followed a broad candidate funnel: **40 distinct
-production-shaped configurations were tested with live pilot requests, four
-advanced to complete 60-provider development evaluations, and the selected
-configuration was then frozen and tested on a separate 60-provider holdout.**
+The selection is an engineering decision, not a claim that every preregistered
+statistical gate passed. In the disjoint 60-provider holdout, both final
+configurations parsed 60/60 responses. The selected configuration returned an
+eligible professional contact for 51/60 providers versus 48/60 for its paired
+control, and had slightly lower estimated cost and latency. It met the frozen
+noninferiority gates for whole-packet material support, readable own-citation
+support, and provider-identity attachment. The contact-survival gate formally
+missed because the lower confidence bound crossed the preregistered -5%
+margin, despite a five-point observed improvement.
 
-The companion [CMS response](CMS_PROVIDER_AI_RESPONSE.md) includes the literal
-evaluated production prompt and strict output schema as Appendices A and B.
+The sealed automatic judge also failed the safety gate. A separate additive
+trace audit preserved those labels but found that the cited first-party and
+government pages supported the selected configuration's disputed contacts.
+No selected claim was confirmed as a fax, personal/mobile number, residential
+address, prohibited-source disclosure, or wrong-provider contact. This audit
+does not rewrite the sealed result and does not convert unreadable evidence
+into correct evidence.
 
-This is not a perfect-accuracy claim. The holdout found one confirmed minor
-address-format defect, nine claims whose exact evidence remained unavailable,
-imperfect source-hierarchy adherence, and citation-span defects. Performance
-has plateaued around citation availability, quotation fidelity, and a few hard
-organizational-identity cases. Further prompt tuning on the holdout would
-overfit the validation set. The stopping rule therefore sends lesser defects
-to post-release monitoring and permits a new version only for a confirmed
-major-safety defect or a separately scoped material improvement.
+The selected configuration is 18,143 static UTF-8 bytes for instructions,
+generated strict schema, and user-prompt scaffold. That is 79.1% shorter than
+the 86,769-byte legacy contract that began the prompt-minimization program and
+1.9% shorter than the immediate 18,487-byte final control. The much shorter
+11,196-byte candidate was not selected because it failed a separately reviewed
+eligible-contact endpoint.
 
-The evaluated configuration was frozen before opening the holdout. Its build
-passed, with 267 tests passing and four skipped across 41 passing suites and
-one skipped suite. It has been packaged and smoke-tested locally but has not
-completed target-environment deployment and verification. This report therefore
-does not claim production cutover completion.
+The release branch builds successfully. Its current suite passes 163 tests in
+18 suites, with four tests skipped in one suite. Twenty-seven obsolete
+historical prompt-text suites were removed during consolidation because they
+asserted mutually incompatible sentences from rejected configurations; the
+selected treatment's API, retry, sanitizer, prompt-safety, and
+citation-metadata regression suites remain active.
 
-## What is being shipped
+## What changed in the selected configuration
 
-The selected configuration uses the Azure OpenAI Responses API with:
+The final treatment was deliberately small:
 
-- deployment `gpt-5.6-terra`;
-- reasoning effort `low`;
-- native `web_search`, required, with at most eight tool calls;
-- strict SDK-native Zod Structured Outputs rather than a free-form request to
-  write JSON;
+- The model is told that prohibited contact data may not appear anywhere in
+  the returned profile, including citation quotations and metadata.
+- Model-controlled `sourceTitle` was removed from the strict model-output
+  schema. The outward compatibility field is derived from the already
+  validated citation URL's hostname, preventing a page title from relaying a
+  rejected phone or address.
+- Parser, retry, web-search, source hierarchy, recency, and narrow sanitizer
+  behavior remained the same as the final control.
+
+This design leaves semantic classification with the model. Host code enforces
+only strict types and bounds, URL validity, request correlation, affirmative
+NPI/name mismatch rejection, placeholder removal, phone digit sanity, literal
+self-declared prohibited terms, website/citation URL equality, and stable
+deduplication. It does not fetch webpages in production, classify an unlabeled
+number as personal, decide whether an address is residential, or decide which
+source is official.
+
+## Production-shaped contract
+
+The evaluated service uses:
+
+- Azure OpenAI Responses API;
+- `gpt-5.6-terra` with reasoning `low`;
+- required native `web_search`, with eight tool calls as a ceiling;
+- SDK-native strict Zod Structured Outputs;
 - one LLM call per semantic attempt;
-- an initial SDK retry allowance of one transport retry, followed by at most
-  one non-stacking semantic recovery with SDK retries disabled: at most three
-  HTTP sends total;
-- identical full retry after a native refusal or completion content filter;
-  identity-focused recovery after malformed strict output;
+- one SDK transport retry followed, when necessary, by at most one semantic
+  recovery with SDK retries disabled, for at most three HTTP sends total;
 - no production host webpage fetch and no second LLM adjudication call;
-- no plan, payer, network, coverage, enrollment, or participation data in the
-  model prompt or output schema;
-- no rating output; and
-- direct per-fact evidence: `sourceUrl`, nullable `sourceTitle`,
-  `providerIdentitySpan`, `factSpan`, and nullable `explicitFactDateSpan`.
+- no plan, payer, network, coverage, enrollment, or participation context in
+  the model prompt or output schema;
+- no ratings; and
+- per-fact `sourceUrl`, `providerIdentitySpan`, `factSpan`, and nullable
+  `explicitFactDateSpan`.
 
-The profile endpoint is currently invoked from the medical-plan workflow, so
-its public request envelope retains `lineOfCoverage: "Medical"` for API
-compatibility. `Medical` identifies the insurance product line only. It is
-orthogonal to provider entity type, is not used to exclude facilities, and is
-not copied into the model prompt. The service supports NPI Type 1 individual
-practitioners and NPI Type 2 entities, including group practices, clinics,
-hospitals, and other facilities. Network status remains the exclusive
-responsibility of CMS and plan-directory APIs.
-
-### Semantic and deterministic responsibilities
-
-The model owns semantic decisions in the same call that performs search:
-exact-provider attachment, professional purpose, personal/residential safety,
-conflict resolution, source eligibility, fact-specific recency, source class,
-and output order.
-
-Host logic retains only narrow independently checkable invariants:
-
-- strict types, bounds, and public HTTP(S) URL validity;
-- request correlation and affirmative NPI/name mismatch rejection;
-- removal of obvious placeholders and generation artifacts;
-- phone digit sanity;
-- a literal veto when an emitted value itself says fax, facsimile, mobile,
-  cell, personal, home, residential, residence, or home address;
-- website value equality with its own citation URL; and
-- stable deduplication while preserving model order.
-
-The host does not fetch the page, infer whether an unlabeled number is
-personal, classify a source as official, judge currentness, or reject an
-address merely because it contains `apt` or `apartment`. Native Azure
-annotation/action mismatches are telemetry rather than a destructive parser
-gate because a valid structured citation is not guaranteed to be repeated in
-every native provenance channel.
+The public request retains `lineOfCoverage: "Medical"` for compatibility with
+the medical-plan workflow. `Medical` identifies an insurance product line,
+not a provider entity type. It is not copied into the model prompt and does
+not limit facility support. Both NPI Type 1 practitioners and NPI Type 2
+groups, clinics, hospitals, and other facilities are supported. CMS and plan
+directory APIs alone determine network participation.
 
 ## CMS source and recency policy
 
-The available CMS artifact asks how conflicts, validation, and multiple
-results will be handled. It does not contain a verbatim CMS mandate defining a
-source taxonomy. Lucie's tested implementation answers those questions with
-the following policy:
+Evidence qualification comes before source priority:
 
-1. Qualify each fact before prioritizing its source. The page must support the
-   exact provider and exact fact, professional purpose, safe display, and a
-   compatible location. Official branding cannot rescue an ineligible fact.
-2. Resolve affirmative different-NPI or different-operation conflicts before
-   recency or source rank. Shared use is not automatically a contradiction.
+1. A page must support the exact provider, exact fact, professional purpose,
+   safe display, and compatible operation. Official branding cannot rescue an
+   ineligible fact.
+2. Affirmative different-NPI or incompatible-operation conflicts are resolved
+   before recency or source rank. Shared use is not itself a contradiction.
 3. Among otherwise eligible evidence for the same fact, prefer an exact
-   provider/practice/facility page, then an exact-provider government source
-   including NPPES, then an established exact-provider professional directory.
+   first-party provider, practice, or facility page; then exact-provider
+   government evidence including NPPES; then an established exact-provider
+   professional directory.
 4. NPPES is valid exact-NPI evidence but may be stale. A government page that
    reproduces the same registry record is not independent corroboration merely
    because it is official.
-5. Use recency only when a page dates the exact provider, field, and value.
-   Retrieval dates, copyright years, and registry enumeration, certification,
-   or record-wide update dates do not date every fact.
-6. Missing recency is neutral. An undated supported fact remains eligible; it
-   is not rejected as stale and is never described as current merely because
-   the page is official.
-7. Resolve fields independently. A conflict in one field does not suppress an
-   unrelated supported fact. Emit multiple competing values only with
-   affirmative evidence that they are concurrently active.
-8. Element zero is the default display value; later qualified values are shown
+5. Recency applies only when a page dates the exact provider, field, and value.
+   Retrieval dates, copyright years, and registry-wide update dates do not date
+   every fact.
+6. Missing recency is neutral. An undated supported fact remains eligible and
+   is not described as current merely because the source is official.
+7. Fields are resolved independently. A conflict in one field does not
+   suppress unrelated supported facts. Multiple competing values require
+   affirmative evidence of concurrent professional use.
+8. Element zero is the default display value; later eligible values appear
    behind “Show more.”
 
-## Validation design
+## Experimental design
 
-### Iteration history and development selection
+### Candidate funnel
 
-Initial baseline, sanitizer, source-hierarchy, and direct-citation studies
-identified the main failure modes: over-restrictive deterministic filtering,
-weak fact-level citation attribution, source priority applied before evidence
-qualification, and unnecessary plan context. The subsequent controlled
-candidate-evolution phase exercised **40 distinct production-shaped
-configurations in live pilots**. Most were tested only on targeted difficult
-cases. **Four configurations advanced to a complete 60-provider development
-battery.** The final two non-dominated configurations then received a paired
-60-provider comparison under the same fixed evaluator. The winner was selected
-and frozen before the separate 60-provider holdout was opened.
+Approximately 40 distinct production-shaped prompt/parser/sanitizer
+configurations received live pilot requests. Four advanced to complete
+60-provider development evaluations. After additional focused development on
+personal-contact safety, citation attribution, source priority, and prompt
+length, the final two configurations received a paired development comparison.
+Both final treatments were frozen before the disjoint holdout was opened; the
+release recommendation was made after reviewing the sealed holdout and the
+preserved additive audit.
 
-The selected configuration's unique change over its final comparator was
-deliberately narrow and prompt/schema-only:
+### Frozen provider batteries
 
-- require exact, page-local source quotations for identity and each fact;
-- apply source hierarchy only among pages qualified for that exact fact, with
-  government or professional-directory fallback when a first-party page does
-  not expose the field;
-- recognize an unambiguous first-party biography or team page as website
-  evidence without requiring it to repeat every contact field; and
-- stop searching once identity, fact-local support, plausible first-party
-  inspection, and relevant conflict resolution are complete.
+The same exact 60 requests were used for both arms within each battery. Every
+request preserved provider ID/NPI, name, specialty, city/state/ZIP, CMS
+baseline, plan/network evidence, strata, and case ID in the experiment record.
+Plan/network evidence was intentionally excluded from model and judge prompts.
 
-The parser, provenance treatment, retry behavior, and narrow deterministic
-sanitizer were unchanged from the final comparator. In the paired development
-comparison, both finalists had zero validated major-safety failures and no
-profile/all-contact loss. Fifty-eight providers were paired evaluable. The
-selected configuration won at the first unequal safety-first criterion: the
-comparator emitted one readable materially unsupported address component,
-while the selected configuration emitted none. The selected configuration had
-one later partial own-citation detail that the comparator did not; the
-preregistered lexicographic rule did not allow that later tradeoff to override
-the earlier material-support result. These differences do not establish
-universal or statistical superiority.
+The holdout repeated the cohort-construction procedure with an independent
+seed and excluded every development provider. It contained 48 individuals and
+12 organizations, split evenly between urban and nonmetro locations across
+Miami, Cleveland, Houston, Athens (Ohio), Cookeville, and Sylva. Every provider
+was returned by the CMS Marketplace provider-search API, had literal
+`"coverage":"Covered"` for at least one sampled actual 2026 Marketplace plan,
+was confirmed as `covered:true` by Lucie's wrapper, and had an active matching
+NPPES identity at cohort construction. There was no NPI or normalized
+name+city+state overlap with development.
 
-The two-configuration development production run cost an estimated `$10.2757645`; the
-118 paid Sol/high judge calls cost `$83.879661`. Evaluation cost is not
-production unit cost.
+This is a constructed probability sample conditional on six markets, sampled
+plans, and text-query frames. It is not nationally representative.
 
-### Sealed holdout
+### Runtime isolation
 
-The holdout repeated the original construction procedure with an independent
-seed and excluded every development provider before sampling. It contains 60
-providers from a six-market constructed frame:
+Each arm was pinned to an exact commit and executed independently. Provider-arm
+order was interleaved to reduce live-web and time-of-day drift. The non-treatment
+settings were constant: Terra/low, the same Azure endpoint/deployment,
+Responses API and web-search configuration, retry/timeout/concurrency policy,
+and parser API surface except for the intentional schema treatment.
 
-- 48 individuals and 12 organizations;
-- 30 urban and 30 nonmetro;
-- Miami FL, Cleveland OH, Houston TX, Athens OH, Cookeville TN, and Sylva NC;
-- every provider was returned by the CMS Marketplace provider-search API;
-- every provider had literal `"coverage":"Covered"` for at least one sampled
-  actual 2026 Marketplace plan and `covered:true` through Lucie's plan wrapper;
-- every provider had an active NPPES result with matching entity type and an
-  exact CMS-to-NPPES professional location at cohort construction;
-- zero NPI overlap with the development 60 and candidate pilots; and
-- zero normalized name+city+state overlap with the development 60.
+All 120 holdout requests preserved raw Azure responses, tool actions,
+annotations, parsed output, sanitizer decisions, latency, tokens, searches,
+retries, and estimated cost.
 
-This is a probability sample conditional on the six-market, text-query-based
-frame and sampled plans. It is not nationally representative; inclusion
-probabilities relative to the complete national provider universe are unknown.
+### Fixed evaluator
 
-### Fixed evaluation
+The evaluator was frozen before the holdout:
 
-Production ran the frozen requests once. Evaluation then fetched only the URLs
-returned by the selected configuration; it did not use a union packet or credit
-the configuration with a page it had not returned. Fetching was deterministic,
-parallel, evaluation-only, and absent from production.
+- `gpt-5.6-sol`, reasoning `high`;
+- identical categorical rubric, strict output schema, and host derivations;
+- no model-generated aggregate score and no host aggregate quality score;
+- 10 concurrent atomic judges and 10 concurrent synthesis judges;
+- 872 completed atomic calls and 104 completed synthesis calls;
+- 50 providers per arm in the automatic stratum and 10 per arm in blinded
+  manual review; zero censored providers; and
+- evaluator authority hash
+  `4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e`.
 
-The fixed judge was `gpt-5.6-sol` with reasoning `high`, concurrency 10, no web
-tool, one categorical rubric, one strict schema, and no model-generated or
-host-generated aggregate score. Host code joined bounded categorical items and
-reported each denominator separately. A prior five-packet calibration showed
-that Sol `low` and `medium` were not equivalent to `high`: both reproduced the
-critical findings but introduced evidence-sufficiency, recency, and CMS-role
-differences. High reasoning therefore remained fixed for the official judge.
+The evidence collector fetched only the exact URLs returned by each arm. It
+used no union source packet and never credited one arm with another arm's page.
+Fetching was parallel and evaluation-only, with bounded redirects, size,
+timeouts, and retries. TLS verification was disabled and logged for this test
+workstation. Large spreadsheets were normalized deterministically and routed
+to blinded manual review when the fixed direct-judge representation remained
+insufficient. No extraction-model fallback was used.
 
 ## Holdout production results
 
-| Outcome | Result |
-| --- | ---: |
-| Parsed responses | 60/60 |
-| Profiles returned | 60/60 |
-| Profiles with at least one phone/address/website | 60/60 |
-| Specialty | 60/60 cases; 72 items |
-| Address | 57/60 cases; 60 items |
-| Phone | 56/60 cases; 56 items |
-| Website | 33/60 cases; 33 items |
-| Ratings | 0/60 cases; 0 items by design |
-| Total emitted non-rating claims | 221 |
-| Web-search calls | 148 |
-| HTTP sends | 61 |
-| Transport retries | 0 |
-| Semantic retries | 1 |
-| Production host fetches | 0 |
+| Outcome | Final control | Selected configuration |
+| --- | ---: | ---: |
+| Parsed profiles | 60/60 | 60/60 |
+| Raw profiles with phone/address/website | 52/60 | 54/60 |
+| Judged eligible professional-contact survival | 48/60 | 51/60 |
+| Specialty items | 70 | 84 |
+| Address items | 56 | 58 |
+| Phone items | 46 | 47 |
+| Website items | 33 | 32 |
+| Ratings | 0 | 0 |
+| Web searches | 198 | 190 |
+| HTTP sends | 60 | 60 |
+| Estimated production cost | $6.333971 | $6.128398 |
+| Median latency | 11.511 s | 11.157 s |
+| Mean latency | 13.333 s | 12.205 s |
+| p95 latency | 20.432 s | 19.550 s |
 
-The production request logs confirm `gpt-5.6-terra`, reasoning `low`, required
-native web search, strict JSON schema output, `store:false`, and no supplied
-plan/network data.
+The selected arm used 1,481,420 input tokens, including 399,872 cached input
+tokens, and 44,304 output tokens. Its per-request estimated cost distribution
+was: minimum $0.060685, median $0.101256, mean $0.102140, p90 $0.127541,
+p95 $0.140109, and maximum $0.155920. These are public-list estimates, not an
+invoice or contract-rate statement.
 
-### Match and overlap with CMS/provider APIs
+## Fixed categorical findings
 
-NPI and provider name were the primary identity keys. Specialty and requested
-location were deliberately stale-capable cross-checks, not gates. Of the 59
-evaluable address claims, the fixed judge classified 51 as the requested CMS
-location, six as a different professional location, and two as unreadable.
-Different professional location is not automatically an error: the provider
-may have multiple locations and the CMS hint may be stale. The whole-packet
-support assessment, not CMS equality, determined whether the emitted fact was
-supported.
+The strata remain separate because manual review was triggered by evidence
+format, not randomly sampled.
 
-The experiment therefore establishes overlap and independent support but does
-not establish that AI contact data are more accurate than CMS, NPPES, or plan
-directory data. CMS/plan APIs remain authoritative for network participation;
-AI never overrides them.
+### Automatic stratum (50 providers per arm)
 
-## Categorical evidence findings
+| Criterion | Final control | Selected configuration |
+| --- | ---: | ---: |
+| Critical labels | 7/50 | 6/50 |
+| Readable material-support defects | 10/50 | 10/50 |
+| Own-citation support defects | 4/20 known | 6/20 known |
+| Identity-attachment defects | 6/50 | 7/50 |
+| Inappropriate withholding | 12/42 known | 11/43 known |
+| Lower-tier source selected | 8/41 known | 9/41 known |
+| Citation-span/contract defects | 38/50 | 38/50 |
 
-Fifty-nine cases and 218 of 221 claims were evaluable. One holdout case was a
-fail-closed `CONTEXT_OVERFLOW` no-call: its complete serialized input was estimated at
-473,359 tokens against the evaluator's 224,000-token direct-input ceiling.
-There was no truncation, extraction fallback, malformed judge response, judge
-error, or judge content filter.
+### Blinded manual stratum (10 providers per arm)
 
-| Criterion | Categories among 218 evaluated claims |
-| --- | --- |
-| Whole returned-source packet supports value | exact 206; partial 1; unreadable 9; raw contradicted 2 |
-| Claim's own citation supports value | exact 125; partial 1; unreadable 92 |
-| Provider-identity span fidelity | exact 121; nonverbatim 5; unreadable 92 |
-| Fact-span fidelity | exact 119; nonverbatim 7; unreadable 92 |
-| Field validity | valid 206; partial 1; unreadable 9; raw invalid 2 |
-| Recency | undated 209; unreadable 9; qualifying fact-specific date 0 |
+| Criterion | Final control | Selected configuration |
+| --- | ---: | ---: |
+| Critical labels | 0/10 | 0/10 |
+| Readable material-support defects | 0/7 known | 0/9 known |
+| Own-citation support defects | 0/2 known | 0/4 known |
+| Identity-attachment defects | 0/7 known | 0/9 known |
+| Inappropriate withholding | 4/9 known | 3/9 known |
+| Lower-tier source selected | 2/9 known | 0/8 known |
+| Citation-span/contract defects | 6/9 known | 4/8 known |
 
-For 126 claims, the claim's own cited page was host-readable; 125 exactly
-supported the value and one partially supported it. The 92 unreadable own
-citations remain unknown, not successes or failures. Independent readable
-pages returned by the same configuration allowed whole-packet assessment for most of
-those claims.
+### Frozen noninferiority endpoints
 
-The evaluation host processed 1,523 logical returned-source rows (1,498
-unique URLs), including 18 detected PDFs. It read 817 source rows and marked
-706 unavailable in the final judge packets. Host-fetch failure is evaluator
-insufficiency, not a production error and not affirmative evidence that a fact
-is wrong.
+Across all adjudicated providers, the selected-minus-control estimates were:
 
-### Source hierarchy by field
-
-Counts are across 59 evaluable cases and apply only to sources found by the
-selected configuration, not to the entire internet.
-
-| Field | Highest eligible tier | Lower tier | Appropriate conflict withholding | Inappropriate withholding | Indeterminate | N/A |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Address | 37 | 7 | 1 | 2 | 9 | 3 |
-| Phone | 33 | 9 | 2 | 2 | 9 | 4 |
-| Specialty | 38 | 7 | 0 | 0 | 11 | 3 |
-| Website | 27 | 0 | 0 | 5 | 0 | 27 |
-
-The 23 lower-tier selections are CMS-priority fidelity findings, not automatic
-wrong-value findings. The nine non-rating inappropriate-withholding findings
-are recall opportunities on pages the configuration itself returned. The evaluator's 25
-rating-withholding findings are inapplicable because ratings were intentionally
-removed from the shipped contract.
-
-### Adverse-case trace review
-
-The sealed judge emitted three raw critical labels in two cases. The additive
-audit preserved those labels and did not mutate the sealed results:
-
-- **Apartment-labeled professional location.** The judge inferred residential use
-  from `Apt 612` alone, contrary to the explicit rubric. Exact-NPI NPPES and
-  readable professional pages identify it as a practice/contact location; no
-  evidence calls it a home. Disposition: evaluator semantic overreach, not a
-  confirmed disclosure.
-- **Shared exact-NPI professional contact.** The cited NPIdb page
-  was host-unreadable and the judge treated other-provider use as contradiction.
-  The frozen NPPES response directly assigns the exact address and phone to NPI
-  1962148841, and the CMS baseline independently assigns the address. Shared
-  use does not prove exclusivity or incompatibility. Disposition: evaluator
-  evidence insufficiency/overreach, not a confirmed wrong-provider disclosure.
-
-After review, there were **zero confirmed major safety violations among 59
-evaluable holdout cases**. This does not convert unknown claims into correct
-ones.
-
-Confirmed and unresolved residuals:
-
-- One case emitted unsupported `addressLine2: "/"`; the remaining address was
-  supported. This is a minor formatting/exactness defect.
-- Nine claims across six cases remained indeterminate because their exact
-  evidence was unavailable.
-- Twelve readable submitted spans were nonverbatim across identity and fact
-  dimensions even though the normalized values were semantically supported.
-- No evaluated claim carried a qualifying fact-specific date. Undated evidence
-  remained eligible and neutral; Lucie must not claim those facts are current.
-
-## Development-to-holdout regression assessment
-
-The relevant test-set comparator is the frozen 60-provider development battery,
-not the smaller prompt-tuning pilots. The holdout used different
-providers but the same production model/runtime and fixed Sol/high evaluation
-family. No material safety or end-to-end coverage regression was observed.
-
-| Outcome | Development battery | Disjoint holdout | Assessment |
+| Endpoint | Difference | Lower 95% bound | Result versus -5% margin |
 | --- | ---: | ---: | --- |
-| Parsed profiles | 60/60 | 60/60 | No regression |
-| Profiles with a phone, address, or website | 60/60 | 60/60 | No survival/contact regression |
-| Emitted claims | 218 | 221 | Overall output volume was stable; phone claims decreased 59→56 while websites increased 27→33 |
-| Confirmed major-safety violations | 0 among 58 paired-eligible development cases | 0 among 59 evaluable holdout cases | No observed safety regression |
-| Whole-packet fixed-judge categories | 216 exact; 2 unreadable | 206 exact; 1 partial; 9 unreadable; 2 raw contradicted | Raw labels worsened, but trace review found both contradictions were evaluator overreach; one real minor formatting defect remained |
-| Readable own-citation precision | 128/129 exact (99.2%); 1 partial | 125/126 exact (99.2%); 1 partial | Effectively unchanged |
-| Unreadable own-citation assessments | 89/218 (40.8%) across 35/60 cases | 92/218 (42.2%) across 34/59 evaluable cases | Essentially unchanged and remains the main evaluation limitation |
-| Lower-tier source selections | 26 fields | 23 fields | No hierarchy regression; descriptive improvement |
-| Non-rating inappropriate withholding | 14 fields | 9 fields | No recall-policy regression; descriptive improvement |
-| Qualifying fact-specific dates | 0 | 0 | No regression, but recency remains unproven rather than current |
-| Mean production cost | `$0.0847505` | `$0.0838086` | 1.1% lower on holdout |
-| Azure latency | median `8.859 s`; p95 `13.190 s`; max `309.402 s` | median `9.542 s`; p95 `13.881 s`; max `14.613 s` | Median/p95 were 7.7%/5.2% slower, but the development run's extreme transport tail did not recur |
+| Eligible-contact survival | +5.00 points | -6.67 points | Missed |
+| Whole-packet exact material support | +0.11 points | -3.31 points | Passed |
+| Readable own-citation exact support | -1.11 points | -3.06 points | Passed |
+| Exact-provider identity attachment | -1.08 points | -4.03 points | Passed |
 
-This study did not preregister a confirmatory development-versus-holdout
-noninferiority test, so “no statistically significant regression” should not
-be read as proof of equivalence. As an exploratory check at the provider unit,
-cases with any unreadable whole-packet claim increased from 2/60 to 6/59
-(`p=0.163`, two-sided Fisher exact), while cases with any unreadable own
-citation were 35/60 versus 34/59 (`p=1.000`). Phone presence (59/60 versus
-56/60) and website presence (27/60 versus 33/60) also did not cross the
-conventional 0.05 threshold (`p=0.364` and `p=0.361`). These post-hoc tests are
-descriptive, unadjusted for multiple comparisons, and do not treat multiple
-claims from one provider as independent.
+The all-adjudicated row is secondary because the preregistration kept the
+automatic and manual strata separate. The automatic and manual contact-survival
+gates also missed because their small-sample confidence intervals were wide.
 
-The honest conclusion is therefore: **no significant or release-material
-regression was established**, but the holdout exposed one minor formatting
-defect, one evaluator overflow, and somewhat more whole-packet evidence
-unreadability. Those limitations remain visible rather than being averaged
-away or repaired by retuning on the holdout.
+### Recency findings
 
-## Cost, latency, and reliability
+The claim-level judge classified the selected arm's 221 emitted claims as 172
+undated, 43 current from readable page/status context, four unknown, one
+unreadable, and one not applicable. It did not validate an emitted
+fact-specific date span: 220 claims made no explicit date claim and one was
+unreadable for that criterion. Accordingly, the report does not generalize the
+43 contextual “current” labels into a claim that every value is freshly dated.
+The production rule remains: use a date only when it governs that exact value;
+otherwise treat missing recency as neutral.
 
-All costs are public-list estimates; contract rates and invoice amounts are
-unknown. Production and evaluation costs must remain separate.
+## Additive trace audit of critical labels
 
-### Production-shaped requests
+The fixed judge's raw labels are retained. The audit below is additional
+evidence, not a replacement judgment.
 
-- total: `$5.028516` for 60 requests;
-- minimum: `$0.0515085`;
-- median (compiler order statistic): `$0.0814885`;
-- mean: `$0.0838086`;
-- p95 (compiler order statistic): `$0.1148255`;
-- maximum: `$0.156701`;
-- sample standard deviation from the production summary: `$0.0185292`.
+| Disputed evidence pattern | Trace-supported disposition |
+| --- | --- |
+| First-party academic provider pages initially recorded as unavailable | The exact returned pages subsequently fetched with HTTP 200 and explicitly named the requested providers and their displayed professional contacts. The raw unsupported/wrong-location labels were fetch insufficiency. |
+| Academic team page with a shared assistant number | The page explicitly named the requested physician and assistant and displayed the number. Other physicians' use did not negate exact-provider first-party attachment. The raw wrong-provider/cross-NPI label was false. |
+| State facility record whose provider/contact appeared in embedded page data | The returned page's embedded data bound the exact organization, address, and phone. The normalizer missed script data. |
+| Different professional contact values on other exact-provider sources | A different value is a conflict/hierarchy finding, not affirmative contradiction. The cited page still attached the emitted professional contact to the requested provider. |
+| Shared exact-NPI professional address or phone | Exact-NPI evidence attached the value to the requested provider. Shared use did not establish a different provider or unsafe disclosure. |
 
-Azure latency:
+After inspecting all critical cases, the audit confirmed no selected personal,
+mobile, fax, residential, prohibited-source, or wrong-provider disclosure. The
+honest sealed result remains that six automatic selected-arm cases received at
+least one critical label and the preregistered safety gate failed before the
+additive audit.
 
-- median: `9.542 s`;
-- mean: `9.787 s`;
-- p95: `13.881 s`;
-- maximum: `14.613 s`.
+## Development versus holdout
 
-The production run used 1,900,624 input tokens, 1,112,064 cached input tokens,
-47,140 output tokens, and 19,989 reasoning tokens. Usage was complete for all
-60 rows.
+The fixed evaluator showed stronger selected-arm gains on development than on
+holdout:
 
-### Evaluation
+| Automatic criterion | Development control → selected | Holdout control → selected |
+| --- | ---: | ---: |
+| Critical-label cases | 10 → 3 | 7 → 6 |
+| Readable-support defect cases | 11 → 5 | 10 → 10 |
+| Identity-attachment defect cases | 4 → 2 | 6 → 7 |
+| Inappropriate withholding | 14/44 → 18/49 | 12/42 → 11/43 |
+| Lower-tier selection | 8/42 → 7/44 | 8/41 → 9/41 |
+| Citation-contract defect cases | 39 → 34 | 38 → 38 |
 
-- 59 paid Sol/high calls and one no-call overflow;
-- cost: `$44.153370`;
-- median cost: `$0.704914`;
-- mean cost: `$0.748362`;
-- p95 cost: `$1.233964`;
-- maximum cost: `$1.385295`;
-- median latency: `97.567 s`;
-- mean latency: `98.862 s`;
-- p95 latency: `120.743 s`;
-- maximum latency: `125.523 s`.
+The development advantages attenuated and some descriptive criteria reversed.
+No confirmatory development-versus-holdout equivalence test was preregistered,
+so the report does not claim that the two samples are statistically identical.
+The holdout nonetheless showed no parser loss, observed better eligible-contact
+survival, noninferior material support/citation/identity endpoints, and no
+confirmed major safety regression after trace audit. The principal unresolved
+quality limitation is citation-contract fidelity and source readability, not a
+demonstrated personal-contact leak.
 
-Final holdout production plus judge spend was `$49.181886`. An earlier aborted
-operational attempt cost `$0.113255`; it is excluded from quality metrics.
-Including that overhead, observed holdout-program spend was `$49.295141`.
+## Cost accounting
 
-## Exact APIs and credential-safe reproductions
+Production and evaluation costs are reported separately.
 
-The provider battery used these APIs:
+| Campaign | Production cost, both arms | Sol/high API evaluation cost |
+| --- | ---: | ---: |
+| 60-provider development comparison | $12.458154 | $297.438741 |
+| 60-provider holdout comparison | $12.462369 | $280.030093 |
+| Total for these two final comparisons | $24.920523 | $577.468834 |
+
+The final comparisons therefore generated $602.389357 in estimated Azure API
+charges. This excludes earlier pilots, aborted attempts, manual-review labor,
+and contract-rate adjustments. The selected production configuration itself
+cost $6.128398 for the 60 holdout requests; Sol/high evaluation cost must not be
+used as a production unit-cost estimate.
+
+## API inventory and credential-safe reproductions
 
 | API | Endpoint | Use |
 | --- | --- | --- |
-| CMS Marketplace plans | `POST https://marketplace.api.healthcare.gov/api/v1/plans/search` | Construct the 2026 plan frame and sample actual plans |
-| CMS provider search | `GET https://marketplace.api.healthcare.gov/api/v1/providers/search` | Construct the provider frame and frozen request baseline |
-| CMS provider coverage | `GET https://marketplace.api.healthcare.gov/api/v1/providers/covered` | Require literal provider-plan `Covered` evidence |
-| Lucie API-Plans wrapper | `POST http://api-plans.local.com/v1/providers-covered?year=2026` | Confirm Lucie's mapping to `covered:true` |
-| NPPES 2.1 | `GET https://npiregistry.cms.hhs.gov/api/` | Independent identity, entity, active-status, and location validation |
-| Azure OpenAI Responses | `POST https://foundry-lucie-ai.openai.azure.com/openai/v1/responses` | One-call Terra/low provider web search and strict output |
+| CMS Marketplace plans | `POST https://marketplace.api.healthcare.gov/api/v1/plans/search` | Build the 2026 plan frame |
+| CMS provider search | `GET https://marketplace.api.healthcare.gov/api/v1/providers/search` | Build provider batteries and CMS baselines |
+| CMS provider coverage | `GET https://marketplace.api.healthcare.gov/api/v1/providers/covered` | Require literal provider-plan coverage |
+| Lucie plan wrapper | `POST http://api-plans.local.com/v1/providers-covered?year=2026` | Confirm Lucie's `covered:true` mapping |
+| NPPES 2.1 | `GET https://npiregistry.cms.hhs.gov/api/` | Identity/entity/location validation |
+| Azure OpenAI Responses | `POST https://foundry-lucie-ai.openai.azure.com/openai/v1/responses` | Terra/low production search and Sol/high evaluation |
 
-Set credentials from an approved secret store:
+Set credentials through an approved secret store:
 
 ```sh
 export CMS_API_KEY='...'
@@ -450,110 +366,45 @@ curl -sS --get 'https://npiregistry.cms.hhs.gov/api/' \
   --data 'number=1013931773'
 ```
 
-Azure reproduction using an exported production request body. The OpenAI SDK
-`apiKey` configuration used by production sends bearer authentication to the
-Azure v1 endpoint:
+Azure Responses API using an exported redacted production request:
 
 ```sh
 export AZURE_REQUEST_BODY='/approved/path/to/redacted-production-request.json'
 
-curl -sS -X POST \
-  "$AZURE_RESPONSES_ENDPOINT" \
+curl -sS -X POST "$AZURE_RESPONSES_ENDPOINT" \
   -H "Authorization: Bearer $AZURE_OPENAI_API_KEY" \
   -H 'Content-Type: application/json' \
   --data-binary "@$AZURE_REQUEST_BODY"
 ```
 
-The reproducibility package also contains the complete CMS plan, provider,
-coverage, Lucie-wrapper, NPPES, and Azure request examples.
+## Committed reproducibility package
 
-## CMS-facing conclusions
+The branch retains text-only fixed-evaluator artifacts under
+[`eval/evidence`](evidence/README.md): the development and holdout compiler
+reports and summaries, raw categorical/case/claim/field/source/policy TSVs,
+frozen gates, paired bootstrap output, production and evaluator operations,
+the 20-row critical-label audit, and the development-to-holdout comparison.
+Raw Azure responses and third-party webpage bodies remain in the controlled
+local evidence store and are not duplicated in Git. No binary artifacts or
+credentials are included.
 
-### Personal information guardrails
+## Limitations and release conditions
 
-Lucie instructs the model to emit only public professional contacts for the
-exact provider and to omit fax, mobile/cell, personal/home, residential,
-people-search, and uncertain-purpose candidates. Every fact must carry its own
-provider-identity and fact quotation. A narrow host veto prevents a literal
-self-declared prohibited value from reaching display, but Lucie does not claim
-that deterministic code can classify an unlabeled personal number or address.
-The holdout found no confirmed personal-contact or residential disclosure among
-59 evaluable cases.
+- The study is not nationally representative and does not prove that AI
+  contact data are more accurate than CMS, NPPES, or issuer directories.
+- CMS and plan APIs remain authoritative for network participation.
+- Live web results drift; each arm was evaluated only on the pages it returned.
+- Unknown or unreadable evidence is not counted as correct.
+- Source hierarchy and quotation fidelity remain imperfect.
+- Missing fact-specific dates are neutral; they do not prove freshness.
+- This report supports the selected configuration as shippable, not perfect.
+- The current dependency audit reports six advisories (one low, one moderate,
+  four high), including direct TypeORM and UUID findings. Dependency remediation
+  and regression testing remain a deployment prerequisite; they are outside
+  the evaluated semantic treatment.
+- Deployment still requires ordinary CI, security/privacy review, immutable
+  image binding, monitoring, rollback, and target-environment smoke tests.
 
-### Conflicts with HealthCare.gov or plan data
-
-HealthCare.gov and plan-directory APIs exclusively determine network status.
-Plan/network information is not sent to the AI, and AI output cannot override
-network participation. Contact disagreements are field-local evidence
-questions, not proof that either source is inherently correct. NPI/name are the
-identity anchors; specialty and location are stale-capable cross-checks.
-
-### Field validation and reliability
-
-Every emitted specialty, address, phone, and website must identify the exact
-provider and include a direct page URL plus separate identity and fact spans.
-Source priority follows, rather than precedes, evidence qualification. Ratings,
-including Zocdoc ratings, are not shipped. In the holdout, 206 of 218
-evaluable claims had exact whole-packet support, one was partial, nine were
-unreadable, and two raw contradictions were rejected after documented trace
-review. For 126 claims, the own cited page was host-readable; 125 exactly
-supported the value and one partially supported it.
-
-### Multiple values and default display
-
-The model resolves each field independently and returns multiple values only
-when evidence supports concurrent professional use. It orders eligible values
-after identity, conflict, safety, location, and fact-specific-recency checks.
-Among otherwise equivalent eligible sources it prefers a first-party provider,
-practice, or facility page; then government evidence; then a professional
-directory. Element zero is displayed first; later values require “Show more.”
-The holdout shows this hierarchy is useful but imperfect and should not be
-represented as deterministic or infallible.
-
-### Comparative accuracy statement
-
-Lucie completed a development comparison and an outcome-blind disjoint
-holdout. The study supports the selected configuration as shippable under the stated
-stopping rule. It does **not** show that AI provider contact data are more
-accurate than CMS, NPPES, or plan-directory APIs, does not establish national
-performance, and was not a blinded independent human-adjudication study.
-
-## Reproducibility package
-
-The retained evidence package contains the sealed cohort and overlap proof,
-exact production requests and raw Azure responses, production summaries, raw
-case/claim/candidate/source/policy TSVs, deterministic webpage snapshots, fixed
-judge requests and responses, compiled validation results, the additive manual
-trace audit, and credential-safe API reproductions. The production and case
-TSVs each contain 60 data rows; the claim and candidate TSVs each contain 221;
-and the source TSV contains 1,583. All were validated as UTF-8, tab-delimited,
-fixed-column records without embedded carriage returns or NUL bytes.
-Production and judge secret scans recorded zero matches. Internal variant,
-case, source-control, and storage identifiers remain in that controlled package
-for auditability but are intentionally omitted from this outward-facing report.
-
-## Release packaging and remaining cutover work
-
-After the sealed evaluation, Lucie added a packaging-only production image and
-deployment contract without changing the evaluated treatment. The image uses a
-digest-pinned Node base, locked install, compiled start, non-root user,
-read-only-compatible filesystem, and Redis/AI-configuration healthcheck. A
-local dedicated-Redis smoke passed health, non-root/read-only checks, and the
-production API-context fail-closed gate. The release package retains the exact
-smoke evidence and frozen dependency-scan disclosure.
-
-External cutover still requires Lucie to:
-
-1. Publish and review the exact evaluated source and its
-   packaging/documentation-only descendant without altering the treatment.
-2. Build in approved CI, push an immutable registry digest, and bind it to the
-   evaluated source and release build.
-3. Attest the actual endpoint, secret source, Terra/low lock, approved price
-   card, and deployment manifest.
-4. Complete organizational privacy/security evidence for Azure web search,
-   logging, retention, access, and Grounding with Bing terms.
-5. Run the documented deployed non-holdout Public-API/Azure and test-tenant
-   feedback/MySQL smoke, record the previous image digest, and activate the
-   defined monitors before gradual traffic admission.
-6. Treat any confirmed major-safety incident as a release blocker for a
-   separately versioned repair; do not silently retune this sealed result.
+The companion [CMS response](CMS_PROVIDER_AI_RESPONSE.md) gives concise answers
+to the CMS questions and includes the literal selected prompt and strict Zod
+output schema.

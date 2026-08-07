@@ -1,10 +1,10 @@
-# API-AI-Websearch D36 production runbook
+# API-AI-Websearch provider-search production runbook
 
-This packages the holdout-validated D36 semantic treatment without changing
-its prompt, schema, parser, sanitizer, Azure client, retry policy, or runtime
-defaults. The evaluated ancestor is
-`d6afd2d2c24983ea2dbbdbdaf064864d17a13186`, tree
-`9bd581ad68d8b88b891b2833d356d17791d4bda6`.
+This packages the selected privacy-hardened citation-metadata treatment without
+changing its evaluated prompt, schema, parser, sanitizer, Azure client, retry
+policy, or runtime defaults. The evaluated source is
+`8cb1bd884493b5c63affcfc8811707b7fb9e6ef8`, tree
+`ef4c1106fa3f4e7643167f90998ffb0791835de6`.
 
 ## Build and identify the image
 

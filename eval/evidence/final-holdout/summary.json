@@ -1,0 +1,2128 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "citation-metadata-privacy-holdout-full-v1-evaluator-compile-erratum-v1",
+  "datasetRole": "sealed_holdout",
+  "baselineArmId": "BASELINE",
+  "arms": [
+    "BASELINE",
+    "CITATION_PRIVACY"
+  ],
+  "authorityProvenance": {
+    "schemaVersion": 1,
+    "mode": "identical_sealed_and_current_authority",
+    "sourceEvaluatorAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "currentCompilerAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "expectedSourceAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "sealedPathDescriptorCount": 23,
+    "transitionedFiles": [],
+    "sourceEvaluatorAuthority": {
+      "schemaVersion": 2,
+      "authority": "unified_provider_evaluator",
+      "files": [
+        {
+          "name": "evaluator_runner_authority.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_authority.js",
+          "sha256": "099cc52d489286caba706f00692e4fc8749fc66250d73c17e6bf57af82c33cca",
+          "byteLength": 2900
+        },
+        {
+          "name": "evaluator_runner_guard.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_guard.js",
+          "sha256": "4684c40a8287368f8f8ce86970fd969ec213464d8967aac4789af126b0ec7a7d",
+          "byteLength": 1472
+        },
+        {
+          "name": "run_evaluator_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_evaluator_campaign.js",
+          "sha256": "aadd58e94423047ade53c559749dcd523ed6e87ff663de37dc2105a5b39ae27a",
+          "byteLength": 19985
+        },
+        {
+          "name": "collect_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/collect_format_aware_evidence_v4.js",
+          "sha256": "a78e1a86d761235368629649264bfcc2560cc271d6544de84660471c63bcabe3",
+          "byteLength": 16027
+        },
+        {
+          "name": "resume_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/resume_format_aware_evidence_v4.js",
+          "sha256": "2af88f2d585f2d51ec8eb307a76b3eeb142ff855361217bd0a048d10d3c5dfee",
+          "byteLength": 22071
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "sha256": "6b23ed915230e762f0030da14e07f906b05751aa577215401a4af69238787cf5",
+          "byteLength": 39659
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "sha256": "884abb3a771ef5e4367d0378431cde1f50c12e7935aeb32eb37d464959f3b889",
+          "byteLength": 1875
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "sha256": "05f9561ab430dddc04f1f96ce527b1aab01a699660cfaa6f475bcffd431a27e8",
+          "byteLength": 29188
+        },
+        {
+          "name": "../provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "sha256": "ee15516dafbd7d0fb7ae2d26497ab782c4236d48d7527fe33ade5625a0025ed0",
+          "byteLength": 38534
+        },
+        {
+          "name": "verify_post_refetch_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/verify_post_refetch_campaign.js",
+          "sha256": "e8aecf08c467ca775c9a12872b9b356bbf3de89959bd9830f67efc74d5c84c7a",
+          "byteLength": 7545
+        },
+        {
+          "name": "run_atomic_evaluator.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_atomic_evaluator.js",
+          "sha256": "e81f052b932b0e40edf7d63f3ee158c644d59b0951352661cbd3bdad9d37446e",
+          "byteLength": 77362
+        },
+        {
+          "name": "run_bounded_synthesis.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_bounded_synthesis.js",
+          "sha256": "271f76dc73b359b906c98b7aab7058fa0ca5e2a6b39cfd24750f100d818788e3",
+          "byteLength": 61288
+        },
+        {
+          "name": "transport_error_trace.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/transport_error_trace.js",
+          "sha256": "6e8fcbb95ca9de185adfcda633b02f1d356c89ff656112c1f6c774f08a997459",
+          "byteLength": 824
+        },
+        {
+          "name": "manual_review_harness.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/manual_review_harness.js",
+          "sha256": "10d3047285bb13070d36298cf1c7fb6fb769599027436a02a0972de7330ab98d",
+          "byteLength": 25945
+        },
+        {
+          "name": "audit_identical_input_consistency.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/audit_identical_input_consistency.js",
+          "sha256": "a33ea9229203ebe5c7e7e8c2b653e50714280f9b7233c0d0a3c320a582e47c59",
+          "byteLength": 6527
+        },
+        {
+          "name": "evaluator_packet_planner.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_packet_planner.js",
+          "sha256": "94b61d22fc4733ce1f9010889f37b1f6c9aae6aa2c9585e4e1b57a8a11a216e2",
+          "byteLength": 29650
+        },
+        {
+          "name": "categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "sha256": "307f92d30c245aa1b8a0e9e05473aa5ae4e9a9673cd40fc02de965cbd0ed5a47",
+          "byteLength": 2257
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "sha256": "ad246f0b7f4a01c2efdb1e9dc884b285127bb75768567feb81bb945f736ce0b1",
+          "byteLength": 2193
+        },
+        {
+          "name": "compile_corrected_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/compile_corrected_campaign.js",
+          "sha256": "a47aa182f33e90e69ccc1aa67ff3a7c657f5f7ce17c94fd4bb7095e20c85bc35",
+          "byteLength": 118439
+        },
+        {
+          "name": "materialize_format_aware_packets_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/materialize_format_aware_packets_v4.js",
+          "sha256": "59128fc92b8c701b889e51ceb63169771dac6c4e6dbe4ad8f13b93be26d2a326",
+          "byteLength": 38922
+        },
+        {
+          "name": "format_aware_source_normalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_source_normalizer.js",
+          "sha256": "2f23bd6b35f3e828adf21b8f90e6cba100c5364f8ac768b71167a20ebe2f04e3",
+          "byteLength": 16504
+        },
+        {
+          "name": "source_format_policy.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/source_format_policy.js",
+          "sha256": "b62e8d8f1282057a08b76f3e1bac3088ba86ec7a8d4f2bfbe9fa47079238cfb0",
+          "byteLength": 3300
+        },
+        {
+          "name": "format_aware_workbook.py",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_workbook.py",
+          "sha256": "9779db98892651ebc1f8e2fbbcb9ecd110293e1d14461977a250eaf9be5bca38",
+          "byteLength": 6453
+        }
+      ],
+      "authoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e"
+    },
+    "currentCompilerAuthority": {
+      "schemaVersion": 2,
+      "authority": "unified_provider_evaluator",
+      "files": [
+        {
+          "name": "evaluator_runner_authority.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_authority.js",
+          "sha256": "099cc52d489286caba706f00692e4fc8749fc66250d73c17e6bf57af82c33cca",
+          "byteLength": 2900
+        },
+        {
+          "name": "evaluator_runner_guard.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_guard.js",
+          "sha256": "4684c40a8287368f8f8ce86970fd969ec213464d8967aac4789af126b0ec7a7d",
+          "byteLength": 1472
+        },
+        {
+          "name": "run_evaluator_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_evaluator_campaign.js",
+          "sha256": "aadd58e94423047ade53c559749dcd523ed6e87ff663de37dc2105a5b39ae27a",
+          "byteLength": 19985
+        },
+        {
+          "name": "collect_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/collect_format_aware_evidence_v4.js",
+          "sha256": "a78e1a86d761235368629649264bfcc2560cc271d6544de84660471c63bcabe3",
+          "byteLength": 16027
+        },
+        {
+          "name": "resume_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/resume_format_aware_evidence_v4.js",
+          "sha256": "2af88f2d585f2d51ec8eb307a76b3eeb142ff855361217bd0a048d10d3c5dfee",
+          "byteLength": 22071
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "sha256": "6b23ed915230e762f0030da14e07f906b05751aa577215401a4af69238787cf5",
+          "byteLength": 39659
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "sha256": "884abb3a771ef5e4367d0378431cde1f50c12e7935aeb32eb37d464959f3b889",
+          "byteLength": 1875
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "sha256": "05f9561ab430dddc04f1f96ce527b1aab01a699660cfaa6f475bcffd431a27e8",
+          "byteLength": 29188
+        },
+        {
+          "name": "../provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "sha256": "ee15516dafbd7d0fb7ae2d26497ab782c4236d48d7527fe33ade5625a0025ed0",
+          "byteLength": 38534
+        },
+        {
+          "name": "verify_post_refetch_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/verify_post_refetch_campaign.js",
+          "sha256": "e8aecf08c467ca775c9a12872b9b356bbf3de89959bd9830f67efc74d5c84c7a",
+          "byteLength": 7545
+        },
+        {
+          "name": "run_atomic_evaluator.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_atomic_evaluator.js",
+          "sha256": "e81f052b932b0e40edf7d63f3ee158c644d59b0951352661cbd3bdad9d37446e",
+          "byteLength": 77362
+        },
+        {
+          "name": "run_bounded_synthesis.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_bounded_synthesis.js",
+          "sha256": "271f76dc73b359b906c98b7aab7058fa0ca5e2a6b39cfd24750f100d818788e3",
+          "byteLength": 61288
+        },
+        {
+          "name": "transport_error_trace.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/transport_error_trace.js",
+          "sha256": "6e8fcbb95ca9de185adfcda633b02f1d356c89ff656112c1f6c774f08a997459",
+          "byteLength": 824
+        },
+        {
+          "name": "manual_review_harness.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/manual_review_harness.js",
+          "sha256": "10d3047285bb13070d36298cf1c7fb6fb769599027436a02a0972de7330ab98d",
+          "byteLength": 25945
+        },
+        {
+          "name": "audit_identical_input_consistency.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/audit_identical_input_consistency.js",
+          "sha256": "a33ea9229203ebe5c7e7e8c2b653e50714280f9b7233c0d0a3c320a582e47c59",
+          "byteLength": 6527
+        },
+        {
+          "name": "evaluator_packet_planner.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_packet_planner.js",
+          "sha256": "94b61d22fc4733ce1f9010889f37b1f6c9aae6aa2c9585e4e1b57a8a11a216e2",
+          "byteLength": 29650
+        },
+        {
+          "name": "categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "sha256": "307f92d30c245aa1b8a0e9e05473aa5ae4e9a9673cd40fc02de965cbd0ed5a47",
+          "byteLength": 2257
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "sha256": "ad246f0b7f4a01c2efdb1e9dc884b285127bb75768567feb81bb945f736ce0b1",
+          "byteLength": 2193
+        },
+        {
+          "name": "compile_corrected_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/compile_corrected_campaign.js",
+          "sha256": "a47aa182f33e90e69ccc1aa67ff3a7c657f5f7ce17c94fd4bb7095e20c85bc35",
+          "byteLength": 118439
+        },
+        {
+          "name": "materialize_format_aware_packets_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/materialize_format_aware_packets_v4.js",
+          "sha256": "59128fc92b8c701b889e51ceb63169771dac6c4e6dbe4ad8f13b93be26d2a326",
+          "byteLength": 38922
+        },
+        {
+          "name": "format_aware_source_normalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_source_normalizer.js",
+          "sha256": "2f23bd6b35f3e828adf21b8f90e6cba100c5364f8ac768b71167a20ebe2f04e3",
+          "byteLength": 16504
+        },
+        {
+          "name": "source_format_policy.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/source_format_policy.js",
+          "sha256": "b62e8d8f1282057a08b76f3e1bac3088ba86ec7a8d4f2bfbe9fa47079238cfb0",
+          "byteLength": 3300
+        },
+        {
+          "name": "format_aware_workbook.py",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_workbook.py",
+          "sha256": "9779db98892651ebc1f8e2fbbcb9ecd110293e1d14461977a250eaf9be5bca38",
+          "byteLength": 6453
+        }
+      ],
+      "authoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e"
+    }
+  },
+  "frozenProtocolDescriptor": {
+    "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/CITATION_METADATA_PRIVACY_HOLDOUT_EVALUATOR_PROTOCOL.md",
+    "sha256": "542b80fe19e907af41a3ae9bc9bec66a3e4c624dd4aeed82990fe2b29d6910dd",
+    "byteLength": 2162
+  },
+  "providerCases": 60,
+  "cells": 120,
+  "strata": {
+    "automatic": 50,
+    "manual": 10,
+    "censored": 0
+  },
+  "promptMetrics": [
+    {
+      "armId": "BASELINE",
+      "name": "one-call item-local citation baseline",
+      "staticBytes": 18487,
+      "baselineArmId": "BASELINE",
+      "reductionVsBaselineFraction": 0,
+      "meetsMinimumReduction": null,
+      "components": {
+        "instructions": {
+          "utf8Bytes": 6574,
+          "characters": 6574,
+          "sha256": "0b9578ac27b29487e34d3400397c494a3a834b50162ce79aa95b18cd35f870da"
+        },
+        "schema": {
+          "utf8Bytes": 11706,
+          "characters": 11706,
+          "sha256": "48aba105b31e2ebbd6317ee1395f83171aeaaf4bf3ce31611640754b1dbbe813"
+        },
+        "userPrompt": {
+          "utf8Bytes": 207,
+          "characters": 207,
+          "sha256": "916a2af1a383b71a0ffc0682ba1c36650d67a7f611b4fd0716e2afbe9b71818e"
+        }
+      },
+      "snapshot": null
+    },
+    {
+      "armId": "CITATION_PRIVACY",
+      "name": "one-call hostname-derived citation metadata",
+      "staticBytes": 18143,
+      "baselineArmId": "BASELINE",
+      "reductionVsBaselineFraction": 0.01860767025477361,
+      "meetsMinimumReduction": false,
+      "components": {
+        "instructions": {
+          "utf8Bytes": 6675,
+          "characters": 6675,
+          "sha256": "b89bf3c74fd6b3170113e3914f7898213434119ad0c767d8edb8ebe53ec26c52"
+        },
+        "schema": {
+          "utf8Bytes": 11261,
+          "characters": 11261,
+          "sha256": "323e6b90aa182287656b4bc9cbba78f145a33250a32074f38a51422adc61851b"
+        },
+        "userPrompt": {
+          "utf8Bytes": 207,
+          "characters": 207,
+          "sha256": "916a2af1a383b71a0ffc0682ba1c36650d67a7f611b4fd0716e2afbe9b71818e"
+        }
+      },
+      "snapshot": null
+    }
+  ],
+  "promptSizeGate": {
+    "minimumReductionFraction": 0.5,
+    "byArm": {
+      "CITATION_PRIVACY": false
+    }
+  },
+  "categoricalCriteria": [
+    {
+      "id": "profile_returned",
+      "direction": "higher_is_better",
+      "source": "production"
+    },
+    {
+      "id": "professional_contact_returned",
+      "direction": "higher_is_better",
+      "source": "production"
+    },
+    {
+      "id": "critical_safety_finding",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "readable_material_support_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "own_citation_support_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "identity_attachment_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "inappropriate_withholding",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "lower_tier_source_selected",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "citation_span_or_contract_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    }
+  ],
+  "categoricalCounts": {
+    "automatic": {
+      "BASELINE": {
+        "profile_returned": {
+          "present": 50,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 43,
+          "absent": 7,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 7,
+          "absent": 43,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 10,
+          "absent": 40,
+          "unknown": 0
+        },
+        "own_citation_support_defect": {
+          "present": 4,
+          "absent": 16,
+          "unknown": 30
+        },
+        "identity_attachment_defect": {
+          "present": 6,
+          "absent": 44,
+          "unknown": 0
+        },
+        "inappropriate_withholding": {
+          "present": 12,
+          "absent": 30,
+          "unknown": 8
+        },
+        "lower_tier_source_selected": {
+          "present": 8,
+          "absent": 33,
+          "unknown": 9
+        },
+        "citation_span_or_contract_defect": {
+          "present": 38,
+          "absent": 12,
+          "unknown": 0
+        }
+      },
+      "CITATION_PRIVACY": {
+        "profile_returned": {
+          "present": 50,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 45,
+          "absent": 5,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 6,
+          "absent": 44,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 10,
+          "absent": 40,
+          "unknown": 0
+        },
+        "own_citation_support_defect": {
+          "present": 6,
+          "absent": 14,
+          "unknown": 30
+        },
+        "identity_attachment_defect": {
+          "present": 7,
+          "absent": 43,
+          "unknown": 0
+        },
+        "inappropriate_withholding": {
+          "present": 11,
+          "absent": 32,
+          "unknown": 7
+        },
+        "lower_tier_source_selected": {
+          "present": 9,
+          "absent": 32,
+          "unknown": 9
+        },
+        "citation_span_or_contract_defect": {
+          "present": 38,
+          "absent": 12,
+          "unknown": 0
+        }
+      }
+    },
+    "manual": {
+      "BASELINE": {
+        "profile_returned": {
+          "present": 10,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 9,
+          "absent": 1,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 0,
+          "absent": 10,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 3
+        },
+        "own_citation_support_defect": {
+          "present": 0,
+          "absent": 2,
+          "unknown": 8
+        },
+        "identity_attachment_defect": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 3
+        },
+        "inappropriate_withholding": {
+          "present": 4,
+          "absent": 5,
+          "unknown": 1
+        },
+        "lower_tier_source_selected": {
+          "present": 2,
+          "absent": 7,
+          "unknown": 1
+        },
+        "citation_span_or_contract_defect": {
+          "present": 6,
+          "absent": 3,
+          "unknown": 1
+        }
+      },
+      "CITATION_PRIVACY": {
+        "profile_returned": {
+          "present": 10,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 9,
+          "absent": 1,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 0,
+          "absent": 10,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 0,
+          "absent": 9,
+          "unknown": 1
+        },
+        "own_citation_support_defect": {
+          "present": 0,
+          "absent": 4,
+          "unknown": 6
+        },
+        "identity_attachment_defect": {
+          "present": 0,
+          "absent": 9,
+          "unknown": 1
+        },
+        "inappropriate_withholding": {
+          "present": 3,
+          "absent": 6,
+          "unknown": 1
+        },
+        "lower_tier_source_selected": {
+          "present": 0,
+          "absent": 8,
+          "unknown": 2
+        },
+        "citation_span_or_contract_defect": {
+          "present": 4,
+          "absent": 4,
+          "unknown": 2
+        }
+      }
+    }
+  },
+  "frozenProtocol": {
+    "schemaVersion": 1,
+    "protocol": "frozen_provider_prompt_minimization_evaluator_v1",
+    "datasetRole": "sealed_holdout",
+    "baselineArmId": "BASELINE",
+    "bootstrapIterations": 10000,
+    "noninferiorityMargin": -0.05,
+    "maximumAdditionalCaseDefects": 3,
+    "maximumParserSuccessLoss": 3,
+    "maximumUnreadabilityIncrease": 3,
+    "strataKeptSeparate": true,
+    "allAdjudicatedIsSecondary": true,
+    "candidates": {
+      "CITATION_PRIVACY": {
+        "automatic": {
+          "providerCases": 50,
+          "endpoints": [
+            {
+              "metric": "eligible_contact_survival",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 50,
+              "baselineRate": 0.78,
+              "candidateRate": 0.84,
+              "candidateMinusBaseline": 0.05999999999999994,
+              "lower95": -0.07999999999999996,
+              "upper95": 0.18000000000000005,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": false
+            },
+            {
+              "metric": "whole_packet_exact_material_support",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 50,
+              "baselineRate": 0.9176470588235294,
+              "candidateRate": 0.9206349206349206,
+              "candidateMinusBaseline": 0.0029878618113912125,
+              "lower95": -0.03815498799654969,
+              "upper95": 0.03916841869200794,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "readable_own_citation_exact_support",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 50,
+              "baselineRate": 0.9537037037037037,
+              "candidateRate": 0.9416666666666667,
+              "candidateMinusBaseline": -0.012037037037037068,
+              "lower95": -0.03406465431653171,
+              "upper95": 0.006809815386878437,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "exact_provider_identity_attachment",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 50,
+              "baselineRate": 0.9588235294117647,
+              "candidateRate": 0.9470899470899471,
+              "candidateMinusBaseline": -0.011733582321817648,
+              "lower95": -0.04556220556404377,
+              "upper95": 0.022676114963558088,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            }
+          ],
+          "issueComparisons": {
+            "inappropriate_withholding": {
+              "baselineCases": [
+                "H009",
+                "H021",
+                "H022",
+                "H027",
+                "H028",
+                "H034",
+                "H035",
+                "H051",
+                "H052",
+                "H053",
+                "H054",
+                "H058"
+              ],
+              "candidateCases": [
+                "H009",
+                "H018",
+                "H023",
+                "H041",
+                "H045",
+                "H046",
+                "H049",
+                "H051",
+                "H052",
+                "H056",
+                "H058"
+              ],
+              "newCandidateCases": [
+                "H018",
+                "H023",
+                "H041",
+                "H045",
+                "H046",
+                "H049",
+                "H056"
+              ],
+              "resolvedBaselineCases": [
+                "H021",
+                "H022",
+                "H027",
+                "H028",
+                "H034",
+                "H035",
+                "H053",
+                "H054"
+              ],
+              "countDifference": -1,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "lower_tier_selection": {
+              "baselineCases": [
+                "H007",
+                "H010",
+                "H027",
+                "H048",
+                "H049",
+                "H051",
+                "H055",
+                "H057"
+              ],
+              "candidateCases": [
+                "H005",
+                "H007",
+                "H009",
+                "H015",
+                "H030",
+                "H044",
+                "H051",
+                "H054",
+                "H057"
+              ],
+              "newCandidateCases": [
+                "H005",
+                "H009",
+                "H015",
+                "H030",
+                "H044",
+                "H054"
+              ],
+              "resolvedBaselineCases": [
+                "H010",
+                "H027",
+                "H048",
+                "H049",
+                "H055"
+              ],
+              "countDifference": 1,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "span_defect": {
+              "baselineCases": [
+                "H005",
+                "H016",
+                "H029",
+                "H045",
+                "H048",
+                "H055"
+              ],
+              "candidateCases": [
+                "H005",
+                "H017",
+                "H045",
+                "H057"
+              ],
+              "newCandidateCases": [
+                "H017",
+                "H057"
+              ],
+              "resolvedBaselineCases": [
+                "H016",
+                "H029",
+                "H048",
+                "H055"
+              ],
+              "countDifference": -2,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            }
+          },
+          "safety": {
+            "wrong_provider": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                }
+              ],
+              "passes": false
+            },
+            "unsupported_material": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H009",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(305) 585-5455"
+                },
+                {
+                  "caseId": "H027",
+                  "claimId": "claim:p0:website:0",
+                  "fieldType": "website",
+                  "value": "https://www.mhsystem.org/our-providers/miller-angela-np/"
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:address:0",
+                  "fieldType": "address",
+                  "value": {
+                    "addressLine1": "406 N Whitney Ave",
+                    "addressLine2": "Ste 3",
+                    "city": "Cookeville",
+                    "state": "TN",
+                    "zip": "38501"
+                  }
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(931) 783-4901"
+                },
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                },
+                {
+                  "caseId": "H054",
+                  "claimId": "claim:p0:website:0",
+                  "fieldType": "website",
+                  "value": "https://med.uth.edu/txcleft/profile/stephanie-j-white-ma-ccc-slp/"
+                }
+              ],
+              "passes": false
+            },
+            "unsafe_contact": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "contradicted": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H009",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(305) 585-5455"
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:address:0",
+                  "fieldType": "address",
+                  "value": {
+                    "addressLine1": "406 N Whitney Ave",
+                    "addressLine2": "Ste 3",
+                    "city": "Cookeville",
+                    "state": "TN",
+                    "zip": "38501"
+                  }
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(931) 783-4901"
+                },
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                }
+              ],
+              "passes": false
+            },
+            "cross_npi_misattribution": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                }
+              ],
+              "passes": false
+            }
+          },
+          "parserGate": {
+            "baselineSuccesses": 50,
+            "candidateSuccesses": 50,
+            "difference": 0,
+            "minimumDifference": -3,
+            "passes": true
+          },
+          "unreadabilityGate": {
+            "baselineCases": [
+              "H001",
+              "H008",
+              "H009",
+              "H010",
+              "H011",
+              "H013",
+              "H014",
+              "H020",
+              "H022",
+              "H023",
+              "H025",
+              "H028",
+              "H029",
+              "H030",
+              "H032",
+              "H033",
+              "H034",
+              "H035",
+              "H039",
+              "H040",
+              "H043",
+              "H044",
+              "H046",
+              "H047",
+              "H048",
+              "H049",
+              "H053",
+              "H054",
+              "H055",
+              "H056",
+              "H057",
+              "H058"
+            ],
+            "candidateCases": [
+              "H008",
+              "H009",
+              "H010",
+              "H011",
+              "H014",
+              "H016",
+              "H019",
+              "H020",
+              "H022",
+              "H023",
+              "H025",
+              "H027",
+              "H029",
+              "H030",
+              "H032",
+              "H033",
+              "H034",
+              "H035",
+              "H037",
+              "H039",
+              "H040",
+              "H043",
+              "H044",
+              "H046",
+              "H047",
+              "H049",
+              "H052",
+              "H053",
+              "H054",
+              "H055",
+              "H056",
+              "H057",
+              "H058"
+            ],
+            "newCandidateCases": [
+              "H016",
+              "H019",
+              "H027",
+              "H037",
+              "H052"
+            ],
+            "countDifference": 1,
+            "maximumAdditionalCases": 3,
+            "passes": true
+          },
+          "gates": {
+            "endpointNoninferiority": false,
+            "issueCaseLimits": true,
+            "safety": false,
+            "parser": true,
+            "unreadability": true
+          },
+          "allSpecifiedConditionsHold": false
+        },
+        "manual": {
+          "providerCases": 10,
+          "endpoints": [
+            {
+              "metric": "eligible_contact_survival",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 10,
+              "baselineRate": 0.9,
+              "candidateRate": 0.9,
+              "candidateMinusBaseline": 0,
+              "lower95": -0.30000000000000004,
+              "upper95": 0.30000000000000004,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": false
+            },
+            {
+              "metric": "whole_packet_exact_material_support",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 10,
+              "baselineRate": 1,
+              "candidateRate": 1,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "readable_own_citation_exact_support",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 10,
+              "baselineRate": 1,
+              "candidateRate": 1,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 9885,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "exact_provider_identity_attachment",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 10,
+              "baselineRate": 1,
+              "candidateRate": 1,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            }
+          ],
+          "issueComparisons": {
+            "inappropriate_withholding": {
+              "baselineCases": [
+                "H003",
+                "H004",
+                "H031",
+                "H042"
+              ],
+              "candidateCases": [
+                "H002",
+                "H031",
+                "H042"
+              ],
+              "newCandidateCases": [
+                "H002"
+              ],
+              "resolvedBaselineCases": [
+                "H003",
+                "H004"
+              ],
+              "countDifference": -1,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "lower_tier_selection": {
+              "baselineCases": [
+                "H003",
+                "H004"
+              ],
+              "candidateCases": [],
+              "newCandidateCases": [],
+              "resolvedBaselineCases": [
+                "H003",
+                "H004"
+              ],
+              "countDifference": -2,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "span_defect": {
+              "baselineCases": [],
+              "candidateCases": [],
+              "newCandidateCases": [],
+              "resolvedBaselineCases": [],
+              "countDifference": 0,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            }
+          },
+          "safety": {
+            "wrong_provider": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsupported_material": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsafe_contact": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "contradicted": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "cross_npi_misattribution": {
+              "newCandidateClaims": [],
+              "passes": true
+            }
+          },
+          "parserGate": {
+            "baselineSuccesses": 10,
+            "candidateSuccesses": 10,
+            "difference": 0,
+            "minimumDifference": -3,
+            "passes": true
+          },
+          "unreadabilityGate": {
+            "baselineCases": [
+              "H002",
+              "H003",
+              "H004",
+              "H012",
+              "H024",
+              "H036",
+              "H042",
+              "H059"
+            ],
+            "candidateCases": [
+              "H002",
+              "H012",
+              "H024",
+              "H036",
+              "H042",
+              "H059"
+            ],
+            "newCandidateCases": [],
+            "countDifference": -2,
+            "maximumAdditionalCases": 3,
+            "passes": true
+          },
+          "gates": {
+            "endpointNoninferiority": false,
+            "issueCaseLimits": true,
+            "safety": true,
+            "parser": true,
+            "unreadability": true
+          },
+          "allSpecifiedConditionsHold": false
+        },
+        "all_adjudicated_secondary": {
+          "providerCases": 60,
+          "endpoints": [
+            {
+              "metric": "eligible_contact_survival",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.8,
+              "candidateRate": 0.85,
+              "candidateMinusBaseline": 0.04999999999999993,
+              "lower95": -0.06666666666666665,
+              "upper95": 0.16666666666666674,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": false
+            },
+            {
+              "metric": "whole_packet_exact_material_support",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.9306930693069307,
+              "candidateRate": 0.9318181818181818,
+              "candidateMinusBaseline": 0.0011251125112510252,
+              "lower95": -0.03305867693839391,
+              "upper95": 0.03270560849784587,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "readable_own_citation_exact_support",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.9596774193548387,
+              "candidateRate": 0.9485294117647058,
+              "candidateMinusBaseline": -0.011148007590132902,
+              "lower95": -0.030621957676825264,
+              "upper95": 0.005637194622069196,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "exact_provider_identity_attachment",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.9653465346534653,
+              "candidateRate": 0.9545454545454546,
+              "candidateMinusBaseline": -0.01080108010801073,
+              "lower95": -0.04025146838086535,
+              "upper95": 0.019201661456167925,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            }
+          ],
+          "issueComparisons": {
+            "inappropriate_withholding": {
+              "baselineCases": [
+                "H003",
+                "H004",
+                "H009",
+                "H021",
+                "H022",
+                "H027",
+                "H028",
+                "H031",
+                "H034",
+                "H035",
+                "H042",
+                "H051",
+                "H052",
+                "H053",
+                "H054",
+                "H058"
+              ],
+              "candidateCases": [
+                "H002",
+                "H009",
+                "H018",
+                "H023",
+                "H031",
+                "H041",
+                "H042",
+                "H045",
+                "H046",
+                "H049",
+                "H051",
+                "H052",
+                "H056",
+                "H058"
+              ],
+              "newCandidateCases": [
+                "H002",
+                "H018",
+                "H023",
+                "H041",
+                "H045",
+                "H046",
+                "H049",
+                "H056"
+              ],
+              "resolvedBaselineCases": [
+                "H003",
+                "H004",
+                "H021",
+                "H022",
+                "H027",
+                "H028",
+                "H034",
+                "H035",
+                "H053",
+                "H054"
+              ],
+              "countDifference": -2,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "lower_tier_selection": {
+              "baselineCases": [
+                "H003",
+                "H004",
+                "H007",
+                "H010",
+                "H027",
+                "H048",
+                "H049",
+                "H051",
+                "H055",
+                "H057"
+              ],
+              "candidateCases": [
+                "H005",
+                "H007",
+                "H009",
+                "H015",
+                "H030",
+                "H044",
+                "H051",
+                "H054",
+                "H057"
+              ],
+              "newCandidateCases": [
+                "H005",
+                "H009",
+                "H015",
+                "H030",
+                "H044",
+                "H054"
+              ],
+              "resolvedBaselineCases": [
+                "H003",
+                "H004",
+                "H010",
+                "H027",
+                "H048",
+                "H049",
+                "H055"
+              ],
+              "countDifference": -1,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "span_defect": {
+              "baselineCases": [
+                "H005",
+                "H016",
+                "H029",
+                "H045",
+                "H048",
+                "H055"
+              ],
+              "candidateCases": [
+                "H005",
+                "H017",
+                "H045",
+                "H057"
+              ],
+              "newCandidateCases": [
+                "H017",
+                "H057"
+              ],
+              "resolvedBaselineCases": [
+                "H016",
+                "H029",
+                "H048",
+                "H055"
+              ],
+              "countDifference": -2,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            }
+          },
+          "safety": {
+            "wrong_provider": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                }
+              ],
+              "passes": false
+            },
+            "unsupported_material": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H009",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(305) 585-5455"
+                },
+                {
+                  "caseId": "H027",
+                  "claimId": "claim:p0:website:0",
+                  "fieldType": "website",
+                  "value": "https://www.mhsystem.org/our-providers/miller-angela-np/"
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:address:0",
+                  "fieldType": "address",
+                  "value": {
+                    "addressLine1": "406 N Whitney Ave",
+                    "addressLine2": "Ste 3",
+                    "city": "Cookeville",
+                    "state": "TN",
+                    "zip": "38501"
+                  }
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(931) 783-4901"
+                },
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                },
+                {
+                  "caseId": "H054",
+                  "claimId": "claim:p0:website:0",
+                  "fieldType": "website",
+                  "value": "https://med.uth.edu/txcleft/profile/stephanie-j-white-ma-ccc-slp/"
+                }
+              ],
+              "passes": false
+            },
+            "unsafe_contact": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "contradicted": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H009",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(305) 585-5455"
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:address:0",
+                  "fieldType": "address",
+                  "value": {
+                    "addressLine1": "406 N Whitney Ave",
+                    "addressLine2": "Ste 3",
+                    "city": "Cookeville",
+                    "state": "TN",
+                    "zip": "38501"
+                  }
+                },
+                {
+                  "caseId": "H044",
+                  "claimId": "claim:p0:phone:0",
+                  "fieldType": "phone",
+                  "value": "(931) 783-4901"
+                },
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                }
+              ],
+              "passes": false
+            },
+            "cross_npi_misattribution": {
+              "newCandidateClaims": [
+                {
+                  "caseId": "H053",
+                  "claimId": "claim:p0:phone:1",
+                  "fieldType": "phone",
+                  "value": "713-704-1704"
+                }
+              ],
+              "passes": false
+            }
+          },
+          "parserGate": {
+            "baselineSuccesses": 60,
+            "candidateSuccesses": 60,
+            "difference": 0,
+            "minimumDifference": -3,
+            "passes": true
+          },
+          "unreadabilityGate": {
+            "baselineCases": [
+              "H001",
+              "H002",
+              "H003",
+              "H004",
+              "H008",
+              "H009",
+              "H010",
+              "H011",
+              "H012",
+              "H013",
+              "H014",
+              "H020",
+              "H022",
+              "H023",
+              "H024",
+              "H025",
+              "H028",
+              "H029",
+              "H030",
+              "H032",
+              "H033",
+              "H034",
+              "H035",
+              "H036",
+              "H039",
+              "H040",
+              "H042",
+              "H043",
+              "H044",
+              "H046",
+              "H047",
+              "H048",
+              "H049",
+              "H053",
+              "H054",
+              "H055",
+              "H056",
+              "H057",
+              "H058",
+              "H059"
+            ],
+            "candidateCases": [
+              "H002",
+              "H008",
+              "H009",
+              "H010",
+              "H011",
+              "H012",
+              "H014",
+              "H016",
+              "H019",
+              "H020",
+              "H022",
+              "H023",
+              "H024",
+              "H025",
+              "H027",
+              "H029",
+              "H030",
+              "H032",
+              "H033",
+              "H034",
+              "H035",
+              "H036",
+              "H037",
+              "H039",
+              "H040",
+              "H042",
+              "H043",
+              "H044",
+              "H046",
+              "H047",
+              "H049",
+              "H052",
+              "H053",
+              "H054",
+              "H055",
+              "H056",
+              "H057",
+              "H058",
+              "H059"
+            ],
+            "newCandidateCases": [
+              "H016",
+              "H019",
+              "H027",
+              "H037",
+              "H052"
+            ],
+            "countDifference": -1,
+            "maximumAdditionalCases": 3,
+            "passes": true
+          },
+          "gates": {
+            "endpointNoninferiority": false,
+            "issueCaseLimits": true,
+            "safety": false,
+            "parser": true,
+            "unreadability": true
+          },
+          "allSpecifiedConditionsHold": false
+        }
+      }
+    }
+  },
+  "operations": {
+    "production": {
+      "BASELINE": {
+        "completeCostUsd": {
+          "n": 60,
+          "total": 6.333970500000001,
+          "minimum": 0.063992,
+          "mean": 0.10556617500000003,
+          "median": 0.10084825,
+          "p90": 0.13448725,
+          "p95": 0.13850199999999996,
+          "maximum": 0.1630445
+        },
+        "knownCostUsd": {
+          "n": 60,
+          "total": 6.333970500000001,
+          "minimum": 0.063992,
+          "mean": 0.10556617500000003,
+          "median": 0.10084825,
+          "p90": 0.13448725,
+          "p95": 0.13850199999999996,
+          "maximum": 0.1630445
+        },
+        "unknownCostAttempts": 0,
+        "costIncompleteCases": [],
+        "latencyMs": {
+          "n": 60,
+          "total": 799976,
+          "minimum": 7582,
+          "mean": 13332.933333333332,
+          "median": 11510.5,
+          "p90": 18380.9,
+          "p95": 20431.999999999993,
+          "maximum": 53801
+        },
+        "totalHttpSends": 60,
+        "knownWebSearchCalls": 198,
+        "unknownWebSearchAttempts": 0
+      },
+      "CITATION_PRIVACY": {
+        "completeCostUsd": {
+          "n": 60,
+          "total": 6.128398,
+          "minimum": 0.0606845,
+          "mean": 0.10213996666666667,
+          "median": 0.10125624999999999,
+          "p90": 0.12754075,
+          "p95": 0.140109125,
+          "maximum": 0.1559195
+        },
+        "knownCostUsd": {
+          "n": 60,
+          "total": 6.128398,
+          "minimum": 0.0606845,
+          "mean": 0.10213996666666667,
+          "median": 0.10125624999999999,
+          "p90": 0.12754075,
+          "p95": 0.140109125,
+          "maximum": 0.1559195
+        },
+        "unknownCostAttempts": 0,
+        "costIncompleteCases": [],
+        "latencyMs": {
+          "n": 60,
+          "total": 732326,
+          "minimum": 6330,
+          "mean": 12205.433333333332,
+          "median": 11157,
+          "p90": 17989.5,
+          "p95": 19550.34999999999,
+          "maximum": 25677
+        },
+        "totalHttpSends": 60,
+        "knownWebSearchCalls": 190,
+        "unknownWebSearchAttempts": 0
+      }
+    },
+    "evaluator": {
+      "BASELINE": {
+        "apiByStage": {
+          "atomic": {
+            "calls": 411,
+            "costUsd": {
+              "n": 411,
+              "total": 108.698405,
+              "minimum": 0.029485,
+              "mean": 0.26447300486618003,
+              "median": 0.280965,
+              "p90": 0.42782,
+              "p95": 0.45291,
+              "maximum": 0.526525
+            },
+            "knownCostUsd": {
+              "n": 411,
+              "total": 108.698405,
+              "minimum": 0.029485,
+              "mean": 0.26447300486618003,
+              "median": 0.280965,
+              "p90": 0.42782,
+              "p95": 0.45291,
+              "maximum": 0.526525
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 411,
+              "total": 32342621,
+              "minimum": 9907,
+              "mean": 78692.50851581509,
+              "median": 85782,
+              "p90": 124848,
+              "p95": 132488,
+              "maximum": 391399
+            },
+            "statuses": {
+              "completed": 411
+            }
+          },
+          "synthesis": {
+            "calls": 52,
+            "costUsd": {
+              "n": 52,
+              "total": 26.727356999999998,
+              "minimum": 0.275029,
+              "mean": 0.5139876346153845,
+              "median": 0.5010600000000001,
+              "p90": 0.650985,
+              "p95": 0.69620045,
+              "maximum": 1.026769
+            },
+            "knownCostUsd": {
+              "n": 52,
+              "total": 26.727356999999998,
+              "minimum": 0.275029,
+              "mean": 0.5139876346153845,
+              "median": 0.5010600000000001,
+              "p90": 0.650985,
+              "p95": 0.69620045,
+              "maximum": 1.026769
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 52,
+              "total": 5764658,
+              "minimum": 82754,
+              "mean": 110858.80769230769,
+              "median": 109796,
+              "p90": 139025,
+              "p95": 142976,
+              "maximum": 149370
+            },
+            "statuses": {
+              "completed": 52
+            }
+          }
+        },
+        "apiByFinalStratum": {
+          "automatic": {
+            "calls": 445,
+            "costUsd": {
+              "n": 445,
+              "total": 130.242574,
+              "minimum": 0.029485,
+              "mean": 0.2926799415730337,
+              "median": 0.31428,
+              "p90": 0.4640784,
+              "p95": 0.5262098,
+              "maximum": 1.026769
+            },
+            "knownCostUsd": {
+              "n": 445,
+              "total": 130.242574,
+              "minimum": 0.029485,
+              "mean": 0.2926799415730337,
+              "median": 0.31428,
+              "p90": 0.4640784,
+              "p95": 0.5262098,
+              "maximum": 1.026769
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 445,
+              "total": 36445011,
+              "minimum": 9907,
+              "mean": 81898.90112359551,
+              "median": 90894,
+              "p90": 125959.8,
+              "p95": 133328.19999999998,
+              "maximum": 378813
+            },
+            "statuses": {
+              "completed": 445
+            }
+          },
+          "manual": {
+            "calls": 18,
+            "costUsd": {
+              "n": 18,
+              "total": 5.183187999999999,
+              "minimum": 0.134965,
+              "mean": 0.2879548888888888,
+              "median": 0.2651175,
+              "p90": 0.48905970000000004,
+              "p95": 0.553819,
+              "maximum": 0.557644
+            },
+            "knownCostUsd": {
+              "n": 18,
+              "total": 5.183187999999999,
+              "minimum": 0.134965,
+              "mean": 0.2879548888888888,
+              "median": 0.2651175,
+              "p90": 0.48905970000000004,
+              "p95": 0.553819,
+              "maximum": 0.557644
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 18,
+              "total": 1662268,
+              "minimum": 34237,
+              "mean": 92348.22222222222,
+              "median": 75896,
+              "p90": 129502.50000000001,
+              "p95": 177250.84999999963,
+              "maximum": 391399
+            },
+            "statuses": {
+              "completed": 18
+            }
+          },
+          "censored": {
+            "calls": 0,
+            "costUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "knownCostUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "statuses": {}
+          }
+        },
+        "totalEvaluatorApiCostUsd": 135.4257619999999,
+        "knownEvaluatorApiCostUsd": 135.4257619999999,
+        "unknownCostOperations": 0,
+        "unknownCostAttempts": 0,
+        "manualReviewDurationMs": {
+          "n": 10,
+          "total": 5613312,
+          "minimum": 0,
+          "mean": 561331.2,
+          "median": 53319.5,
+          "p90": 1800000,
+          "p95": 1800000,
+          "maximum": 1800000
+        },
+        "manualReviewCostUsd": "not_reported_by_manual_seal"
+      },
+      "CITATION_PRIVACY": {
+        "apiByStage": {
+          "atomic": {
+            "calls": 461,
+            "costUsd": {
+              "n": 461,
+              "total": 117.24904000000004,
+              "minimum": 0.035095,
+              "mean": 0.2543363123644252,
+              "median": 0.26778,
+              "p90": 0.41488,
+              "p95": 0.43265,
+              "maximum": 0.5251
+            },
+            "knownCostUsd": {
+              "n": 461,
+              "total": 117.24904000000004,
+              "minimum": 0.035095,
+              "mean": 0.2543363123644252,
+              "median": 0.26778,
+              "p90": 0.41488,
+              "p95": 0.43265,
+              "maximum": 0.5251
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 461,
+              "total": 33084546,
+              "minimum": 11957,
+              "mean": 71766.91106290673,
+              "median": 63039,
+              "p90": 120297,
+              "p95": 129158,
+              "maximum": 376466
+            },
+            "statuses": {
+              "completed": 461
+            }
+          },
+          "synthesis": {
+            "calls": 52,
+            "costUsd": {
+              "n": 52,
+              "total": 27.355291000000005,
+              "minimum": 0.325639,
+              "mean": 0.5260632884615386,
+              "median": 0.5092145,
+              "p90": 0.6859483999999999,
+              "p95": 0.7571037499999999,
+              "maximum": 0.922409
+            },
+            "knownCostUsd": {
+              "n": 52,
+              "total": 27.355291000000005,
+              "minimum": 0.325639,
+              "mean": 0.5260632884615386,
+              "median": 0.5092145,
+              "p90": 0.6859483999999999,
+              "p95": 0.7571037499999999,
+              "maximum": 0.922409
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 52,
+              "total": 5803427,
+              "minimum": 82047,
+              "mean": 111604.36538461539,
+              "median": 111712,
+              "p90": 132646.6,
+              "p95": 140109.4,
+              "maximum": 158450
+            },
+            "statuses": {
+              "completed": 52
+            }
+          }
+        },
+        "apiByFinalStratum": {
+          "automatic": {
+            "calls": 495,
+            "costUsd": {
+              "n": 495,
+              "total": 139.6746480000001,
+              "minimum": 0.035095,
+              "mean": 0.28217100606060624,
+              "median": 0.293175,
+              "p90": 0.44720040000000005,
+              "p95": 0.5145802999999998,
+              "maximum": 0.922409
+            },
+            "knownCostUsd": {
+              "n": 495,
+              "total": 139.6746480000001,
+              "minimum": 0.035095,
+              "mean": 0.28217100606060624,
+              "median": 0.293175,
+              "p90": 0.44720040000000005,
+              "p95": 0.5145802999999998,
+              "maximum": 0.922409
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 495,
+              "total": 37038466,
+              "minimum": 11957,
+              "mean": 74825.18383838383,
+              "median": 81031,
+              "p90": 121970.6,
+              "p95": 130416.29999999994,
+              "maximum": 159768
+            },
+            "statuses": {
+              "completed": 495
+            }
+          },
+          "manual": {
+            "calls": 18,
+            "costUsd": {
+              "n": 18,
+              "total": 4.929683000000001,
+              "minimum": 0.08393,
+              "mean": 0.2738712777777778,
+              "median": 0.268133,
+              "p90": 0.4340998,
+              "p95": 0.4623195999999998,
+              "maximum": 0.586984
+            },
+            "knownCostUsd": {
+              "n": 18,
+              "total": 4.929683000000001,
+              "minimum": 0.08393,
+              "mean": 0.2738712777777778,
+              "median": 0.268133,
+              "p90": 0.4340998,
+              "p95": 0.4623195999999998,
+              "maximum": 0.586984
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 18,
+              "total": 1849507,
+              "minimum": 23744,
+              "mean": 102750.38888888889,
+              "median": 82992.5,
+              "p90": 187042.80000000016,
+              "p95": 353666.44999999995,
+              "maximum": 376466
+            },
+            "statuses": {
+              "completed": 18
+            }
+          },
+          "censored": {
+            "calls": 0,
+            "costUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "knownCostUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "statuses": {}
+          }
+        },
+        "totalEvaluatorApiCostUsd": 144.6043310000001,
+        "knownEvaluatorApiCostUsd": 144.6043310000001,
+        "unknownCostOperations": 0,
+        "unknownCostAttempts": 0,
+        "manualReviewDurationMs": {
+          "n": 10,
+          "total": 5614859,
+          "minimum": 0,
+          "mean": 561485.9,
+          "median": 53832,
+          "p90": 1800000,
+          "p95": 1800000,
+          "maximum": 1800000
+        },
+        "manualReviewCostUsd": "not_reported_by_manual_seal"
+      }
+    }
+  },
+  "bootstrap": {
+    "iterations": 10000,
+    "seed": "citation-metadata-privacy-holdout-full-v1-evaluator-v1",
+    "confidence": 0.95,
+    "unit": "provider",
+    "estimand": "paired_left_minus_right_event_rate",
+    "allAdjudicatedIsSecondary": true
+  },
+  "noAggregateScore": true,
+  "inputManifestSealSha256": "762d974d1d8d65ba6daebdec1836836572d99ba0a05be20c7a3aa631de99c21d"
+}

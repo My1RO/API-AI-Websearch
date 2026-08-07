@@ -1,0 +1,1986 @@
+{
+  "schemaVersion": 1,
+  "campaignId": "citation-metadata-privacy-development-full-v1-evaluator-v1",
+  "datasetRole": "development",
+  "baselineArmId": "BASELINE",
+  "arms": [
+    "BASELINE",
+    "CITATION_PRIVACY"
+  ],
+  "authorityProvenance": {
+    "schemaVersion": 1,
+    "mode": "identical_sealed_and_current_authority",
+    "sourceEvaluatorAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "currentCompilerAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "expectedSourceAuthoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e",
+    "sealedPathDescriptorCount": 23,
+    "transitionedFiles": [],
+    "sourceEvaluatorAuthority": {
+      "schemaVersion": 2,
+      "authority": "unified_provider_evaluator",
+      "files": [
+        {
+          "name": "evaluator_runner_authority.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_authority.js",
+          "sha256": "099cc52d489286caba706f00692e4fc8749fc66250d73c17e6bf57af82c33cca",
+          "byteLength": 2900
+        },
+        {
+          "name": "evaluator_runner_guard.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_guard.js",
+          "sha256": "4684c40a8287368f8f8ce86970fd969ec213464d8967aac4789af126b0ec7a7d",
+          "byteLength": 1472
+        },
+        {
+          "name": "run_evaluator_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_evaluator_campaign.js",
+          "sha256": "aadd58e94423047ade53c559749dcd523ed6e87ff663de37dc2105a5b39ae27a",
+          "byteLength": 19985
+        },
+        {
+          "name": "collect_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/collect_format_aware_evidence_v4.js",
+          "sha256": "a78e1a86d761235368629649264bfcc2560cc271d6544de84660471c63bcabe3",
+          "byteLength": 16027
+        },
+        {
+          "name": "resume_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/resume_format_aware_evidence_v4.js",
+          "sha256": "2af88f2d585f2d51ec8eb307a76b3eeb142ff855361217bd0a048d10d3c5dfee",
+          "byteLength": 22071
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "sha256": "6b23ed915230e762f0030da14e07f906b05751aa577215401a4af69238787cf5",
+          "byteLength": 39659
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "sha256": "884abb3a771ef5e4367d0378431cde1f50c12e7935aeb32eb37d464959f3b889",
+          "byteLength": 1875
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "sha256": "05f9561ab430dddc04f1f96ce527b1aab01a699660cfaa6f475bcffd431a27e8",
+          "byteLength": 29188
+        },
+        {
+          "name": "../provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "sha256": "ee15516dafbd7d0fb7ae2d26497ab782c4236d48d7527fe33ade5625a0025ed0",
+          "byteLength": 38534
+        },
+        {
+          "name": "verify_post_refetch_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/verify_post_refetch_campaign.js",
+          "sha256": "e8aecf08c467ca775c9a12872b9b356bbf3de89959bd9830f67efc74d5c84c7a",
+          "byteLength": 7545
+        },
+        {
+          "name": "run_atomic_evaluator.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_atomic_evaluator.js",
+          "sha256": "e81f052b932b0e40edf7d63f3ee158c644d59b0951352661cbd3bdad9d37446e",
+          "byteLength": 77362
+        },
+        {
+          "name": "run_bounded_synthesis.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_bounded_synthesis.js",
+          "sha256": "271f76dc73b359b906c98b7aab7058fa0ca5e2a6b39cfd24750f100d818788e3",
+          "byteLength": 61288
+        },
+        {
+          "name": "transport_error_trace.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/transport_error_trace.js",
+          "sha256": "6e8fcbb95ca9de185adfcda633b02f1d356c89ff656112c1f6c774f08a997459",
+          "byteLength": 824
+        },
+        {
+          "name": "manual_review_harness.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/manual_review_harness.js",
+          "sha256": "10d3047285bb13070d36298cf1c7fb6fb769599027436a02a0972de7330ab98d",
+          "byteLength": 25945
+        },
+        {
+          "name": "audit_identical_input_consistency.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/audit_identical_input_consistency.js",
+          "sha256": "a33ea9229203ebe5c7e7e8c2b653e50714280f9b7233c0d0a3c320a582e47c59",
+          "byteLength": 6527
+        },
+        {
+          "name": "evaluator_packet_planner.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_packet_planner.js",
+          "sha256": "94b61d22fc4733ce1f9010889f37b1f6c9aae6aa2c9585e4e1b57a8a11a216e2",
+          "byteLength": 29650
+        },
+        {
+          "name": "categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "sha256": "307f92d30c245aa1b8a0e9e05473aa5ae4e9a9673cd40fc02de965cbd0ed5a47",
+          "byteLength": 2257
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "sha256": "ad246f0b7f4a01c2efdb1e9dc884b285127bb75768567feb81bb945f736ce0b1",
+          "byteLength": 2193
+        },
+        {
+          "name": "compile_corrected_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/compile_corrected_campaign.js",
+          "sha256": "a47aa182f33e90e69ccc1aa67ff3a7c657f5f7ce17c94fd4bb7095e20c85bc35",
+          "byteLength": 118439
+        },
+        {
+          "name": "materialize_format_aware_packets_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/materialize_format_aware_packets_v4.js",
+          "sha256": "59128fc92b8c701b889e51ceb63169771dac6c4e6dbe4ad8f13b93be26d2a326",
+          "byteLength": 38922
+        },
+        {
+          "name": "format_aware_source_normalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_source_normalizer.js",
+          "sha256": "2f23bd6b35f3e828adf21b8f90e6cba100c5364f8ac768b71167a20ebe2f04e3",
+          "byteLength": 16504
+        },
+        {
+          "name": "source_format_policy.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/source_format_policy.js",
+          "sha256": "b62e8d8f1282057a08b76f3e1bac3088ba86ec7a8d4f2bfbe9fa47079238cfb0",
+          "byteLength": 3300
+        },
+        {
+          "name": "format_aware_workbook.py",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_workbook.py",
+          "sha256": "9779db98892651ebc1f8e2fbbcb9ecd110293e1d14461977a250eaf9be5bca38",
+          "byteLength": 6453
+        }
+      ],
+      "authoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e"
+    },
+    "currentCompilerAuthority": {
+      "schemaVersion": 2,
+      "authority": "unified_provider_evaluator",
+      "files": [
+        {
+          "name": "evaluator_runner_authority.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_authority.js",
+          "sha256": "099cc52d489286caba706f00692e4fc8749fc66250d73c17e6bf57af82c33cca",
+          "byteLength": 2900
+        },
+        {
+          "name": "evaluator_runner_guard.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_runner_guard.js",
+          "sha256": "4684c40a8287368f8f8ce86970fd969ec213464d8967aac4789af126b0ec7a7d",
+          "byteLength": 1472
+        },
+        {
+          "name": "run_evaluator_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_evaluator_campaign.js",
+          "sha256": "aadd58e94423047ade53c559749dcd523ed6e87ff663de37dc2105a5b39ae27a",
+          "byteLength": 19985
+        },
+        {
+          "name": "collect_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/collect_format_aware_evidence_v4.js",
+          "sha256": "a78e1a86d761235368629649264bfcc2560cc271d6544de84660471c63bcabe3",
+          "byteLength": 16027
+        },
+        {
+          "name": "resume_format_aware_evidence_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/resume_format_aware_evidence_v4.js",
+          "sha256": "2af88f2d585f2d51ec8eb307a76b3eeb142ff855361217bd0a048d10d3c5dfee",
+          "byteLength": 22071
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/collect_d_evidence_v7.js",
+          "sha256": "6b23ed915230e762f0030da14e07f906b05751aa577215401a4af69238787cf5",
+          "byteLength": 39659
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/generated/public_url_canonicalizer.js",
+          "sha256": "884abb3a771ef5e4367d0378431cde1f50c12e7935aeb32eb37d464959f3b889",
+          "byteLength": 1875
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/scripts/d_synthesis_protocol.js",
+          "sha256": "05f9561ab430dddc04f1f96ce527b1aab01a699660cfaa6f475bcffd431a27e8",
+          "byteLength": 29188
+        },
+        {
+          "name": "../provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-final-experiment-2026-07-30/scripts/full_source_ingestion_v6.js",
+          "sha256": "ee15516dafbd7d0fb7ae2d26497ab782c4236d48d7527fe33ade5625a0025ed0",
+          "byteLength": 38534
+        },
+        {
+          "name": "verify_post_refetch_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/verify_post_refetch_campaign.js",
+          "sha256": "e8aecf08c467ca775c9a12872b9b356bbf3de89959bd9830f67efc74d5c84c7a",
+          "byteLength": 7545
+        },
+        {
+          "name": "run_atomic_evaluator.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_atomic_evaluator.js",
+          "sha256": "e81f052b932b0e40edf7d63f3ee158c644d59b0951352661cbd3bdad9d37446e",
+          "byteLength": 77362
+        },
+        {
+          "name": "run_bounded_synthesis.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/run_bounded_synthesis.js",
+          "sha256": "271f76dc73b359b906c98b7aab7058fa0ca5e2a6b39cfd24750f100d818788e3",
+          "byteLength": 61288
+        },
+        {
+          "name": "transport_error_trace.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/transport_error_trace.js",
+          "sha256": "6e8fcbb95ca9de185adfcda633b02f1d356c89ff656112c1f6c774f08a997459",
+          "byteLength": 824
+        },
+        {
+          "name": "manual_review_harness.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/manual_review_harness.js",
+          "sha256": "10d3047285bb13070d36298cf1c7fb6fb769599027436a02a0972de7330ab98d",
+          "byteLength": 25945
+        },
+        {
+          "name": "audit_identical_input_consistency.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/audit_identical_input_consistency.js",
+          "sha256": "a33ea9229203ebe5c7e7e8c2b653e50714280f9b7233c0d0a3c320a582e47c59",
+          "byteLength": 6527
+        },
+        {
+          "name": "evaluator_packet_planner.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/evaluator_packet_planner.js",
+          "sha256": "94b61d22fc4733ce1f9010889f37b1f6c9aae6aa2c9585e4e1b57a8a11a216e2",
+          "byteLength": 29650
+        },
+        {
+          "name": "categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/categorical_judge_schema_v13_bounded_synthesis_axes.js",
+          "sha256": "307f92d30c245aa1b8a0e9e05473aa5ae4e9a9673cd40fc02de965cbd0ed5a47",
+          "byteLength": 2257
+        },
+        {
+          "name": "../provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-d-series-2026-07-31/frozen-v14/categorical_judge_schema_v12_whole_page_support.js",
+          "sha256": "ad246f0b7f4a01c2efdb1e9dc884b285127bb75768567feb81bb945f736ce0b1",
+          "byteLength": 2193
+        },
+        {
+          "name": "compile_corrected_campaign.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/compile_corrected_campaign.js",
+          "sha256": "a47aa182f33e90e69ccc1aa67ff3a7c657f5f7ce17c94fd4bb7095e20c85bc35",
+          "byteLength": 118439
+        },
+        {
+          "name": "materialize_format_aware_packets_v4.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/materialize_format_aware_packets_v4.js",
+          "sha256": "59128fc92b8c701b889e51ceb63169771dac6c4e6dbe4ad8f13b93be26d2a326",
+          "byteLength": 38922
+        },
+        {
+          "name": "format_aware_source_normalizer.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_source_normalizer.js",
+          "sha256": "2f23bd6b35f3e828adf21b8f90e6cba100c5364f8ac768b71167a20ebe2f04e3",
+          "byteLength": 16504
+        },
+        {
+          "name": "source_format_policy.js",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/source_format_policy.js",
+          "sha256": "b62e8d8f1282057a08b76f3e1bac3088ba86ec7a8d4f2bfbe9fa47079238cfb0",
+          "byteLength": 3300
+        },
+        {
+          "name": "format_aware_workbook.py",
+          "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/format_aware_workbook.py",
+          "sha256": "9779db98892651ebc1f8e2fbbcb9ecd110293e1d14461977a250eaf9be5bca38",
+          "byteLength": 6453
+        }
+      ],
+      "authoritySha256": "4a442fcdff5390350a49a8468acfb45ffbc1cd56332cde334e7aedc31950b00e"
+    }
+  },
+  "frozenProtocolDescriptor": {
+    "path": "/Users/kui/lucie/EDE/tmp/provider-production-campaign-runner/test-evidence/provider-prompt-minimization-2026-08-02/PROTOCOL.md",
+    "sha256": "997ce9b6f609a8377a9195095415aea98ae1b5e14b3ddb2ed2f97caf4734b325",
+    "byteLength": 5731
+  },
+  "providerCases": 60,
+  "cells": 120,
+  "strata": {
+    "automatic": 53,
+    "manual": 7,
+    "censored": 0
+  },
+  "promptMetrics": [
+    {
+      "armId": "BASELINE",
+      "name": "one-call item-local citation baseline",
+      "staticBytes": 18487,
+      "baselineArmId": "BASELINE",
+      "reductionVsBaselineFraction": 0,
+      "meetsMinimumReduction": null,
+      "components": {
+        "instructions": {
+          "utf8Bytes": 6574,
+          "characters": 6574,
+          "sha256": "0b9578ac27b29487e34d3400397c494a3a834b50162ce79aa95b18cd35f870da"
+        },
+        "schema": {
+          "utf8Bytes": 11706,
+          "characters": 11706,
+          "sha256": "48aba105b31e2ebbd6317ee1395f83171aeaaf4bf3ce31611640754b1dbbe813"
+        },
+        "userPrompt": {
+          "utf8Bytes": 207,
+          "characters": 207,
+          "sha256": "916a2af1a383b71a0ffc0682ba1c36650d67a7f611b4fd0716e2afbe9b71818e"
+        }
+      },
+      "snapshot": null
+    },
+    {
+      "armId": "CITATION_PRIVACY",
+      "name": "one-call hostname-derived citation metadata",
+      "staticBytes": 18143,
+      "baselineArmId": "BASELINE",
+      "reductionVsBaselineFraction": 0.01860767025477361,
+      "meetsMinimumReduction": false,
+      "components": {
+        "instructions": {
+          "utf8Bytes": 6675,
+          "characters": 6675,
+          "sha256": "b89bf3c74fd6b3170113e3914f7898213434119ad0c767d8edb8ebe53ec26c52"
+        },
+        "schema": {
+          "utf8Bytes": 11261,
+          "characters": 11261,
+          "sha256": "323e6b90aa182287656b4bc9cbba78f145a33250a32074f38a51422adc61851b"
+        },
+        "userPrompt": {
+          "utf8Bytes": 207,
+          "characters": 207,
+          "sha256": "916a2af1a383b71a0ffc0682ba1c36650d67a7f611b4fd0716e2afbe9b71818e"
+        }
+      },
+      "snapshot": null
+    }
+  ],
+  "promptSizeGate": {
+    "minimumReductionFraction": 0.5,
+    "byArm": {
+      "CITATION_PRIVACY": false
+    }
+  },
+  "categoricalCriteria": [
+    {
+      "id": "profile_returned",
+      "direction": "higher_is_better",
+      "source": "production"
+    },
+    {
+      "id": "professional_contact_returned",
+      "direction": "higher_is_better",
+      "source": "production"
+    },
+    {
+      "id": "critical_safety_finding",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "readable_material_support_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "own_citation_support_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "identity_attachment_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "inappropriate_withholding",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "lower_tier_source_selected",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    },
+    {
+      "id": "citation_span_or_contract_defect",
+      "direction": "lower_is_better",
+      "source": "evaluator"
+    }
+  ],
+  "categoricalCounts": {
+    "automatic": {
+      "BASELINE": {
+        "profile_returned": {
+          "present": 53,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 48,
+          "absent": 5,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 10,
+          "absent": 43,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 11,
+          "absent": 42,
+          "unknown": 0
+        },
+        "own_citation_support_defect": {
+          "present": 2,
+          "absent": 15,
+          "unknown": 36
+        },
+        "identity_attachment_defect": {
+          "present": 4,
+          "absent": 49,
+          "unknown": 0
+        },
+        "inappropriate_withholding": {
+          "present": 14,
+          "absent": 30,
+          "unknown": 9
+        },
+        "lower_tier_source_selected": {
+          "present": 8,
+          "absent": 34,
+          "unknown": 11
+        },
+        "citation_span_or_contract_defect": {
+          "present": 39,
+          "absent": 14,
+          "unknown": 0
+        }
+      },
+      "CITATION_PRIVACY": {
+        "profile_returned": {
+          "present": 53,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 47,
+          "absent": 6,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 3,
+          "absent": 50,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 5,
+          "absent": 48,
+          "unknown": 0
+        },
+        "own_citation_support_defect": {
+          "present": 2,
+          "absent": 20,
+          "unknown": 31
+        },
+        "identity_attachment_defect": {
+          "present": 2,
+          "absent": 51,
+          "unknown": 0
+        },
+        "inappropriate_withholding": {
+          "present": 18,
+          "absent": 31,
+          "unknown": 4
+        },
+        "lower_tier_source_selected": {
+          "present": 7,
+          "absent": 37,
+          "unknown": 9
+        },
+        "citation_span_or_contract_defect": {
+          "present": 34,
+          "absent": 19,
+          "unknown": 0
+        }
+      }
+    },
+    "manual": {
+      "BASELINE": {
+        "profile_returned": {
+          "present": 7,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 5,
+          "absent": 2,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 0
+        },
+        "own_citation_support_defect": {
+          "present": 0,
+          "absent": 2,
+          "unknown": 5
+        },
+        "identity_attachment_defect": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 0
+        },
+        "inappropriate_withholding": {
+          "present": 4,
+          "absent": 3,
+          "unknown": 0
+        },
+        "lower_tier_source_selected": {
+          "present": 6,
+          "absent": 1,
+          "unknown": 0
+        },
+        "citation_span_or_contract_defect": {
+          "present": 7,
+          "absent": 0,
+          "unknown": 0
+        }
+      },
+      "CITATION_PRIVACY": {
+        "profile_returned": {
+          "present": 7,
+          "absent": 0,
+          "unknown": 0
+        },
+        "professional_contact_returned": {
+          "present": 5,
+          "absent": 2,
+          "unknown": 0
+        },
+        "critical_safety_finding": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 0
+        },
+        "readable_material_support_defect": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 0
+        },
+        "own_citation_support_defect": {
+          "present": 0,
+          "absent": 2,
+          "unknown": 5
+        },
+        "identity_attachment_defect": {
+          "present": 0,
+          "absent": 7,
+          "unknown": 0
+        },
+        "inappropriate_withholding": {
+          "present": 4,
+          "absent": 3,
+          "unknown": 0
+        },
+        "lower_tier_source_selected": {
+          "present": 6,
+          "absent": 1,
+          "unknown": 0
+        },
+        "citation_span_or_contract_defect": {
+          "present": 6,
+          "absent": 1,
+          "unknown": 0
+        }
+      }
+    }
+  },
+  "frozenProtocol": {
+    "schemaVersion": 1,
+    "protocol": "frozen_provider_prompt_minimization_evaluator_v1",
+    "datasetRole": "development",
+    "baselineArmId": "BASELINE",
+    "bootstrapIterations": 10000,
+    "noninferiorityMargin": -0.05,
+    "maximumAdditionalCaseDefects": 3,
+    "maximumParserSuccessLoss": 3,
+    "maximumUnreadabilityIncrease": 3,
+    "strataKeptSeparate": true,
+    "allAdjudicatedIsSecondary": true,
+    "candidates": {
+      "CITATION_PRIVACY": {
+        "automatic": {
+          "providerCases": 53,
+          "endpoints": [
+            {
+              "metric": "eligible_contact_survival",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 53,
+              "baselineRate": 0.8679245283018868,
+              "candidateRate": 0.8679245283018868,
+              "candidateMinusBaseline": 0,
+              "lower95": -0.1132075471698113,
+              "upper95": 0.1132075471698113,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": false
+            },
+            {
+              "metric": "whole_packet_exact_material_support",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 53,
+              "baselineRate": 0.9337016574585635,
+              "candidateRate": 0.9675675675675676,
+              "candidateMinusBaseline": 0.03386591010900408,
+              "lower95": -0.0008008342567165066,
+              "upper95": 0.07194335269993167,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "readable_own_citation_exact_support",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 53,
+              "baselineRate": 0.9629629629629629,
+              "candidateRate": 0.9612403100775194,
+              "candidateMinusBaseline": -0.0017226528854434875,
+              "lower95": -0.04166666666666663,
+              "upper95": 0.031151421396546076,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "exact_provider_identity_attachment",
+              "stratum": "automatic",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 53,
+              "baselineRate": 0.9834254143646409,
+              "candidateRate": 0.9891891891891892,
+              "candidateMinusBaseline": 0.005763774824548262,
+              "lower95": -0.011494252873563204,
+              "upper95": 0.02389923290587194,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            }
+          ],
+          "issueComparisons": {
+            "inappropriate_withholding": {
+              "baselineCases": [
+                "P004",
+                "P010",
+                "P015",
+                "P017",
+                "P019",
+                "P022",
+                "P023",
+                "P024",
+                "P030",
+                "P039",
+                "P044",
+                "P049",
+                "P052",
+                "P053"
+              ],
+              "candidateCases": [
+                "P004",
+                "P009",
+                "P015",
+                "P016",
+                "P017",
+                "P019",
+                "P022",
+                "P024",
+                "P030",
+                "P035",
+                "P036",
+                "P037",
+                "P039",
+                "P044",
+                "P048",
+                "P051",
+                "P052",
+                "P058"
+              ],
+              "newCandidateCases": [
+                "P009",
+                "P016",
+                "P035",
+                "P036",
+                "P037",
+                "P048",
+                "P051",
+                "P058"
+              ],
+              "resolvedBaselineCases": [
+                "P010",
+                "P023",
+                "P049",
+                "P053"
+              ],
+              "countDifference": 4,
+              "maximumAdditionalCases": 3,
+              "passes": false
+            },
+            "lower_tier_selection": {
+              "baselineCases": [
+                "P009",
+                "P015",
+                "P024",
+                "P035",
+                "P039",
+                "P043",
+                "P045",
+                "P047"
+              ],
+              "candidateCases": [
+                "P009",
+                "P011",
+                "P022",
+                "P024",
+                "P039",
+                "P053",
+                "P056"
+              ],
+              "newCandidateCases": [
+                "P011",
+                "P022",
+                "P053",
+                "P056"
+              ],
+              "resolvedBaselineCases": [
+                "P015",
+                "P035",
+                "P043",
+                "P045",
+                "P047"
+              ],
+              "countDifference": -1,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "span_defect": {
+              "baselineCases": [
+                "P003",
+                "P005",
+                "P016",
+                "P024",
+                "P043",
+                "P047"
+              ],
+              "candidateCases": [
+                "P003",
+                "P010",
+                "P011",
+                "P015"
+              ],
+              "newCandidateCases": [
+                "P010",
+                "P011",
+                "P015"
+              ],
+              "resolvedBaselineCases": [
+                "P005",
+                "P016",
+                "P024",
+                "P043",
+                "P047"
+              ],
+              "countDifference": -2,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            }
+          },
+          "safety": {
+            "wrong_provider": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsupported_material": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsafe_contact": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "contradicted": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "cross_npi_misattribution": {
+              "newCandidateClaims": [],
+              "passes": true
+            }
+          },
+          "parserGate": {
+            "baselineSuccesses": 53,
+            "candidateSuccesses": 53,
+            "difference": 0,
+            "minimumDifference": -3,
+            "passes": true
+          },
+          "unreadabilityGate": {
+            "baselineCases": [
+              "P002",
+              "P003",
+              "P005",
+              "P010",
+              "P011",
+              "P013",
+              "P015",
+              "P017",
+              "P018",
+              "P019",
+              "P021",
+              "P022",
+              "P024",
+              "P025",
+              "P027",
+              "P028",
+              "P031",
+              "P033",
+              "P034",
+              "P035",
+              "P036",
+              "P037",
+              "P039",
+              "P040",
+              "P041",
+              "P043",
+              "P044",
+              "P045",
+              "P046",
+              "P048",
+              "P050",
+              "P051",
+              "P052",
+              "P053",
+              "P054",
+              "P055",
+              "P058"
+            ],
+            "candidateCases": [
+              "P002",
+              "P003",
+              "P005",
+              "P010",
+              "P013",
+              "P019",
+              "P021",
+              "P022",
+              "P025",
+              "P027",
+              "P028",
+              "P030",
+              "P031",
+              "P033",
+              "P034",
+              "P035",
+              "P036",
+              "P037",
+              "P039",
+              "P040",
+              "P042",
+              "P043",
+              "P044",
+              "P048",
+              "P050",
+              "P051",
+              "P052",
+              "P053",
+              "P054",
+              "P056",
+              "P058"
+            ],
+            "newCandidateCases": [
+              "P030",
+              "P042",
+              "P056"
+            ],
+            "countDifference": -6,
+            "maximumAdditionalCases": 3,
+            "passes": true
+          },
+          "gates": {
+            "endpointNoninferiority": false,
+            "issueCaseLimits": false,
+            "safety": true,
+            "parser": true,
+            "unreadability": true
+          },
+          "allSpecifiedConditionsHold": false
+        },
+        "manual": {
+          "providerCases": 7,
+          "endpoints": [
+            {
+              "metric": "eligible_contact_survival",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 7,
+              "baselineRate": 0.7142857142857143,
+              "candidateRate": 0.7142857142857143,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "whole_packet_exact_material_support",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 7,
+              "baselineRate": 1,
+              "candidateRate": 1,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "readable_own_citation_exact_support",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 7,
+              "baselineRate": 1,
+              "candidateRate": 1,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 9771,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "exact_provider_identity_attachment",
+              "stratum": "manual",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 7,
+              "baselineRate": 1,
+              "candidateRate": 1,
+              "candidateMinusBaseline": 0,
+              "lower95": 0,
+              "upper95": 0,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            }
+          ],
+          "issueComparisons": {
+            "inappropriate_withholding": {
+              "baselineCases": [
+                "P006",
+                "P014",
+                "P026",
+                "P059"
+              ],
+              "candidateCases": [
+                "P006",
+                "P026",
+                "P059",
+                "P060"
+              ],
+              "newCandidateCases": [
+                "P060"
+              ],
+              "resolvedBaselineCases": [
+                "P014"
+              ],
+              "countDifference": 0,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "lower_tier_selection": {
+              "baselineCases": [
+                "P006",
+                "P014",
+                "P026",
+                "P029",
+                "P059",
+                "P060"
+              ],
+              "candidateCases": [
+                "P006",
+                "P014",
+                "P026",
+                "P029",
+                "P059",
+                "P060"
+              ],
+              "newCandidateCases": [],
+              "resolvedBaselineCases": [],
+              "countDifference": 0,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "span_defect": {
+              "baselineCases": [
+                "P014",
+                "P020"
+              ],
+              "candidateCases": [
+                "P014",
+                "P060"
+              ],
+              "newCandidateCases": [
+                "P060"
+              ],
+              "resolvedBaselineCases": [
+                "P020"
+              ],
+              "countDifference": 0,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            }
+          },
+          "safety": {
+            "wrong_provider": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsupported_material": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsafe_contact": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "contradicted": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "cross_npi_misattribution": {
+              "newCandidateClaims": [],
+              "passes": true
+            }
+          },
+          "parserGate": {
+            "baselineSuccesses": 7,
+            "candidateSuccesses": 7,
+            "difference": 0,
+            "minimumDifference": -3,
+            "passes": true
+          },
+          "unreadabilityGate": {
+            "baselineCases": [
+              "P006",
+              "P026",
+              "P029",
+              "P059",
+              "P060"
+            ],
+            "candidateCases": [
+              "P006",
+              "P026",
+              "P029",
+              "P059",
+              "P060"
+            ],
+            "newCandidateCases": [],
+            "countDifference": 0,
+            "maximumAdditionalCases": 3,
+            "passes": true
+          },
+          "gates": {
+            "endpointNoninferiority": true,
+            "issueCaseLimits": true,
+            "safety": true,
+            "parser": true,
+            "unreadability": true
+          },
+          "allSpecifiedConditionsHold": true
+        },
+        "all_adjudicated_secondary": {
+          "providerCases": 60,
+          "endpoints": [
+            {
+              "metric": "eligible_contact_survival",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.85,
+              "candidateRate": 0.85,
+              "candidateMinusBaseline": 0,
+              "lower95": -0.09999999999999998,
+              "upper95": 0.09999999999999998,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": false
+            },
+            {
+              "metric": "whole_packet_exact_material_support",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.9411764705882353,
+              "candidateRate": 0.970873786407767,
+              "candidateMinusBaseline": 0.029697315819531722,
+              "lower95": -0.0007779444033153693,
+              "upper95": 0.06451165074490646,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "readable_own_citation_exact_support",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.9661016949152542,
+              "candidateRate": 0.9642857142857143,
+              "candidateMinusBaseline": -0.001815980629539915,
+              "lower95": -0.03896627565982406,
+              "upper95": 0.02783855201702996,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            },
+            {
+              "metric": "exact_provider_identity_attachment",
+              "stratum": "all_adjudicated_secondary",
+              "baselineArmId": "BASELINE",
+              "candidateArmId": "CITATION_PRIVACY",
+              "pairedProviders": 60,
+              "baselineRate": 0.9852941176470589,
+              "candidateRate": 0.9902912621359223,
+              "candidateMinusBaseline": 0.004997144488863459,
+              "lower95": -0.01034981780730675,
+              "upper95": 0.0217774954461236,
+              "iterations": 10000,
+              "margin": -0.05,
+              "passes": true
+            }
+          ],
+          "issueComparisons": {
+            "inappropriate_withholding": {
+              "baselineCases": [
+                "P004",
+                "P006",
+                "P010",
+                "P014",
+                "P015",
+                "P017",
+                "P019",
+                "P022",
+                "P023",
+                "P024",
+                "P026",
+                "P030",
+                "P039",
+                "P044",
+                "P049",
+                "P052",
+                "P053",
+                "P059"
+              ],
+              "candidateCases": [
+                "P004",
+                "P006",
+                "P009",
+                "P015",
+                "P016",
+                "P017",
+                "P019",
+                "P022",
+                "P024",
+                "P026",
+                "P030",
+                "P035",
+                "P036",
+                "P037",
+                "P039",
+                "P044",
+                "P048",
+                "P051",
+                "P052",
+                "P058",
+                "P059",
+                "P060"
+              ],
+              "newCandidateCases": [
+                "P009",
+                "P016",
+                "P035",
+                "P036",
+                "P037",
+                "P048",
+                "P051",
+                "P058",
+                "P060"
+              ],
+              "resolvedBaselineCases": [
+                "P010",
+                "P014",
+                "P023",
+                "P049",
+                "P053"
+              ],
+              "countDifference": 4,
+              "maximumAdditionalCases": 3,
+              "passes": false
+            },
+            "lower_tier_selection": {
+              "baselineCases": [
+                "P006",
+                "P009",
+                "P014",
+                "P015",
+                "P024",
+                "P026",
+                "P029",
+                "P035",
+                "P039",
+                "P043",
+                "P045",
+                "P047",
+                "P059",
+                "P060"
+              ],
+              "candidateCases": [
+                "P006",
+                "P009",
+                "P011",
+                "P014",
+                "P022",
+                "P024",
+                "P026",
+                "P029",
+                "P039",
+                "P053",
+                "P056",
+                "P059",
+                "P060"
+              ],
+              "newCandidateCases": [
+                "P011",
+                "P022",
+                "P053",
+                "P056"
+              ],
+              "resolvedBaselineCases": [
+                "P015",
+                "P035",
+                "P043",
+                "P045",
+                "P047"
+              ],
+              "countDifference": -1,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            },
+            "span_defect": {
+              "baselineCases": [
+                "P003",
+                "P005",
+                "P014",
+                "P016",
+                "P020",
+                "P024",
+                "P043",
+                "P047"
+              ],
+              "candidateCases": [
+                "P003",
+                "P010",
+                "P011",
+                "P014",
+                "P015",
+                "P060"
+              ],
+              "newCandidateCases": [
+                "P010",
+                "P011",
+                "P015",
+                "P060"
+              ],
+              "resolvedBaselineCases": [
+                "P005",
+                "P016",
+                "P020",
+                "P024",
+                "P043",
+                "P047"
+              ],
+              "countDifference": -2,
+              "maximumAdditionalCases": 3,
+              "passes": true
+            }
+          },
+          "safety": {
+            "wrong_provider": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsupported_material": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "unsafe_contact": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "contradicted": {
+              "newCandidateClaims": [],
+              "passes": true
+            },
+            "cross_npi_misattribution": {
+              "newCandidateClaims": [],
+              "passes": true
+            }
+          },
+          "parserGate": {
+            "baselineSuccesses": 60,
+            "candidateSuccesses": 60,
+            "difference": 0,
+            "minimumDifference": -3,
+            "passes": true
+          },
+          "unreadabilityGate": {
+            "baselineCases": [
+              "P002",
+              "P003",
+              "P005",
+              "P006",
+              "P010",
+              "P011",
+              "P013",
+              "P015",
+              "P017",
+              "P018",
+              "P019",
+              "P021",
+              "P022",
+              "P024",
+              "P025",
+              "P026",
+              "P027",
+              "P028",
+              "P029",
+              "P031",
+              "P033",
+              "P034",
+              "P035",
+              "P036",
+              "P037",
+              "P039",
+              "P040",
+              "P041",
+              "P043",
+              "P044",
+              "P045",
+              "P046",
+              "P048",
+              "P050",
+              "P051",
+              "P052",
+              "P053",
+              "P054",
+              "P055",
+              "P058",
+              "P059",
+              "P060"
+            ],
+            "candidateCases": [
+              "P002",
+              "P003",
+              "P005",
+              "P006",
+              "P010",
+              "P013",
+              "P019",
+              "P021",
+              "P022",
+              "P025",
+              "P026",
+              "P027",
+              "P028",
+              "P029",
+              "P030",
+              "P031",
+              "P033",
+              "P034",
+              "P035",
+              "P036",
+              "P037",
+              "P039",
+              "P040",
+              "P042",
+              "P043",
+              "P044",
+              "P048",
+              "P050",
+              "P051",
+              "P052",
+              "P053",
+              "P054",
+              "P056",
+              "P058",
+              "P059",
+              "P060"
+            ],
+            "newCandidateCases": [
+              "P030",
+              "P042",
+              "P056"
+            ],
+            "countDifference": -6,
+            "maximumAdditionalCases": 3,
+            "passes": true
+          },
+          "gates": {
+            "endpointNoninferiority": false,
+            "issueCaseLimits": false,
+            "safety": true,
+            "parser": true,
+            "unreadability": true
+          },
+          "allSpecifiedConditionsHold": false
+        }
+      }
+    }
+  },
+  "operations": {
+    "production": {
+      "BASELINE": {
+        "completeCostUsd": {
+          "n": 60,
+          "total": 6.286149,
+          "minimum": 0.0621995,
+          "mean": 0.10476915,
+          "median": 0.1027595,
+          "p90": 0.12135975,
+          "p95": 0.13673899999999994,
+          "maximum": 0.208442
+        },
+        "knownCostUsd": {
+          "n": 60,
+          "total": 6.286149,
+          "minimum": 0.0621995,
+          "mean": 0.10476915,
+          "median": 0.1027595,
+          "p90": 0.12135975,
+          "p95": 0.13673899999999994,
+          "maximum": 0.208442
+        },
+        "unknownCostAttempts": 0,
+        "costIncompleteCases": [],
+        "latencyMs": {
+          "n": 60,
+          "total": 775685,
+          "minimum": 6508,
+          "mean": 12928.083333333334,
+          "median": 12332.5,
+          "p90": 18390.3,
+          "p95": 19172.3,
+          "maximum": 26596
+        },
+        "totalHttpSends": 60,
+        "knownWebSearchCalls": 194,
+        "unknownWebSearchAttempts": 0
+      },
+      "CITATION_PRIVACY": {
+        "completeCostUsd": {
+          "n": 60,
+          "total": 6.172005374999997,
+          "minimum": 0.062367,
+          "mean": 0.10286675624999994,
+          "median": 0.10059699999999999,
+          "p90": 0.12081425000000001,
+          "p95": 0.14177328749999998,
+          "maximum": 0.179345625
+        },
+        "knownCostUsd": {
+          "n": 60,
+          "total": 6.172005374999997,
+          "minimum": 0.062367,
+          "mean": 0.10286675624999994,
+          "median": 0.10059699999999999,
+          "p90": 0.12081425000000001,
+          "p95": 0.14177328749999998,
+          "maximum": 0.179345625
+        },
+        "unknownCostAttempts": 0,
+        "costIncompleteCases": [],
+        "latencyMs": {
+          "n": 60,
+          "total": 757450,
+          "minimum": 6831,
+          "mean": 12624.166666666666,
+          "median": 11302.5,
+          "p90": 16995.6,
+          "p95": 20110.499999999993,
+          "maximum": 32129
+        },
+        "totalHttpSends": 60,
+        "knownWebSearchCalls": 184,
+        "unknownWebSearchAttempts": 0
+      }
+    },
+    "evaluator": {
+      "BASELINE": {
+        "apiByStage": {
+          "atomic": {
+            "calls": 457,
+            "costUsd": {
+              "n": 457,
+              "total": 114.67255199999997,
+              "minimum": 0.03959,
+              "mean": 0.25092462144420125,
+              "median": 0.261275,
+              "p90": 0.41594800000000004,
+              "p95": 0.435742,
+              "maximum": 0.496515
+            },
+            "knownCostUsd": {
+              "n": 457,
+              "total": 114.67255199999997,
+              "minimum": 0.03959,
+              "mean": 0.25092462144420125,
+              "median": 0.261275,
+              "p90": 0.41594800000000004,
+              "p95": 0.435742,
+              "maximum": 0.496515
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 457,
+              "total": 29115825,
+              "minimum": 9632,
+              "mean": 63710.77680525164,
+              "median": 63764,
+              "p90": 107618.6,
+              "p95": 116425.4,
+              "maximum": 156717
+            },
+            "statuses": {
+              "completed": 457
+            }
+          },
+          "synthesis": {
+            "calls": 57,
+            "costUsd": {
+              "n": 57,
+              "total": 29.596401999999998,
+              "minimum": 0.311614,
+              "mean": 0.5192351228070176,
+              "median": 0.522999,
+              "p90": 0.653932,
+              "p95": 0.7083227999999998,
+              "maximum": 0.8722719999999999
+            },
+            "knownCostUsd": {
+              "n": 57,
+              "total": 29.596401999999998,
+              "minimum": 0.311614,
+              "mean": 0.5192351228070176,
+              "median": 0.522999,
+              "p90": 0.653932,
+              "p95": 0.7083227999999998,
+              "maximum": 0.8722719999999999
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 57,
+              "total": 6211955,
+              "minimum": 73455,
+              "mean": 108981.66666666667,
+              "median": 102668,
+              "p90": 132898.8,
+              "p95": 157823.19999999984,
+              "maximum": 297293
+            },
+            "statuses": {
+              "completed": 57
+            }
+          }
+        },
+        "apiByFinalStratum": {
+          "automatic": {
+            "calls": 482,
+            "costUsd": {
+              "n": 482,
+              "total": 136.31817900000004,
+              "minimum": 0.03959,
+              "mean": 0.2828177987551868,
+              "median": 0.3001825,
+              "p90": 0.46471850000000015,
+              "p95": 0.52764225,
+              "maximum": 0.8722719999999999
+            },
+            "knownCostUsd": {
+              "n": 482,
+              "total": 136.31817900000004,
+              "minimum": 0.03959,
+              "mean": 0.2828177987551868,
+              "median": 0.3001825,
+              "p90": 0.46471850000000015,
+              "p95": 0.52764225,
+              "maximum": 0.8722719999999999
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 482,
+              "total": 33237941,
+              "minimum": 9632,
+              "mean": 68958.38381742738,
+              "median": 73584.5,
+              "p90": 111129.6,
+              "p95": 120704.9,
+              "maximum": 297293
+            },
+            "statuses": {
+              "completed": 482
+            }
+          },
+          "manual": {
+            "calls": 32,
+            "costUsd": {
+              "n": 32,
+              "total": 7.950775,
+              "minimum": 0.08928,
+              "mean": 0.24846171875,
+              "median": 0.2392625,
+              "p90": 0.3774676,
+              "p95": 0.46412679999999984,
+              "maximum": 0.609809
+            },
+            "knownCostUsd": {
+              "n": 32,
+              "total": 7.950775,
+              "minimum": 0.08928,
+              "mean": 0.24846171875,
+              "median": 0.2392625,
+              "p90": 0.3774676,
+              "p95": 0.46412679999999984,
+              "maximum": 0.609809
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 32,
+              "total": 2089839,
+              "minimum": 23350,
+              "mean": 65307.46875,
+              "median": 72090,
+              "p90": 101536.40000000001,
+              "p95": 111210.34999999999,
+              "maximum": 121129
+            },
+            "statuses": {
+              "completed": 32
+            }
+          },
+          "censored": {
+            "calls": 0,
+            "costUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "knownCostUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "statuses": {}
+          }
+        },
+        "totalEvaluatorApiCostUsd": 144.26895400000004,
+        "knownEvaluatorApiCostUsd": 144.26895400000004,
+        "unknownCostOperations": 0,
+        "unknownCostAttempts": 0,
+        "manualReviewDurationMs": {
+          "n": 7,
+          "total": 2330,
+          "minimum": 39,
+          "mean": 332.85714285714283,
+          "median": 247,
+          "p90": 724.0000000000002,
+          "p95": 944.4999999999994,
+          "maximum": 1165
+        },
+        "manualReviewCostUsd": "not_reported_by_manual_seal"
+      },
+      "CITATION_PRIVACY": {
+        "apiByStage": {
+          "atomic": {
+            "calls": 481,
+            "costUsd": {
+              "n": 481,
+              "total": 123.6262850000001,
+              "minimum": 0.0345,
+              "mean": 0.25701930353430374,
+              "median": 0.2812,
+              "p90": 0.41886,
+              "p95": 0.437815,
+              "maximum": 0.49667
+            },
+            "knownCostUsd": {
+              "n": 481,
+              "total": 123.6262850000001,
+              "minimum": 0.0345,
+              "mean": 0.25701930353430374,
+              "median": 0.2812,
+              "p90": 0.41886,
+              "p95": 0.437815,
+              "maximum": 0.49667
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 481,
+              "total": 31876085,
+              "minimum": 8630,
+              "mean": 66270.44698544698,
+              "median": 69630,
+              "p90": 104756,
+              "p95": 115426,
+              "maximum": 325292
+            },
+            "statuses": {
+              "completed": 481
+            }
+          },
+          "synthesis": {
+            "calls": 57,
+            "costUsd": {
+              "n": 57,
+              "total": 29.543502,
+              "minimum": 0.303959,
+              "mean": 0.518307052631579,
+              "median": 0.518044,
+              "p90": 0.674141,
+              "p95": 0.711108,
+              "maximum": 0.764344
+            },
+            "knownCostUsd": {
+              "n": 57,
+              "total": 29.543502,
+              "minimum": 0.303959,
+              "mean": 0.518307052631579,
+              "median": 0.518044,
+              "p90": 0.674141,
+              "p95": 0.711108,
+              "maximum": 0.764344
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 57,
+              "total": 6217388,
+              "minimum": 69002,
+              "mean": 109076.98245614035,
+              "median": 101360,
+              "p90": 129979.59999999999,
+              "p95": 138138.3999999999,
+              "maximum": 332305
+            },
+            "statuses": {
+              "completed": 57
+            }
+          }
+        },
+        "apiByFinalStratum": {
+          "automatic": {
+            "calls": 502,
+            "costUsd": {
+              "n": 502,
+              "total": 144.02189700000005,
+              "minimum": 0.0345,
+              "mean": 0.28689620916334674,
+              "median": 0.3120875,
+              "p90": 0.4503340000000001,
+              "p95": 0.52195325,
+              "maximum": 0.750509
+            },
+            "knownCostUsd": {
+              "n": 502,
+              "total": 144.02189700000005,
+              "minimum": 0.0345,
+              "mean": 0.28689620916334674,
+              "median": 0.3120875,
+              "p90": 0.4503340000000001,
+              "p95": 0.52195325,
+              "maximum": 0.750509
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 502,
+              "total": 35671089,
+              "minimum": 8630,
+              "mean": 71057.94621513944,
+              "median": 77230,
+              "p90": 109614,
+              "p95": 121889.95,
+              "maximum": 332305
+            },
+            "statuses": {
+              "completed": 502
+            }
+          },
+          "manual": {
+            "calls": 36,
+            "costUsd": {
+              "n": 36,
+              "total": 9.147889999999999,
+              "minimum": 0.036365,
+              "mean": 0.2541080555555555,
+              "median": 0.2587,
+              "p90": 0.398677,
+              "p95": 0.50465475,
+              "maximum": 0.764344
+            },
+            "knownCostUsd": {
+              "n": 36,
+              "total": 9.147889999999999,
+              "minimum": 0.036365,
+              "mean": 0.2541080555555555,
+              "median": 0.2587,
+              "p90": 0.398677,
+              "p95": 0.50465475,
+              "maximum": 0.764344
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 36,
+              "total": 2422384,
+              "minimum": 9420,
+              "mean": 67288.44444444444,
+              "median": 73978,
+              "p90": 104504,
+              "p95": 116882.75,
+              "maximum": 153310
+            },
+            "statuses": {
+              "completed": 36
+            }
+          },
+          "censored": {
+            "calls": 0,
+            "costUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "knownCostUsd": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "unknownCostAttempts": 0,
+            "latencyMs": {
+              "n": 0,
+              "total": 0,
+              "minimum": null,
+              "mean": null,
+              "median": null,
+              "p90": null,
+              "p95": null,
+              "maximum": null
+            },
+            "statuses": {}
+          }
+        },
+        "totalEvaluatorApiCostUsd": 153.169787,
+        "knownEvaluatorApiCostUsd": 153.169787,
+        "unknownCostOperations": 0,
+        "unknownCostAttempts": 0,
+        "manualReviewDurationMs": {
+          "n": 7,
+          "total": 901,
+          "minimum": 23,
+          "mean": 128.71428571428572,
+          "median": 97,
+          "p90": 246.00000000000009,
+          "p95": 320.99999999999983,
+          "maximum": 396
+        },
+        "manualReviewCostUsd": "not_reported_by_manual_seal"
+      }
+    }
+  },
+  "bootstrap": {
+    "iterations": 10000,
+    "seed": "citation-metadata-privacy-development-full-v1-evaluator-v1",
+    "confidence": 0.95,
+    "unit": "provider",
+    "estimand": "paired_left_minus_right_event_rate",
+    "allAdjudicatedIsSecondary": true
+  },
+  "noAggregateScore": true,
+  "inputManifestSealSha256": "9ff7e128eef92186ed31113507b7a5b7cf9d76fc2ec6714ab902827463aabee7"
+}

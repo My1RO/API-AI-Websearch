@@ -1,0 +1,1081 @@
+arm_id	case_id	stratum	reviewer_mode	criterion_id	favorable_direction	state	detail_json
+BASELINE	H001	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H001	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H001	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H001	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H001	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H001	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H001	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H001	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H001	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	unknown	one_or_more_claims_unreadable
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	unknown	one_or_more_identity_links_unreadable
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H002	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	present	["phone","specialty"]
+BASELINE	H003	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","specialty"]}
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	absent	
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["phone","address"]
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	present	["specialty"]
+BASELINE	H004	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H005	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H005	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H005	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H005	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H005	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H005	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H005	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H005	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H005	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:phone:0"],"fields":["phone"]}
+BASELINE	H006	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H006	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H006	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H006	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H006	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H006	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H006	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H006	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H006	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H007	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H007	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H007	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H007	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H007	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H007	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H007	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H007	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["address","specialty"]
+BASELINE	H007	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H008	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H008	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H008	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["WRONG_PROVIDER","UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT","UNRESOLVED_CROSS_NPI_CONFLICT_DISCLOSURE"]
+BASELINE	H008	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0"]
+BASELINE	H008	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H008	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0"]
+BASELINE	H008	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H008	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H008	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H009	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H009	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H009	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H009	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H009	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H009	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H009	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+BASELINE	H009	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H009	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+BASELINE	H010	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H010	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H010	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["WRONG_PROVIDER","UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT","UNRESOLVED_CROSS_NPI_CONFLICT_DISCLOSURE"]
+BASELINE	H010	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:0"]
+BASELINE	H010	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0"]
+BASELINE	H010	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:phone:0"]
+BASELINE	H010	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H010	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone","address"]
+BASELINE	H010	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H011	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H011	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H011	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H011	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H011	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H011	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H011	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H011	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H011	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H012	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	unknown	one_or_more_span_or_contract_axes_indeterminate
+BASELINE	H013	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H013	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H013	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+BASELINE	H013	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:0"]
+BASELINE	H013	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H013	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H013	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H013	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H013	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H014	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H014	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H014	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H014	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H014	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H014	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H014	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H014	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H014	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H015	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H015	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H015	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H015	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H015	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0"]
+BASELINE	H015	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H015	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H015	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H015	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address"]}
+BASELINE	H016	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H016	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H016	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H016	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H016	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H016	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H016	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H016	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H016	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:specialty:1","claim:p0:address:0","claim:p0:phone:0"],"fields":["phone","address"]}
+BASELINE	H017	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H017	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H017	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H017	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H017	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:specialty:0"]
+BASELINE	H017	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H017	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H017	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H017	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H018	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H018	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H018	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H018	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H018	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H018	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H018	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H018	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H018	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H019	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H019	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H019	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+BASELINE	H019	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:1"]
+BASELINE	H019	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H019	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H019	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H019	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H019	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H020	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H020	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H020	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H020	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H020	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H020	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H020	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H020	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H020	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H021	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H021	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H021	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H021	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H021	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H021	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H021	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+BASELINE	H021	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H021	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H022	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H022	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H022	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H022	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H022	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H022	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H022	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H022	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H022	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H023	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H023	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H023	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H023	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H023	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H023	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H023	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H023	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H023	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	unknown	one_or_more_claims_unreadable
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	unknown	one_or_more_identity_links_unreadable
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H024	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website","specialty"]}
+BASELINE	H025	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H025	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H025	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+BASELINE	H025	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0","claim:p0:website:0"]
+BASELINE	H025	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H025	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+BASELINE	H025	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H025	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H025	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website","specialty"]}
+BASELINE	H026	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H026	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H026	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H026	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H026	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H026	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H026	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H026	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H026	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H027	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H027	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H027	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H027	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H027	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H027	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H027	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+BASELINE	H027	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone","address","specialty"]
+BASELINE	H027	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address"]}
+BASELINE	H028	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H028	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H028	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H028	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H028	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H028	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H028	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H028	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H028	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H029	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H029	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H029	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H029	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H029	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0"]
+BASELINE	H029	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H029	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H029	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H029	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:website:0"],"fields":["address","website","specialty"]}
+BASELINE	H030	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H030	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H030	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H030	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H030	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H030	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H030	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H030	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H030	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["phone"]
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H031	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H032	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H032	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H032	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H032	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H032	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H032	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H032	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H032	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H032	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone"]}
+BASELINE	H033	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H033	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H033	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H033	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H033	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H033	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H033	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H033	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H033	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H034	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H034	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H034	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H034	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:website:0"]
+BASELINE	H034	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H034	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+BASELINE	H034	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H034	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H034	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["website","specialty"]}
+BASELINE	H035	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H035	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H035	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H035	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H035	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H035	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H035	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["phone","website"]
+BASELINE	H035	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H035	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H036	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H037	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H037	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H037	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H037	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H037	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H037	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H037	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H037	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H037	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address"]}
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H038	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H039	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H039	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H039	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H039	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H039	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H039	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H039	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H039	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H039	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H040	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H040	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H040	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H040	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H040	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H040	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H040	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H040	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H040	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H041	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H041	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H041	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H041	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H041	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H041	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H041	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H041	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H041	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["website"]
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H042	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H043	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H043	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H043	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H043	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:specialty:0","claim:p0:website:0"]
+BASELINE	H043	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H043	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+BASELINE	H043	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H043	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H043	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","website","specialty"]}
+BASELINE	H044	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H044	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H044	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H044	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H044	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H044	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H044	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H044	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H044	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H045	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H045	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H045	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H045	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H045	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H045	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H045	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H045	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H045	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:address:0","claim:p0:phone:0"],"fields":["phone","address"]}
+BASELINE	H046	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H046	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H046	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H046	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H046	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H046	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H046	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H046	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H046	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H047	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H047	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H047	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H047	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H047	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H047	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H047	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H047	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H047	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H048	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H048	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H048	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H048	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:address:1"]
+BASELINE	H048	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H048	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H048	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H048	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone"]
+BASELINE	H048	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:specialty:0"],"fields":["phone","specialty"]}
+BASELINE	H049	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H049	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H049	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+BASELINE	H049	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:0"]
+BASELINE	H049	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H049	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H049	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H049	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone"]
+BASELINE	H049	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+BASELINE	H050	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H050	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H050	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H050	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H050	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H050	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H050	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H050	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H050	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H051	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H051	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H051	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H051	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H051	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H051	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H051	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+BASELINE	H051	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["specialty"]
+BASELINE	H051	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H052	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H052	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H052	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H052	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H052	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H052	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H052	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H052	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H052	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H053	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H053	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H053	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+BASELINE	H053	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:website:0"]
+BASELINE	H053	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H053	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+BASELINE	H053	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H053	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H053	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["website","specialty"]}
+BASELINE	H054	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H054	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H054	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H054	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H054	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H054	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H054	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+BASELINE	H054	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H054	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H055	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H055	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H055	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H055	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H055	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H055	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H055	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H055	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["website"]
+BASELINE	H055	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:website:0"],"fields":["website","specialty"]}
+BASELINE	H056	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H056	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H056	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H056	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H056	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H056	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H056	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H056	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H056	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+BASELINE	H057	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H057	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H057	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H057	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H057	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H057	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H057	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H057	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone","address"]
+BASELINE	H057	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H058	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H058	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+BASELINE	H058	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H058	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H058	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H058	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H058	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address","website"]
+BASELINE	H058	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+BASELINE	H058	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	unknown	one_or_more_claims_unreadable
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	unknown	one_or_more_identity_links_unreadable
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H059	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website","specialty"]}
+BASELINE	H060	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+BASELINE	H060	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+BASELINE	H060	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+BASELINE	H060	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+BASELINE	H060	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+BASELINE	H060	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+BASELINE	H060	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+BASELINE	H060	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+BASELINE	H060	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H001	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	absent	
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["phone","address","website"]
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H002	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	unknown	one_or_more_span_or_contract_axes_indeterminate
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H003	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H004	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:specialty:0"]
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["address"]
+CITATION_PRIVACY	H005	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:specialty:1"],"fields":["specialty"]}
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H006	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone","address","specialty"]
+CITATION_PRIVACY	H007	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:address:0"]
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H008	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:0"]
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone"]
+CITATION_PRIVACY	H009	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:0"]
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0"]
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:phone:0"]
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H010	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H011	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H012	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	unknown	one_or_more_span_or_contract_axes_indeterminate
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H013	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H014	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0"]
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone"]
+CITATION_PRIVACY	H015	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address"]}
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H016	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:specialty:0"]
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H017	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:address:0","claim:p0:phone:0","claim:p0:website:0"],"fields":["phone","address","website","specialty"]}
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H018	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H019	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H020	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H021	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H022	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H023	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H024	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["WRONG_LOCATION_CRITICAL_CONTACT","UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0","claim:p0:website:0"]
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0","claim:p0:website:0"]
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H025	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website","specialty"]}
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H026	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H027	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website"]}
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H028	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address"]}
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0"]
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H029	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["specialty"]
+CITATION_PRIVACY	H030	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["phone"]
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H031	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H032	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone"]}
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H033	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H034	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website","specialty"]}
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H035	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H036	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H037	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H038	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H039	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H040	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address","website"]
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H041	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	present	["phone"]
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H042	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:specialty:0","claim:p0:website:0"]
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H043	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","website","specialty"]}
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT"]
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:address:0","claim:p0:phone:0"]
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone","address"]
+CITATION_PRIVACY	H044	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["phone","address"]
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H045	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:specialty:0"],"fields":["specialty"]}
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H046	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H047	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H048	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address","website"]
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H049	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H050	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["specialty"]
+CITATION_PRIVACY	H051	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	absent	
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["address"]
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H052	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	present	["WRONG_PROVIDER","UNSUPPORTED_OR_CONTRADICTED_CRITICAL_CONTACT","UNRESOLVED_CROSS_NPI_CONFLICT_DISCLOSURE"]
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:phone:1","claim:p0:website:0"]
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:phone:1","claim:p0:website:0"]
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H053	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","website","specialty"]}
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	present	["claim:p0:website:0"]
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone","address","specialty"]
+CITATION_PRIVACY	H054	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["website"]}
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	present	["claim:p0:address:0"]
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H055	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["website"]
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H056	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["address","specialty"]}
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	present	["phone"]
+CITATION_PRIVACY	H057	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":["claim:p0:phone:0"],"fields":["phone","address","specialty"]}
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	present	["phone","address"]
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	unknown	one_or_more_hierarchy_outcomes_indeterminate
+CITATION_PRIVACY	H058	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["specialty"]}
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	readable_material_support_defect	lower_is_better	unknown	one_or_more_claims_unreadable
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	own_citation_support_defect	lower_is_better	unknown	one_or_more_citations_unreadable
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	identity_attachment_defect	lower_is_better	unknown	one_or_more_identity_links_unreadable
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H059	manual	codex_harness_manual_separate_from_automatic_sol	citation_span_or_contract_defect	lower_is_better	present	{"claims":[],"fields":["phone","address","website","specialty"]}
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	profile_returned	higher_is_better	present	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	professional_contact_returned	higher_is_better	present	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	critical_safety_finding	lower_is_better	absent	[]
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	readable_material_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	own_citation_support_defect	lower_is_better	absent	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	identity_attachment_defect	lower_is_better	absent	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	inappropriate_withholding	lower_is_better	absent	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	lower_tier_source_selected	lower_is_better	absent	
+CITATION_PRIVACY	H060	automatic	automatic_sol_high	citation_span_or_contract_defect	lower_is_better	absent	
