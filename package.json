@@ -25,6 +25,7 @@
     "openai": "^5.0.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.19",
+    "undici": "^6.28.0",
     "uuid": "^10.0.0",
     "zod": "^3.24.1"
   },
@@ -47,6 +48,9 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "testTimeout": 30000,
+    "testPathIgnorePatterns": [
+      "<rootDir>/eval/runner/tests/"
+    ],
     "collectCoverageFrom": [
       "src/**/*.ts",
       "!src/index.ts"

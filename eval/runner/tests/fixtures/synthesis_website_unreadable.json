@@ -1,0 +1,14 @@
+{
+  "fixtureKind": "synthetic_unreadable_website_assessment",
+  "observed": {
+    "citedSourceSupport": "unreadable",
+    "providerIdentitySpanFidelity": "unreadable",
+    "factSpanFidelity": "unreadable",
+    "exactSupport": "partial",
+    "fieldValidity": "partial",
+    "criticalFindings": [
+      "OFFICIAL_WEBSITE_MISREPRESENTATION"
+    ]
+  },
+  "expectedCriticalFindings": []
+}
