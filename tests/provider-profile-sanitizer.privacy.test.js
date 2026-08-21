@@ -1,7 +1,67 @@
-const {
-  sanitizeProviderProfiles,
-  sanitizeProviderProfilesForRequest
-} = require("../src/services/provider-profile-sanitizer.service");
+const sanitizer = require("../src/services/provider-profile-sanitizer.service");
+
+const citationProfiles = profiles => profiles.map(profile => {
+  const sources = new Map((profile.sources || []).map(source => [source.id, source]));
+  const citationFor = fact => {
+    const factText = fact?.value ?? [
+      fact?.addressLine1?.value || fact?.addressLine1 || fact?.street1 || fact?.address,
+      fact?.addressLine2,
+      fact?.city?.value || fact?.city,
+      fact?.state?.value || fact?.state,
+      fact?.zip?.value || fact?.zip
+    ].filter(Boolean).join(" ");
+    const directCitation = fact?.citation || {};
+    const sourceId = fact?.sourceId || fact?.source?.id;
+    if (!sourceId && !directCitation.sourceUrl) {
+      return {};
+    }
+    const source = sources.get(sourceId) || fact?.source || {};
+    const sourceUrl = directCitation.sourceUrl || source.url
+      || (source.domain ? `https://${source.domain}/${sourceId || "provider"}` : undefined);
+    return {
+      sourceUrl,
+      sourceTitle: directCitation.sourceTitle ?? fact?.sourceName ?? source.title ?? null,
+      providerIdentitySpan: directCitation.providerIdentitySpan
+        || `${profile.providerName?.value || profile.providerName || profile.name} ${profile.npi || ""}`.trim(),
+      factSpan: directCitation.factSpan || String(factText || "Public professional fact"),
+      explicitFactDateSpan: directCitation.explicitFactDateSpan ?? null
+    };
+  };
+  const sourced = fact => ({
+    value: fact?.value ?? fact,
+    citation: citationFor(fact)
+  });
+  const sourcedFacts = facts => (facts || []).map(sourced).filter(fact => fact.citation.sourceUrl);
+  return {
+    providerId: profile.providerId,
+    npi: profile.npi,
+    providerName: profile.providerName?.value || profile.providerName || profile.name,
+    specialties: sourcedFacts(profile.specialties),
+    locations: (profile.locations || profile.addresses || []).map(location => ({
+      addressLine1: location?.addressLine1?.value || location?.addressLine1 || location?.street1 || location?.address,
+      addressLine2: location?.addressLine2 || null,
+      city: location?.city?.value || location?.city || null,
+      state: location?.state?.value || location?.state || null,
+      zip: location?.zip?.value || location?.zip || null,
+      citation: citationFor(location?.addressLine1?.value ? location.addressLine1 : location)
+    })).filter(location => location.citation.sourceUrl),
+    phoneNumbers: sourcedFacts(profile.phoneNumbers),
+    ratings: (profile.ratings || []).map(rating => ({
+      value: rating.value,
+      scale: rating.scale || null,
+      citation: citationFor(rating)
+    })),
+    websites: sourcedFacts(profile.websites),
+    confidenceNotes: []
+  };
+});
+
+const sanitizeProviderProfiles = (profiles, options) => (
+  sanitizer.sanitizeProviderProfiles(citationProfiles(profiles), options)
+);
+const sanitizeProviderProfilesForRequest = (profiles, providers) => (
+  sanitizer.sanitizeProviderProfilesForRequest(citationProfiles(profiles), providers)
+);
 
 describe("provider profile sanitizer", () => {
   const baseProfile = {
@@ -12,12 +72,11 @@ describe("provider profile sanitizer", () => {
     locations: [],
     phoneNumbers: [],
     ratings: [],
-    publicInsuranceMentions: [],
     confidenceNotes: [],
     sources: []
   };
 
-  it("drops ratings from directory-only sources while preserving supported contact facts", () => {
+  it("does not use a closed domain list to classify rating-source semantics", () => {
     const [profile] = sanitizeProviderProfiles([
       {
         ...baseProfile,
@@ -44,7 +103,431 @@ describe("provider profile sanitizer", () => {
 
     expect(profile.phoneNumbers).toHaveLength(1);
     expect(profile.locations).toHaveLength(1);
-    expect(profile.ratings).toEqual([]);
+    expect(profile.ratings).toHaveLength(1);
+  });
+
+  it("accepts professional contact facts from the current CMS NPI Registry hostname", () => {
+    const [profile] = sanitizeProviderProfiles([
+      {
+        ...baseProfile,
+        phoneNumbers: [{ value: "(305) 585-1111", sourceId: "npi-registry" }],
+        sources: [{
+          id: "npi-registry",
+          title: "NPI Registry",
+          domain: "npiregistry.cms.hhs.gov",
+          url: "https://npiregistry.cms.hhs.gov/provider-view/1234567890"
+        }]
+      }
+    ], {
+      allowedSourceUrls: ["https://npiregistry.cms.hhs.gov/provider-view/1234567890"]
+    });
+
+    expect(profile.phoneNumbers).toEqual([
+      expect.objectContaining({
+        value: "(305) 585-1111",
+        citation: expect.objectContaining({
+          sourceUrl: "https://npiregistry.cms.hhs.gov/provider-view/1234567890"
+        })
+      })
+    ]);
+  });
+
+  it("accepts provenance-backed professional sources without a closed official-title vocabulary", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      providerName: "Ada Smith, MD",
+      phoneNumbers: [
+        { value: "Office: 217-444-0100", sourceId: "practice" },
+        { value: "Fax: 217-444-0101", sourceId: "practice" }
+      ],
+      websites: [{ value: "https://provider.example.org/ada-smith", sourceId: "practice" }],
+      sources: [{
+        id: "practice",
+        title: "Ada Smith, MD",
+        domain: "provider.example.org",
+        url: "https://provider.example.org/ada-smith"
+      }]
+    }], {
+      allowedSourceUrls: ["https://provider.example.org/ada-smith"]
+    });
+
+    expect(profile.phoneNumbers.map(({ value }) => value)).toEqual(["Office: 217-444-0100"]);
+    expect(profile.websites).toEqual([
+      expect.objectContaining({ value: "https://provider.example.org/ada-smith" })
+    ]);
+  });
+
+  it("keeps a website only when its value canonically matches its own citation URL", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      websites: [{
+        value: "https://care.example.org/provider/1234567890/",
+        citation: {
+          sourceUrl: "https://care.example.org/provider/1234567890",
+          sourceTitle: "Provider page",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "The Cleveland Clinic Foundation provider profile",
+          explicitFactDateSpan: null
+        }
+      }, {
+        value: "https://wrong.example.org/provider/1234567890",
+        citation: {
+          sourceUrl: "https://care.example.org/provider/1234567890",
+          sourceTitle: "Provider page",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "The Cleveland Clinic Foundation provider profile",
+          explicitFactDateSpan: null
+        }
+      }]
+    }], {
+      allowedSourceUrls: ["https://care.example.org/provider/1234567890"]
+    });
+
+    expect(profile.websites).toEqual([
+      expect.objectContaining({ value: "https://care.example.org/provider/1234567890/" })
+    ]);
+  });
+
+  it("rejects literal personal phone labels without semantically classifying an unlabeled number by domain", () => {
+    const profiles = sanitizeProviderProfiles([{
+      ...baseProfile,
+      phoneNumbers: [
+        { value: "Office: (305) 444-1213", sourceId: "official" },
+        { value: "Mobile: (305) 777-1212", sourceId: "official" },
+        { value: "Cell: (305) 777-1214", sourceId: "official" },
+        { value: "Personal: (305) 777-1215", sourceId: "official" },
+        { value: "Home: (305) 777-1216", sourceId: "official" },
+        { value: "(305) 777-1217", sourceId: "people-finder" }
+      ],
+      sources: [{
+        id: "official",
+        title: "The Cleveland Clinic Foundation NPI 1234567890",
+        domain: "clevelandclinic.org",
+        url: "https://clevelandclinic.org/provider/1234567890"
+      }, {
+        id: "people-finder",
+        title: "The Cleveland Clinic Foundation NPI 1234567890",
+        domain: "numlookup.com",
+        url: "https://numlookup.com/provider/1234567890"
+      }]
+    }], {
+      allowedSourceUrls: [
+        "https://clevelandclinic.org/provider/1234567890",
+        "https://numlookup.com/provider/1234567890"
+      ]
+    });
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers.map(({ value }) => value)).toEqual([
+      "Office: (305) 444-1213",
+      "(305) 777-1217"
+    ]);
+  });
+
+  it.each(["truepeoplesearch.com", "411.com", "findwhocallsyou.com", "lookup.robokiller.com"])(
+    "leaves open-domain source eligibility for %s to the one-call model contract",
+    (domain) => {
+      const url = `https://${domain}/provider/1234567890`;
+      const profiles = sanitizeProviderProfiles([{
+        ...baseProfile,
+        phoneNumbers: [{ value: "(305) 777-1217", sourceId: "people-finder" }],
+        sources: [{
+          id: "people-finder",
+          title: "The Cleveland Clinic Foundation NPI 1234567890",
+          domain,
+          url
+        }]
+      }], { allowedSourceUrls: [url] });
+
+      expect(profiles).toHaveLength(1);
+      expect(profiles[0].phoneNumbers).toHaveLength(1);
+    }
+  );
+
+  it("unconditionally removes plan and insurance information from legacy inputs", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
+      publicInsuranceMentions: [
+        { value: "CareSource Medicaid", sourceId: "directory" },
+        { value: "Source Name", sourceId: "directory" }
+      ],
+      insuranceMentions: [{ value: "Tailored Plan", sourceId: "directory" }],
+      sources: [{
+        id: "directory",
+        title: "The Cleveland Clinic Foundation NPI 1234567890",
+        domain: "npiprofile.com"
+      }]
+    }]);
+
+    expect(profile).not.toHaveProperty("publicInsuranceMentions");
+    expect(profile).not.toHaveProperty("insuranceMentions");
+  });
+
+  it("strips optional generation artifacts, retains apartment-style professional locations, and rejects explicit residential locations", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      locations: [{
+        addressLine1: "1418 W Main St",
+        addressLine2: "This schema does not permit null. Use null. Let's produce.",
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "source-1"
+      }, {
+        addressLine1: "100 Main St Apt 2",
+        addressLine2: null,
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "source-1"
+      }, {
+        addressLine1: "100 Main St",
+        addressLine2: "Residential home address",
+        city: "Lebanon",
+        state: "TN",
+        zip: "37087",
+        sourceId: "source-1"
+      }],
+      sources: [{
+        id: "source-1",
+        title: "The Cleveland Clinic Foundation — NPI 1234567890",
+        domain: "npiprofile.com",
+        url: "https://npiprofile.com/provider/123"
+      }]
+    }], { allowedSourceUrls: ["https://npiprofile.com/provider/123"] });
+
+    expect(profile.locations).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        addressLine1: "1418 W Main St",
+        addressLine2: null,
+        city: "Lebanon"
+      }),
+      expect.objectContaining({
+        addressLine1: "100 Main St Apt 2",
+        city: "Lebanon"
+      })
+    ]));
+    expect(profile.locations).toHaveLength(2);
+  });
+
+  it.each([
+    {
+      label: "colon-prefixed null",
+      npi: "1234567890",
+      providerName: "Ada Smith MD",
+      addressLine1: "100 Clinic Ave",
+      addressLine2: ":null",
+      city: "Springfield",
+      state: "IL",
+      zip: "62701",
+      sourceUrl: "https://provider.example.org/ada-smith"
+    },
+    {
+      label: "punctuation-wrapped null",
+      npi: "1098765432",
+      providerName: "Public Clinic",
+      addressLine1: "200 Health St",
+      addressLine2: ": null,",
+      city: "Madison",
+      state: "WI",
+      zip: "53703",
+      sourceUrl: "https://clinic.example.org/contact"
+    }
+  ])("normalizes the $label address scalar without dropping the location", (fixture) => {
+    const profiles = sanitizer.sanitizeProviderProfiles([{
+      providerId: fixture.npi,
+      npi: fixture.npi,
+      providerName: fixture.providerName,
+      specialties: [],
+      locations: [{
+        addressLine1: fixture.addressLine1,
+        addressLine2: fixture.addressLine2,
+        city: fixture.city,
+        state: fixture.state,
+        zip: fixture.zip,
+        citation: {
+          sourceUrl: fixture.sourceUrl,
+          sourceTitle: fixture.providerName,
+          providerIdentitySpan: `${fixture.providerName} NPI ${fixture.npi}`,
+          factSpan: `${fixture.addressLine1}, ${fixture.city}, ${fixture.state} ${fixture.zip}`,
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].locations).toEqual([
+      expect.objectContaining({
+        addressLine1: fixture.addressLine1,
+        addressLine2: null,
+        city: fixture.city,
+        state: fixture.state,
+        zip: fixture.zip
+      })
+    ]);
+  });
+
+  it("normalizes a punctuation-only address line 2 without dropping the location", () => {
+    const [profile] = sanitizer.sanitizeProviderProfiles([{
+      providerId: "1234567890",
+      npi: "1234567890",
+      providerName: "Ada Smith MD",
+      specialties: [],
+      locations: [{
+        addressLine1: "100 Clinic Ave",
+        addressLine2: "/",
+        city: "Springfield",
+        state: "IL",
+        zip: "62701",
+        citation: {
+          sourceUrl: "https://provider.example.org/ada-smith",
+          sourceTitle: "Ada Smith",
+          providerIdentitySpan: "Ada Smith NPI 1234567890",
+          factSpan: "100 Clinic Ave, Springfield, Illinois",
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profile.locations).toHaveLength(1);
+    expect(profile.locations[0].addressLine2).toBeNull();
+  });
+
+  it("drops a phone whose complete digits are absent from its own fact span", () => {
+    const [profile] = sanitizer.sanitizeProviderProfiles([{
+      providerId: "1234567890",
+      npi: "1234567890",
+      providerName: "Ada Smith",
+      specialties: [{
+        value: "Nurse Practitioner",
+        citation: {
+          sourceUrl: "https://provider.example.org/ada-smith",
+          sourceTitle: "Ada Smith",
+          providerIdentitySpan: "Ada Smith",
+          factSpan: "Nurse Practitioner",
+          explicitFactDateSpan: null
+        }
+      }],
+      locations: [],
+      phoneNumbers: [{
+        value: "(217) 444-0100",
+        citation: {
+          sourceUrl: "https://provider.example.org/ada-smith",
+          sourceTitle: "Ada Smith",
+          providerIdentitySpan: "Ada Smith",
+          factSpan: "Clinic location: 100 Clinic Ave, Springfield, IL 62701",
+          explicitFactDateSpan: null
+        }
+      }],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profile.specialties).toHaveLength(1);
+    expect(profile.phoneNumbers).toEqual([]);
+  });
+
+  it("limits punctuation-wrapped null repair to nullable address components", () => {
+    const [profile] = sanitizer.sanitizeProviderProfiles([{
+      providerId: "1234567890",
+      npi: "1234567890",
+      providerName: "Ada Smith MD",
+      specialties: [],
+      locations: [{
+        addressLine1: "100 Clinic Ave",
+        addressLine2: "Null Street Office",
+        city: "Springfield",
+        state: "IL",
+        zip: "62701",
+        citation: {
+          sourceUrl: "https://provider.example.org/ada-smith",
+          sourceTitle: "Ada Smith",
+          providerIdentitySpan: "Ada Smith, MD",
+          factSpan: "100 Clinic Ave, Null Street Office, Springfield, IL 62701",
+          explicitFactDateSpan: null
+        }
+      }],
+      phoneNumbers: [],
+      ratings: [],
+      websites: []
+    }]);
+
+    expect(profile.locations[0].addressLine2).toBe("Null Street Office");
+  });
+
+  it("accepts a facility phone and website only through an exact accepted-address anchor", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      npi: "1234567890",
+      providerName: "Ada Smith, MD",
+      locations: [{
+        addressLine1: "100 Clinic Ave",
+        addressLine2: "This schema does not permit null. Let's produce.",
+        city: "Springfield",
+        state: "IL",
+        zip: "62701",
+        sourceId: "provider-directory"
+      }],
+      phoneNumbers: [
+        { value: "(217) 444-0100", sourceId: "provider-directory" },
+        { value: "(217) 444-0102", sourceId: "facility" }
+      ],
+      websites: [{ value: "https://clinic.example.org/contact", sourceId: "facility" }],
+      sources: [{
+        id: "provider-directory",
+        title: "Ada Smith - Springfield IL",
+        domain: "directory.example.org",
+        url: "https://directory.example.org/provider/1234567890"
+      }, {
+        id: "facility",
+        title: "Public Clinic at 100 Clinic Ave",
+        domain: "clinic.example.org",
+        url: "https://clinic.example.org/contact"
+      }]
+    }]);
+
+    expect(profile.locations[0].addressLine2).toBeNull();
+    expect(profile.phoneNumbers).toHaveLength(2);
+    expect(profile.websites).toHaveLength(1);
+  });
+
+  it("does not infer provider attribution from source-title or URL tokens", () => {
+    const [profile] = sanitizeProviderProfiles([{
+      ...baseProfile,
+      npi: "1234567890",
+      providerName: "Ada Smith, MD",
+      locations: [{
+        addressLine1: "100 Clinic Ave",
+        city: "Springfield",
+        state: "IL",
+        zip: "62701",
+        sourceId: "nppes"
+      }],
+      phoneNumbers: [
+        { value: "217-444-0100", sourceId: "nppes" },
+        { value: "217-444-0102", sourceId: "generic-facility" }
+      ],
+      sources: [{
+        id: "nppes",
+        title: "NPPES record for NPI 1234567890",
+        domain: "npiregistry.cms.hhs.gov",
+        url: "https://npiregistry.cms.hhs.gov/provider-view/1234567890"
+      }, {
+        id: "generic-facility",
+        title: "Public Clinic",
+        domain: "clinic.example.org",
+        url: "https://clinic.example.org/contact"
+      }]
+    }]);
+
+    expect(profile.phoneNumbers.map(({ value }) => value)).toEqual(["217-444-0100", "217-444-0102"]);
   });
 
   it("allows ratings from public review or rating sources", () => {
@@ -66,8 +549,13 @@ describe("provider profile sanitizer", () => {
       {
         value: "4.8",
         scale: "5",
-        sourceId: "rating-source",
-        sourceName: "Public ratings"
+        citation: {
+          sourceUrl: "https://healthgrades.com/rating-source",
+          sourceTitle: "healthgrades.com",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "4.8",
+          explicitFactDateSpan: null
+        }
       }
     ]);
   });
@@ -100,7 +588,7 @@ describe("provider profile sanitizer", () => {
     expect(profiles).toEqual([]);
   });
 
-  it("drops Figma/demo source labels and placeholder phone formats", () => {
+  it("drops placeholder phone formats without treating an unfamiliar domain as semantic evidence", () => {
     const profiles = sanitizeProviderProfiles([
       {
         ...baseProfile,
@@ -125,7 +613,9 @@ describe("provider profile sanitizer", () => {
       }
     ]);
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toEqual([]);
+    expect(profiles[0].locations).toHaveLength(1);
   });
 
   it("drops profile shells that have no safe contact facts", () => {
@@ -161,11 +651,10 @@ describe("provider profile sanitizer", () => {
             zip: { value: "44195" }
           }
         ],
-        phoneNumbers: [{ value: "(216) 444-2200", source: { id: "src-1", title: "NPI Profile" } }],
+        phoneNumbers: [{ value: "(216) 444-2200", source: { id: "src-1", title: "NPI 1234567890 Profile" } }],
         ratings: [],
-        publicInsuranceMentions: [],
         confidenceNotes: "Public directory match",
-        sources: [{ id: "src-1", title: "NPI Profile", domain: "npiprofile.com" }]
+        sources: [{ id: "src-1", title: "NPI 1234567890 Profile", domain: "npiprofile.com" }]
       }
     ]);
 
@@ -177,15 +666,25 @@ describe("provider profile sanitizer", () => {
         city: "Cleveland",
         state: "OH",
         zip: "44195",
-        sourceId: "src-1",
-        sourceName: "NPI Profile"
+        citation: {
+          sourceUrl: "https://npiprofile.com/src-1",
+          sourceTitle: "npiprofile.com",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "9500 Euclid Ave",
+          explicitFactDateSpan: null
+        }
       }
     ]);
     expect(profile.phoneNumbers).toEqual([
       {
         value: "(216) 444-2200",
-        sourceId: "src-1",
-        sourceName: "NPI Profile"
+        citation: {
+          sourceUrl: "https://npiprofile.com/src-1",
+          sourceTitle: "npiprofile.com",
+          providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+          factSpan: "(216) 444-2200",
+          explicitFactDateSpan: null
+        }
       }
     ]);
     expect(profile.confidenceNotes).toEqual([]);
@@ -213,12 +712,12 @@ describe("provider profile sanitizer", () => {
             title: "Directory without a domain"
           },
           {
-            title: "NPI Profile",
+            title: "NPI 1234567890 Profile",
             domain: "npiprofile.com"
           },
           {
             id: "directory",
-            title: "NPI Profile",
+            title: "NPI 1234567890 Profile",
             domain: "npiprofile.com"
           }
         ]
@@ -226,7 +725,7 @@ describe("provider profile sanitizer", () => {
     ]);
 
     expect(profile.specialties).toEqual([]);
-    expect(profile.publicInsuranceMentions).toEqual([]);
+    expect(profile).not.toHaveProperty("publicInsuranceMentions");
     expect(profile.phoneNumbers).toHaveLength(1);
     expect(profile.locations).toHaveLength(1);
   });
@@ -239,7 +738,7 @@ describe("provider profile sanitizer", () => {
           providerId: "wrong-provider",
           providerName: "Cleveland Eye Clinic",
           phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
-          sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+          sources: [{ id: "directory", title: "Cleveland Eye Clinic NPI Profile", domain: "npiprofile.com" }]
         },
         {
           ...baseProfile,
@@ -247,7 +746,7 @@ describe("provider profile sanitizer", () => {
           npi: undefined,
           providerName: "The Cleveland Clinic Foundation",
           phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
-          sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+          sources: [{ id: "directory", title: "The Cleveland Clinic Foundation NPI Profile", domain: "npiprofile.com" }]
         }
       ],
       [
@@ -272,7 +771,7 @@ describe("provider profile sanitizer", () => {
           providerId: undefined,
           npi: "1679525919",
           phoneNumbers: [{ value: "(216) 444-2200", sourceId: "directory" }],
-          sources: [{ id: "directory", title: "NPI Profile", domain: "npiprofile.com" }]
+          sources: [{ id: "directory", title: "NPI 1679525919 Profile", domain: "npiprofile.com" }]
         }
       ],
       [
@@ -337,7 +836,7 @@ describe("provider profile sanitizer", () => {
     expect(profiles).toEqual([]);
   });
 
-  it("rejects personal-directory contacts, non-public domains, and malformed phone numbers", () => {
+  it("does not semantically classify an unlabeled number by source domain", () => {
     const profiles = sanitizeProviderProfiles([
       {
         ...baseProfile,
@@ -353,7 +852,11 @@ describe("provider profile sanitizer", () => {
       }
     ]);
 
-    expect(profiles).toEqual([]);
+    expect(profiles).toHaveLength(1);
+    expect(profiles[0].phoneNumbers).toEqual([
+      expect.objectContaining({ value: "(216) 444-2200" })
+    ]);
+    expect(profiles[0].locations).toEqual([]);
   });
 
   it("retains a canonical official website and exact supporting page URL", () => {
@@ -372,18 +875,17 @@ describe("provider profile sanitizer", () => {
 
     expect(profile.websites).toEqual([{
       value: "https://clevelandclinic.org/locations/main-campus",
-      sourceId: "official",
-      sourceName: "The Cleveland Clinic Foundation official site"
-    }]);
-    expect(profile.sources).toEqual([{
-      id: "official",
-      title: "The Cleveland Clinic Foundation official site",
-      domain: "clevelandclinic.org",
-      url: "https://clevelandclinic.org/locations/main-campus"
+      citation: {
+        sourceUrl: "https://clevelandclinic.org/locations/main-campus",
+        sourceTitle: "clevelandclinic.org",
+        providerIdentitySpan: "The Cleveland Clinic Foundation 1234567890",
+        factSpan: "https://clevelandclinic.org/locations/main-campus?tracking=1",
+        explicitFactDateSpan: null
+      }
     }]);
   });
 
-  it("deduplicates and deterministically prioritizes requested-location and official-source facts", () => {
+  it("deduplicates while preserving the one-call model's ordering", () => {
     const [profile] = sanitizeProviderProfilesForRequest(
       [{
         ...baseProfile,
@@ -401,7 +903,7 @@ describe("provider profile sanitizer", () => {
           { value: "4.8", scale: "5", sourceId: "zocdoc" }
         ],
         sources: [
-          { id: "directory", title: "NPI Profile", domain: "npiprofile.com" },
+          { id: "directory", title: "The Cleveland Clinic Foundation NPI 1234567890 Profile", domain: "npiprofile.com" },
           {
             id: "official",
             title: "The Cleveland Clinic Foundation official site",
@@ -423,9 +925,12 @@ describe("provider profile sanitizer", () => {
     );
 
     expect(profile.phoneNumbers).toHaveLength(2);
-    expect(profile.phoneNumbers[0].sourceId).toBe("official");
-    expect(profile.locations[0].zip).toBe("44195");
-    expect(profile.ratings.map((rating) => rating.sourceId)).toEqual(["healthgrades", "zocdoc"]);
-    expect(profile.sources[0].id).toBe("official");
+    expect(profile.phoneNumbers[0].citation.sourceTitle).toBe("npiprofile.com");
+    expect(profile.locations[0].zip).toBe("44308");
+    expect(profile.ratings.map((rating) => rating.citation.sourceTitle)).toEqual([
+      "healthgrades.com",
+      "zocdoc.com"
+    ]);
+    expect(profile).not.toHaveProperty("sources");
   });
 });

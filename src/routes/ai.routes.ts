@@ -44,6 +44,7 @@ const submitterClassFromRequest = (request: Express.Request): string => {
 aiRouter.post(
   "/provider-profiles",
   asyncHandler(async (request, response) => {
+    assertAiRuntimeReady();
     const input = parseBody(createProviderProfilesSchema, request.body);
     const job = await createProviderProfileJob(input, brokerOrgIdFromRequest(request));
 

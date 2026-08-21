@@ -1,11 +1,10 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const ORIGINAL_ENV = process.env;
 
-const loadRuntimeWithEnv = (overrides = {}) => {
-  jest.resetModules();
-  process.env = {
+const configureTestEnv = (overrides = {}) => {
+  const nextEnv = {
     ...ORIGINAL_ENV,
     NODE_ENV: "test",
     AI_FEATURE_ENABLED: "true",
@@ -15,16 +14,32 @@ const loadRuntimeWithEnv = (overrides = {}) => {
     ...overrides
   };
 
+  for (const [key, value] of Object.entries(nextEnv)) {
+    if (value === undefined) {
+      delete nextEnv[key];
+    }
+  }
+
+  process.env = nextEnv;
+};
+
+const loadRuntimeWithEnv = (overrides = {}) => {
+  jest.resetModules();
+  configureTestEnv(overrides);
+
   return require("../src/config/runtime");
+};
+
+const loadEnvWithEnv = (overrides = {}) => {
+  jest.resetModules();
+  configureTestEnv(overrides);
+
+  return require("../src/config/env");
 };
 
 const loadModelConfigWithEnv = (overrides = {}) => {
   jest.resetModules();
-  process.env = {
-    ...ORIGINAL_ENV,
-    NODE_ENV: "test",
-    ...overrides
-  };
+  configureTestEnv(overrides);
 
   return require("../src/config/provider-profile-model");
 };
@@ -157,6 +172,9 @@ describe("Azure-only AI runtime fail-closed configuration", () => {
       AI_WEBSEARCH_ALLOWED_DOMAINS: [],
       AI_WEBSEARCH_BLOCKED_DOMAINS: []
     }));
+    const { env } = loadEnvWithEnv();
+    expect(env).not.toHaveProperty("azureOpenAiDeployment");
+    expect(env).not.toHaveProperty("aiReasoningEffort");
   });
 
   it("documents only deployment credentials and gates, not result-shaping model settings", () => {

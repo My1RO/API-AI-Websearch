@@ -8,9 +8,10 @@ const mockGetProviderProfileJob = jest.fn().mockResolvedValue({
   requestId: "00000000-0000-4000-8000-000000000001",
   status: "queued"
 });
+const mockAssertAiRuntimeReady = jest.fn();
 
 jest.mock("../src/config/runtime", () => ({
-  assertAiRuntimeReady: jest.fn()
+  assertAiRuntimeReady: mockAssertAiRuntimeReady
 }));
 
 jest.mock("../src/services/provider-profile-job.service", () => ({
@@ -21,6 +22,10 @@ jest.mock("../src/services/provider-profile-job.service", () => ({
 const { createApp } = require("../src/app");
 
 describe("API route surface", () => {
+  beforeEach(() => {
+    mockAssertAiRuntimeReady.mockClear();
+  });
+
   it("exposes AI routes under /v1/ai only", async () => {
     const app = createApp();
     const payload = {
@@ -42,6 +47,7 @@ describe("API route surface", () => {
     const removedCompatibilityResponse = await request(app).post("/api/v1/ai/provider-profiles").send(payload);
 
     expect(supportedResponse.status).not.toBe(404);
+    expect(mockAssertAiRuntimeReady).toHaveBeenCalledTimes(1);
     expect(mockCreateProviderProfileJob).toHaveBeenCalledWith(payload, "local");
     expect(removedCompatibilityResponse.status).toBe(404);
     expect(removedCompatibilityResponse.body.code).toBe("ROUTE_NOT_FOUND");
@@ -65,6 +71,7 @@ describe("API route surface", () => {
 
     expect(createResponse.status).toBe(202);
     expect(pollResponse.status).toBe(200);
+    expect(mockAssertAiRuntimeReady).toHaveBeenCalledTimes(2);
     expect(mockCreateProviderProfileJob).toHaveBeenCalledWith(payload, "broker-org");
     expect(mockGetProviderProfileJob).toHaveBeenCalledWith(requestId, "broker-org");
   });

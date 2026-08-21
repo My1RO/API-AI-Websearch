@@ -1,0 +1,30 @@
+{
+  "id": "resp_REDACTED_native_refusal",
+  "object": "response",
+  "status": "completed",
+  "output": [
+    {
+      "id": "msg_REDACTED_native_refusal",
+      "type": "message",
+      "status": "completed",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "refusal",
+          "refusal": "Unable to comply."
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "input_tokens": 100,
+    "input_tokens_details": {
+      "cached_tokens": 25
+    },
+    "output_tokens": 10,
+    "output_tokens_details": {
+      "reasoning_tokens": 4
+    },
+    "total_tokens": 110
+  }
+}
