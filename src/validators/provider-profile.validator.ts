@@ -22,17 +22,17 @@ export const createProviderProfilesSchema = z.object({
   lineOfCoverage: z.literal("Medical")
 }).strict();
 
-export const sourceSchema = z.object({
-  id: z.string().trim().min(1).max(80),
-  title: z.string().trim().min(1).max(255),
-  domain: z.string().trim().min(1).max(255),
-  url: z.string().trim().max(2048).optional()
-}).strip();
+export const citationSchema = z.object({
+  sourceUrl: z.string().trim().min(1).max(2048),
+  sourceTitle: z.string().trim().min(1).max(255).nullable().optional(),
+  providerIdentitySpan: z.string().trim().min(1).max(2000),
+  factSpan: z.string().trim().min(1).max(2000),
+  explicitFactDateSpan: z.string().trim().min(1).max(1000).nullable()
+}).strict();
 
 export const sourcedValueSchema = z.object({
   value: z.string().trim().min(1).max(500),
-  sourceId: z.string().trim().min(1).max(80),
-  sourceName: z.string().trim().min(1).max(255).optional()
+  citation: citationSchema
 }).strip();
 
 export const providerProfileSchema = z.object({
@@ -48,8 +48,7 @@ export const providerProfileSchema = z.object({
         city: z.string().trim().max(120).nullable().optional(),
         state: z.string().trim().max(2).nullable().optional(),
         zip: z.string().trim().max(10).nullable().optional(),
-        sourceId: z.string().trim().min(1).max(80),
-        sourceName: z.string().trim().min(1).max(255).optional()
+        citation: citationSchema
       }).strip()
     )
     .default([]),
@@ -59,18 +58,55 @@ export const providerProfileSchema = z.object({
       z.object({
         value: z.string().trim().min(1).max(80),
         scale: z.string().trim().max(80).nullable().optional(),
-        sourceId: z.string().trim().min(1).max(80),
-        sourceName: z.string().trim().min(1).max(255).optional()
+        citation: citationSchema
       }).strip()
     )
     .default([]),
   websites: z.array(sourcedValueSchema).default([]),
-  publicInsuranceMentions: z.array(sourcedValueSchema).default([]),
   confidenceNotes: z.array(z.string().trim().min(1).max(500)).default([]),
-  sources: z.array(sourceSchema).default([])
 }).strip();
 
 export const providerProfilesSchema = z.array(providerProfileSchema);
+
+const structuredCitationSchema = z.object({
+  sourceUrl: z.string().describe("Exact consulted readable page supporting this fact."),
+  providerIdentitySpan: z.string().describe("Shortest contiguous verbatim passage that literally occurs on sourceUrl and establishes the exact provider under the prompt's identity rules. Never borrow identity from another page; if sourceUrl lacks such a passage, omit the fact."),
+  factSpan: z.string().describe("Shortest contiguous verbatim passage supporting the complete value: every phone digit plus voice purpose, every non-null address component, or the website's provider heading."),
+  explicitFactDateSpan: z.string().nullable().describe("Verbatim date/status explicitly governing this exact value, never a page, profile, registry, license, retrieval, or copyright date; else null.")
+}).strict();
+
+const structuredSourcedValueSchema = z.object({
+  value: z.string(),
+  citation: structuredCitationSchema
+}).strict();
+
+const structuredPhoneSchema = z.object({
+  value: z.string().describe("Professional voice number for this exact provider; never fax, mobile/cell, personal/home, or uncertain-purpose. citation.factSpan explicitly labels its phone/main/scheduling purpose; adjacency to an address or another number is insufficient. For an individual, this same cited page contains the complete number and requested full name or exact NPI; facility/organization identity or another page cannot repair it. Preserve independently supported eligible numbers unless fact-bound evidence marks one former, closed, wrong, or another exact number current/primary/active."),
+  citation: structuredCitationSchema
+}).strict();
+
+const structuredLocationSchema = z.object({
+  addressLine1: z.string().describe("Professional street address, never residential or uncertain-purpose."),
+  addressLine2: z.string().nullable().describe("Unit, suite, or floor only when this same citation.factSpan contains it and, for an individual, the same cited page contains the requested full name or exact NPI. A facility-only page cannot supply it; use null."),
+  city: z.string().nullable(),
+  state: z.string().regex(/^[A-Z]{2}$/).nullable(),
+  zip: z.string().nullable(),
+  citation: structuredCitationSchema
+}).strict().describe("Verified professional location; never residential, people-search, place-name-only, or uncertain-purpose. For an individual, this same cited page contains every emitted component and the requested full name or exact NPI; facility/organization identity or another page cannot repair it. Use null rather than infer an absent component.");
+
+const structuredProviderProfileSchema = z.object({
+  providerId: z.string().nullable(),
+  npi: z.string().nullable(),
+  providerName: z.string(),
+  specialties: z.array(structuredSourcedValueSchema).describe("Specialties supported for the exact provider."),
+  locations: z.array(structuredLocationSchema),
+  phoneNumbers: z.array(structuredPhoneSchema).describe("Eligible professional voice numbers ordered best first."),
+  websites: z.array(structuredSourcedValueSchema).describe("Exact consulted readable first-party provider or organization pages; each value equals citation.sourceUrl. For an individual, this same page contains the requested full name or exact NPI; a facility-only page is ineligible. Never a directory, marketplace, social, search, or listing page. Omit an unresolved other-NPI or incompatible-operation domain.")
+}).strict();
+
+export const providerProfileStructuredOutputSchema = z.object({
+  profiles: z.array(structuredProviderProfileSchema)
+}).strict();
 
 export const providerProfileProviderJobSchema = z.object({
   requestProviderKey: z.string().trim().min(1).max(320),

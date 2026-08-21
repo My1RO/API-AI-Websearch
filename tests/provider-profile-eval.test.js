@@ -64,6 +64,14 @@ const evalCase = {
   }
 };
 
+const citation = {
+  sourceUrl: "https://publicclinic.org/contact",
+  sourceTitle: "Public Clinic",
+  providerIdentitySpan: "Public Clinic NPI 1234567890",
+  factSpan: "100 Public Street, Cleveland, OH 44113; (216) 444-2200",
+  explicitFactDateSpan: null
+};
+
 const profile = {
   providerId: "provider-001",
   npi: "1234567890",
@@ -74,18 +82,11 @@ const profile = {
     city: "Cleveland",
     state: "OH",
     zip: "44113",
-    sourceId: "official"
+    citation
   }],
-  phoneNumbers: [{ value: "(216) 444-2200", sourceId: "official" }],
+  phoneNumbers: [{ value: "(216) 444-2200", citation }],
   ratings: [],
-  websites: [],
-  publicInsuranceMentions: [],
-  sources: [{
-    id: "official",
-    title: "Public Clinic",
-    domain: "publicclinic.org",
-    url: "https://publicclinic.org/contact"
-  }]
+  websites: []
 };
 
 const observation = {
@@ -154,7 +155,7 @@ describe("provider profile evaluation harness", () => {
     expect(providerEvalCaseSchema.parse(unsafeCase).gold.phones[0]).not.toHaveProperty("value");
     const score = scoreCase(unsafeCase, {
       ...observation,
-      profile: { ...profile, phoneNumbers: [{ value: "(216) 999-0000", sourceId: "official" }] }
+      profile: { ...profile, phoneNumbers: [{ value: "(216) 999-0000", citation }] }
     }, { hmacKey: key });
     expect(score.fields.phones.unsafeDisclosures).toBe(1);
   });
@@ -166,7 +167,7 @@ describe("provider profile evaluation harness", () => {
     }));
     const repeats = repeatVariance([
       observation,
-      { ...observation, repeat: 2, profile: { ...profile, ratings: [{ value: "4.8", sourceId: "official" }] } }
+      { ...observation, repeat: 2, profile: { ...profile, ratings: [{ value: "4.8", citation }] } }
     ]);
     expect(repeats.cases[0].meanJaccard).toBeLessThan(1);
   });

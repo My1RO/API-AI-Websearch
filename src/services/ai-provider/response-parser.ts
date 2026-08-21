@@ -1,5 +1,9 @@
 import { AiProviderError } from "../../errors/http-error";
-import { sanitizeProviderProfiles } from "../provider-profile-sanitizer.service";
+import { providerProfileStructuredOutputSchema } from "../../validators/provider-profile.validator";
+import {
+  canonicalPublicProvenanceUrl,
+  sanitizeProviderProfiles
+} from "../provider-profile-sanitizer.service";
 
 interface ResponseContentPart {
   type?: string;
@@ -10,12 +14,37 @@ interface ResponseContentPart {
 interface ResponseOutputItem {
   type?: string;
   content?: ResponseContentPart[];
+  action?: unknown;
 }
 
 interface ResponseShape {
   output_text?: unknown;
+  output_parsed?: unknown;
   output?: ResponseOutputItem[];
 }
+
+type StructuredProfiles = ReturnType<typeof providerProfileStructuredOutputSchema.parse>["profiles"];
+
+const citationUrlsFromProfiles = (
+  profiles: StructuredProfiles,
+): string[] => profiles.flatMap((profile) => [
+  ...profile.specialties,
+  ...profile.locations,
+  ...profile.phoneNumbers,
+  ...profile.websites
+].map((fact) => fact.citation.sourceUrl));
+
+export const extractResponseProvenanceMismatchUrls = (
+  profiles: StructuredProfiles,
+  response: unknown
+): string[] => {
+  const allowed = new Set(extractResponseProvenanceUrls(response)
+    .map((url) => canonicalPublicProvenanceUrl(url))
+    .filter((url): url is string => Boolean(url)));
+  return [...new Set(citationUrlsFromProfiles(profiles)
+    .map((url) => canonicalPublicProvenanceUrl(url))
+    .filter((url): url is string => typeof url === "string" && !allowed.has(url)))];
+};
 
 const stripCodeFence = (value: string): string => {
   return value
@@ -116,21 +145,67 @@ export const extractResponseCitationUrls = (response: unknown): string[] => {
   )];
 };
 
+export const extractResponseWebSearchSourceUrls = (response: unknown): string[] => {
+  const shaped = response as ResponseShape;
+  return [...new Set(
+    (shaped.output || [])
+      .filter((item) => item.type === "web_search_call")
+      .flatMap((item) => {
+        if (!item.action || typeof item.action !== "object" || Array.isArray(item.action)) {
+          return [];
+        }
+        const sources = (item.action as Record<string, unknown>).sources;
+        return Array.isArray(sources) ? sources : [];
+      })
+      .map((source) => {
+        if (!source || typeof source !== "object" || Array.isArray(source)) {
+          return undefined;
+        }
+        const url = (source as Record<string, unknown>).url;
+        return typeof url === "string" ? url : undefined;
+      })
+      .filter((url): url is string => Boolean(url))
+  )];
+};
+
+export const extractResponseWebSearchOpenedUrls = (response: unknown): string[] => {
+  const shaped = response as ResponseShape;
+  return [...new Set(
+    (shaped.output || [])
+      .filter((item) => item.type === "web_search_call")
+      .map((item) => {
+        if (!item.action || typeof item.action !== "object" || Array.isArray(item.action)) {
+          return undefined;
+        }
+        const action = item.action as Record<string, unknown>;
+        return action.type === "open_page" && typeof action.url === "string"
+          ? action.url
+          : undefined;
+      })
+      .filter((url): url is string => Boolean(url))
+  )];
+};
+
+export const extractResponseProvenanceUrls = (response: unknown): string[] => [
+  ...new Set([
+    ...extractResponseCitationUrls(response),
+    ...extractResponseWebSearchSourceUrls(response),
+    ...extractResponseWebSearchOpenedUrls(response)
+  ])
+];
+
 export const parseProviderProfilesFromResponse = (response: unknown) => {
-  let parsed: unknown;
+  const shaped = response as ResponseShape;
+  let parsed: unknown = shaped.output_parsed;
 
-  try {
-    parsed = JSON.parse(extractJsonText(extractResponseText(response)));
-  } catch {
-    throw new AiProviderError("AI provider returned an invalid profile payload.");
+  if (!parsed) {
+    try {
+      parsed = JSON.parse(extractResponseText(response));
+    } catch {
+      throw new AiProviderError("AI provider returned an invalid profile payload.");
+    }
   }
 
-  const profiles = Array.isArray(parsed) ? parsed : (parsed as { profiles?: unknown }).profiles;
-  if (!profiles) {
-    throw new AiProviderError("AI provider returned an invalid profile payload.");
-  }
-
-  return sanitizeProviderProfiles(profiles, {
-    allowedSourceUrls: extractResponseCitationUrls(response)
-  });
+  const profiles = providerProfileStructuredOutputSchema.parse(parsed).profiles;
+  return sanitizeProviderProfiles(profiles);
 };

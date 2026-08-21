@@ -4,7 +4,8 @@
   "description": "AI-sourced provider profile service for Lucie EDE",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc --project tsconfig.scripts.json",
+    "typecheck:scripts": "tsc --project tsconfig.scripts.json",
     "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
     "migrate": "ts-node src/db/migrate.ts up",
     "migrate:revert": "ts-node src/db/migrate.ts down",

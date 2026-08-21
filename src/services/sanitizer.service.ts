@@ -18,7 +18,7 @@ const placeholderTextPatterns = [
   /\btest\b/i,
   /\blorem\s*ipsum\b/i,
   /loremipsum/i,
-  /source\s*(name|label)?/i,
+  /^source\s*(name|label)?$/i,
   /public address unavailable/i
 ];
 const placeholderDomainPattern = /^(?:example\.(?:com|org|net)|mock\.local|localhost|local|public-source|(?:.+\.)?test)$/i;
