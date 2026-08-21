@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "fixtureKind": "synthetic_mixed_atomic_support_groups",
+  "atomicGroups": [
+    {
+      "values": {
+        "support": "exact",
+        "identityLink": "exact_npi",
+        "locationLink": "requested_location",
+        "displaySafety": "not_applicable",
+        "recency": "stale",
+        "fieldValidity": "valid",
+        "sourceEligibility": "eligible",
+        "crossNpiConflict": "none",
+        "requestedNpiResolution": "exact_requested_npi"
+      }
+    },
+    {
+      "values": {
+        "support": "unreadable",
+        "identityLink": "ambiguous",
+        "locationLink": "not_applicable",
+        "displaySafety": "not_applicable",
+        "recency": "unknown",
+        "fieldValidity": "unreadable",
+        "sourceEligibility": "ambiguous",
+        "crossNpiConflict": "none",
+        "requestedNpiResolution": "none"
+      }
+    }
+  ],
+  "observedInvalidSynthesis": {
+    "exactSupport": "unreadable",
+    "reason": "The exact cited snapshot is non-substantive, even though other readable sources support the value."
+  }
+}
