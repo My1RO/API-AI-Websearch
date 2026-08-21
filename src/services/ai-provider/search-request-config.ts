@@ -1,19 +1,22 @@
-import { ReasoningEffort } from "../../config/env";
+import { ReasoningEffort } from "../../config/provider-profile-model";
 
 export interface WebSearchFilters {
   allowed_domains?: string[];
   blocked_domains?: string[];
 }
 
-export const buildWebSearchFilters = (allowedDomains: string[], blockedDomains: string[]): WebSearchFilters | undefined => {
+export const buildWebSearchFilters = (
+  allowedDomains: readonly string[],
+  blockedDomains: readonly string[]
+): WebSearchFilters | undefined => {
   const filters: WebSearchFilters = {};
 
   if (allowedDomains.length > 0) {
-    filters.allowed_domains = allowedDomains;
+    filters.allowed_domains = [...allowedDomains];
   }
 
   if (blockedDomains.length > 0) {
-    filters.blocked_domains = blockedDomains;
+    filters.blocked_domains = [...blockedDomains];
   }
 
   return filters.allowed_domains || filters.blocked_domains ? filters : undefined;

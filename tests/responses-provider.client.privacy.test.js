@@ -20,14 +20,7 @@ const loadClient = (overrides = {}) => {
     AI_FEATURE_ENABLED: "true",
     AI_WEBSEARCH_COMPLIANCE_CONFIRMED: "true",
     AZURE_OPENAI_API_KEY: "test-azure-key",
-    AZURE_OPENAI_DEPLOYMENT: "gpt-5.4",
     AZURE_OPENAI_ENDPOINT: "https://azure.example.openai.azure.com",
-    AI_WEBSEARCH_TOOL_CHOICE: "required",
-    AI_WEBSEARCH_MAX_TOOL_CALLS: "8",
-    AI_WEBSEARCH_PARALLEL_TOOL_CALLS: "true",
-    AI_REASONING_EFFORT: "medium",
-    AI_WEBSEARCH_ALLOWED_DOMAINS: "",
-    AI_WEBSEARCH_BLOCKED_DOMAINS: "",
     AI_COST_INPUT_USD_PER_MILLION: "",
     AI_COST_CACHED_INPUT_USD_PER_MILLION: "",
     AI_COST_OUTPUT_USD_PER_MILLION: "",
@@ -118,12 +111,12 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     const request = mockCreateResponse.mock.calls[0][0];
     expect(request).toEqual(
       expect.objectContaining({
-        model: "gpt-5.4",
+        model: "gpt-5.6-terra",
         tool_choice: "required",
         max_tool_calls: 8,
         parallel_tool_calls: true,
         store: false,
-        reasoning: { effort: "medium" }
+        reasoning: { effort: "low" }
       })
     );
     expect(request.tools).toEqual([{ type: "web_search" }]);
@@ -134,13 +127,13 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       "AI provider request metadata",
       expect.objectContaining({
         provider: "azure",
-        model: "gpt-5.4",
+        model: "gpt-5.6-terra",
         toolType: "web_search",
         toolChoice: "required",
         store: false,
         maxToolCalls: 8,
         parallelToolCalls: true,
-        reasoningEffort: "medium"
+        reasoningEffort: "low"
       })
     );
     expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/Public Provider|provider-123|prompt|raw|sourceUrl|citation|quote|member|client|patient/i);
@@ -166,9 +159,13 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     }
   );
 
-  it("applies Azure web-search filters without public OpenAI-only tool flags", async () => {
+  it("ignores environment overrides for result-shaping model settings", async () => {
     const { ProviderProfileResponsesClient } = loadClient({
-      AI_WEBSEARCH_MAX_TOOL_CALLS: "12",
+      AZURE_OPENAI_DEPLOYMENT: "gpt-5.6-sol",
+      AI_WEBSEARCH_TOOL_CHOICE: "auto",
+      AI_WEBSEARCH_MAX_TOOL_CALLS: "20",
+      AI_WEBSEARCH_PARALLEL_TOOL_CALLS: "false",
+      AI_REASONING_EFFORT: "high",
       AI_WEBSEARCH_ALLOWED_DOMAINS: "npiprofile.com,healthgrades.com",
       AI_WEBSEARCH_BLOCKED_DOMAINS: "facebook.com"
     });
@@ -189,23 +186,15 @@ describe("Azure OpenAI Responses client privacy contract", () => {
     const request = mockCreateResponse.mock.calls[0][0];
     expect(request).toEqual(
       expect.objectContaining({
-        model: "gpt-5.4",
+        model: "gpt-5.6-terra",
         tool_choice: "required",
-        max_tool_calls: 12,
+        max_tool_calls: 8,
         parallel_tool_calls: true,
         store: false,
-        reasoning: { effort: "medium" }
+        reasoning: { effort: "low" }
       })
     );
-    expect(request.tools).toEqual([
-      {
-        type: "web_search",
-        filters: {
-          allowed_domains: ["npiprofile.com", "healthgrades.com"],
-          blocked_domains: ["facebook.com"]
-        }
-      }
-    ]);
+    expect(request.tools).toEqual([{ type: "web_search" }]);
     expect(request.tools[0]).not.toHaveProperty("external_web_access");
     expect(request.tools[0]).not.toHaveProperty("search_context_size");
     expect(JSON.stringify(request)).not.toMatch(/web_search_preview|background":true|store":true/i);
@@ -214,13 +203,13 @@ describe("Azure OpenAI Responses client privacy contract", () => {
       "AI provider request metadata",
       expect.objectContaining({
         provider: "azure",
-        model: "gpt-5.4",
+        model: "gpt-5.6-terra",
         toolType: "web_search",
         toolChoice: "required",
         store: false,
-        maxToolCalls: 12,
+        maxToolCalls: 8,
         parallelToolCalls: true,
-        reasoningEffort: "medium"
+        reasoningEffort: "low"
       })
     );
     expect(JSON.stringify(consoleLogSpy.mock.calls)).not.toMatch(/Public Provider|provider-123|prompt|raw|sourceUrl|citation|quote|member|client|patient/i);

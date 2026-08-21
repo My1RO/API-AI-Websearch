@@ -64,7 +64,7 @@ export const getAiRuntimeStatus = (): AiRuntimeStatus => {
     };
   }
 
-  if (!env.azureOpenAiApiKey || !env.azureOpenAiDeployment) {
+  if (!env.azureOpenAiApiKey) {
     return {
       provider: "azure",
       enabled: true,

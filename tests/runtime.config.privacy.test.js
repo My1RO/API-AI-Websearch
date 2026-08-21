@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 const ORIGINAL_ENV = process.env;
 
 const loadRuntimeWithEnv = (overrides = {}) => {
@@ -8,12 +11,22 @@ const loadRuntimeWithEnv = (overrides = {}) => {
     AI_FEATURE_ENABLED: "true",
     AI_WEBSEARCH_COMPLIANCE_CONFIRMED: "true",
     AZURE_OPENAI_API_KEY: "test-azure-key",
-    AZURE_OPENAI_DEPLOYMENT: "gpt-5.4",
     AZURE_OPENAI_ENDPOINT: "https://foundry-lucie-ai.openai.azure.com",
     ...overrides
   };
 
   return require("../src/config/runtime");
+};
+
+const loadModelConfigWithEnv = (overrides = {}) => {
+  jest.resetModules();
+  process.env = {
+    ...ORIGINAL_ENV,
+    NODE_ENV: "test",
+    ...overrides
+  };
+
+  return require("../src/config/provider-profile-model");
 };
 
 describe("Azure-only AI runtime fail-closed configuration", () => {
@@ -122,5 +135,45 @@ describe("Azure-only AI runtime fail-closed configuration", () => {
       ready: true,
       baseUrl: "https://foundry-lucie-ai.openai.azure.com/openai/v1"
     });
+  });
+
+  it("keeps result-shaping model settings immutable when environment overrides are present", () => {
+    const modelConfig = loadModelConfigWithEnv({
+      AZURE_OPENAI_DEPLOYMENT: "gpt-5.6-sol",
+      AI_WEBSEARCH_TOOL_CHOICE: "auto",
+      AI_WEBSEARCH_MAX_TOOL_CALLS: "20",
+      AI_WEBSEARCH_PARALLEL_TOOL_CALLS: "false",
+      AI_REASONING_EFFORT: "high",
+      AI_WEBSEARCH_ALLOWED_DOMAINS: "example.com",
+      AI_WEBSEARCH_BLOCKED_DOMAINS: "npiprofile.com"
+    });
+
+    expect(modelConfig).toEqual(expect.objectContaining({
+      AZURE_OPENAI_DEPLOYMENT: "gpt-5.6-terra",
+      AI_WEBSEARCH_TOOL_CHOICE: "required",
+      AI_WEBSEARCH_MAX_TOOL_CALLS: 8,
+      AI_WEBSEARCH_PARALLEL_TOOL_CALLS: true,
+      AI_REASONING_EFFORT: "low",
+      AI_WEBSEARCH_ALLOWED_DOMAINS: [],
+      AI_WEBSEARCH_BLOCKED_DOMAINS: []
+    }));
+  });
+
+  it("documents only deployment credentials and gates, not result-shaping model settings", () => {
+    const envTemplate = fs.readFileSync(path.join(__dirname, "../.env.dist"), "utf8");
+
+    expect(envTemplate).toMatch(/^AZURE_OPENAI_ENDPOINT=$/m);
+    expect(envTemplate).toMatch(/^AZURE_OPENAI_API_KEY=$/m);
+    for (const variableName of [
+      "AZURE_OPENAI_DEPLOYMENT",
+      "AI_WEBSEARCH_TOOL_CHOICE",
+      "AI_WEBSEARCH_MAX_TOOL_CALLS",
+      "AI_WEBSEARCH_PARALLEL_TOOL_CALLS",
+      "AI_REASONING_EFFORT",
+      "AI_WEBSEARCH_ALLOWED_DOMAINS",
+      "AI_WEBSEARCH_BLOCKED_DOMAINS"
+    ]) {
+      expect(envTemplate).not.toMatch(new RegExp(`^${variableName}=`, "m"));
+    }
   });
 });

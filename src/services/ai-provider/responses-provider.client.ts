@@ -1,6 +1,17 @@
 import OpenAI from "openai";
 
-import { env, ReasoningEffort, SearchToolChoice } from "../../config/env";
+import { env } from "../../config/env";
+import {
+  AI_REASONING_EFFORT,
+  AI_WEBSEARCH_ALLOWED_DOMAINS,
+  AI_WEBSEARCH_BLOCKED_DOMAINS,
+  AI_WEBSEARCH_MAX_TOOL_CALLS,
+  AI_WEBSEARCH_PARALLEL_TOOL_CALLS,
+  AI_WEBSEARCH_TOOL_CHOICE,
+  AZURE_OPENAI_DEPLOYMENT,
+  ReasoningEffort,
+  SearchToolChoice
+} from "../../config/provider-profile-model";
 import { AiProviderError } from "../../errors/http-error";
 import { assertAiRuntimeReady, azureOpenAiResponsesBaseUrl } from "../../config/runtime";
 import { CreateProviderProfilesInput } from "../../validators/provider-profile.validator";
@@ -62,17 +73,17 @@ export const providerProfileResponseRequest = (
   input: CreateProviderProfilesInput,
   identityOnly: boolean
 ): ProviderProfileResponseRequest => {
-  const reasoning = supportsReasoningModel(env.azureOpenAiDeployment)
-    ? buildReasoningOptions(env.aiReasoningEffort)
+  const reasoning = supportsReasoningModel(AZURE_OPENAI_DEPLOYMENT)
+    ? buildReasoningOptions(AI_REASONING_EFFORT)
     : undefined;
   const request: ProviderProfileResponseRequest = {
-    model: env.azureOpenAiDeployment,
+    model: AZURE_OPENAI_DEPLOYMENT,
     instructions: providerProfileSystemInstructions,
     input: buildProviderProfilePrompt(input, { identityOnly }),
     tools: [webSearchTool()],
-    tool_choice: env.aiWebSearchToolChoice,
-    max_tool_calls: env.aiWebSearchMaxToolCalls,
-    parallel_tool_calls: env.aiWebSearchParallelToolCalls,
+    tool_choice: AI_WEBSEARCH_TOOL_CHOICE,
+    max_tool_calls: AI_WEBSEARCH_MAX_TOOL_CALLS,
+    parallel_tool_calls: AI_WEBSEARCH_PARALLEL_TOOL_CALLS,
     store: false
   };
 
@@ -140,7 +151,7 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
 
     logAiProviderRequestMetadata({
       provider: "azure",
-      model: env.azureOpenAiDeployment,
+      model: AZURE_OPENAI_DEPLOYMENT,
       input,
       identityOnly,
       toolType: request.tools[0].type,
@@ -155,7 +166,7 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
       const response = await this.responsesClient().responses.create(request as never);
       const status = (response as ResponseStatusShape).status;
       usageRecords.push(recordAiProviderUsage({
-        model: env.azureOpenAiDeployment,
+        model: AZURE_OPENAI_DEPLOYMENT,
         attempt,
         outcome: typeof status === "string" && status !== "completed" ? "incomplete" : "completed",
         durationMs: Date.now() - startedAt,
@@ -167,7 +178,7 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
     } catch (error) {
       if (!usageRecorded) {
         usageRecords.push(recordAiProviderUsage({
-          model: env.azureOpenAiDeployment,
+          model: AZURE_OPENAI_DEPLOYMENT,
           attempt,
           outcome: "request_error",
           durationMs: Date.now() - startedAt
@@ -188,6 +199,6 @@ export class ProviderProfileResponsesClient implements ProviderProfileAiClient {
 }
 
 const webSearchTool = (): AzureWebSearchTool => {
-  const filters = buildWebSearchFilters(env.aiWebSearchAllowedDomains, env.aiWebSearchBlockedDomains);
+  const filters = buildWebSearchFilters(AI_WEBSEARCH_ALLOWED_DOMAINS, AI_WEBSEARCH_BLOCKED_DOMAINS);
   return filters ? { type: "web_search", filters } : { type: "web_search" };
 };

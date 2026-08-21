@@ -1,4 +1,4 @@
-import { env } from "../src/config/env";
+import { AZURE_OPENAI_DEPLOYMENT } from "../src/config/provider-profile-model";
 import { getAiRuntimeStatus } from "../src/config/runtime";
 import { ProviderProfileResponsesClient } from "../src/services/ai-provider/responses-provider.client";
 
@@ -31,7 +31,7 @@ new ProviderProfileResponsesClient()
       ok: true,
       elapsedMs: Date.now() - started,
       runtime: getAiRuntimeStatus(),
-      model: env.aiModel,
+      model: AZURE_OPENAI_DEPLOYMENT,
       profileCount: profiles.length,
       firstProfile: firstProfile ? {
         hasProviderName: Boolean(firstProfile.providerName),
@@ -48,7 +48,7 @@ new ProviderProfileResponsesClient()
       ok: false,
       elapsedMs: Date.now() - started,
       runtime: getAiRuntimeStatus(),
-      model: env.aiModel,
+      model: AZURE_OPENAI_DEPLOYMENT,
       errorName: error instanceof Error ? error.name : "UnknownError",
       errorMessage: error instanceof Error ? error.message : "Provider profile smoke failed."
     }, null, 2)}\n`);
